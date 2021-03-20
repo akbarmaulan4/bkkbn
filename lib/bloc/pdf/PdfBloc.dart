@@ -16,6 +16,22 @@ class PdfBloc{
   final _loadFetcher = PublishSubject<bool>();
   Stream<bool> get loadFetcher => _loadFetcher.stream;
 
+  final _fileDoc = PublishSubject<File>();
+  Stream<File> get fileDoc => _fileDoc.stream;
+
+  File _dataFile;
+  File get dataFile => _dataFile;
+
+  changeDoc(File val){
+    if(val.existsSync()){
+      _dataFile = val;
+      _fileDoc.sink.add(val);
+    }else{
+      _dataFile = null;
+      _fileDoc.sink.add(null);
+    }
+  }
+
   donwloadFile(BuildContext context, String url, String fileName) async {
     try {
 

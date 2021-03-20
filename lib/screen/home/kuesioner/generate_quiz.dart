@@ -33,7 +33,6 @@ class _GenerateQuizState extends State<GenerateQuiz> {
     bloc.resultSubmit.listen((event) {
       if(event != null){
         // Navigator.of(context).pushNamedAndRemoveUntil('/result_quiz', (Route<dynamic> route) => false, arguments: {"data", event});
-        // Navigator.pushNamed(context, '/result_quiz', arguments: {"result", event});
         Navigator.pushNamed(context, '/result_quiz', arguments: {"result": event});
       }
     });
@@ -189,6 +188,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.changeValue = (val){
           quest.value = val;
         };
+        quest.file_name = '';
         dataWidget.add(input);
       }else if(quest.tipe == 'radio'){
         RadioQuiz radioQuiz = new RadioQuiz();
@@ -197,7 +197,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         radioQuiz.changeValue = (val){
           quest.value = val;
         };
-
+        quest.file_name = '';
         dataWidget.add(radioQuiz);
       }else if(quest.tipe == 'tanggal'){
         DateQuiz input = new DateQuiz();
@@ -206,6 +206,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.changeValue = (val){
           quest.value = val;
         };
+        quest.file_name = '';
         dataWidget.add(input);
       }else if(quest.tipe == 'autocomplete'){
         AutoCompleteQuiz input = new AutoCompleteQuiz();
@@ -216,6 +217,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.changeValue = (val){
           quest.value = val;
         };
+        quest.file_name = '';
         dataWidget.add(input);
       }else if(quest.tipe == 'upload'){
         UploadFileQuiz input = new UploadFileQuiz();
@@ -223,6 +225,9 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.question = quest.title;
         input.changeValue = (val){
           quest.value = val;
+        };
+        input.changeFileName = (val){
+          quest.file_name = val;
         };
         dataWidget.add(input);
       }else{
@@ -233,6 +238,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.changeValue = (val){
           quest.value = val;
         };
+        quest.file_name = '';
         dataWidget.add(input);
       }
     }

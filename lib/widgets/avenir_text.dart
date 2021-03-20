@@ -14,7 +14,9 @@ class TextAvenir extends Text{
     this.textAlign = TextAlign.left,
     this.weight = FontWeight.normal
   }) : super(data,
-      textAlign: textAlign, //isCentered ? TextAlign.center : TextAlign.left,
+      textAlign: textAlign,
+      maxLines: 2,//isCentered ? TextAlign.center : TextAlign.left,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
           fontFamily: 'Avenir',
           fontWeight: weight,

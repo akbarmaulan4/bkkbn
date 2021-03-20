@@ -6,6 +6,7 @@ PertanyaanSubmit _$fromJson(Map<String, dynamic> json) {
     ..pertanyaan_id = json['pertanyaan_id'] != null ? json['pertanyaan_id'] is num ? (json['pertanyaan_id'] as num)?.toInt() ?? 0: int.tryParse(json['pertanyaan_id'] as String) ?? -1: -1
     ..tipe = json['tipe'] as String ?? ''
     ..value = json['value'] as String ?? ''
+    ..file_name = json['file_name'] as String ?? ''
   ;
 }
 
@@ -16,4 +17,5 @@ Map<String, dynamic> _$toJson(PertanyaanSubmit instance) =>
       'pertanyaan_id': instance.pertanyaan_id,
       'tipe': instance.tipe,
       'value': instance.value,
+      'file_name': instance.file_name,
     };

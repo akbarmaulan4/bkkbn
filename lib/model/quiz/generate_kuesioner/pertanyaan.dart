@@ -12,6 +12,7 @@ class Pertanyaan{
   String api;
   String params;
   String value;
+  String file_name;
   List<ListAnswer> element;
 
   factory Pertanyaan.fromJson(Map<String, dynamic> json) => _$fromJson(json);

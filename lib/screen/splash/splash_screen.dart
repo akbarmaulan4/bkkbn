@@ -27,12 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   checkUser() async{
-    // var user = await LocalData.getUser();
-    // if(user != null){
-    //   Navigator.popAndPushNamed(context, '/home');
-    // }else{
+    var user = await LocalData.getUser();
+    if(user != null){
+      Navigator.popAndPushNamed(context, '/home');
+    }else{
       Navigator.popAndPushNamed(context, '/gateway');
-    // }
+    }
   }
 
   @override

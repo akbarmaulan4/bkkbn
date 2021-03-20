@@ -255,16 +255,6 @@ class API{
     });
   }
 
-  static finding(String url, String param, String valueParam, void callback(Map, Exception)) async {
-    var header = new Map<String, String>();
-    var post = new Map<String, dynamic>();
-    header['Content-Type'] = 'application/json';
-    post[param] = valueParam;
-    basePost2(url, post, header, true, (result, error){
-      callback(result, error);
-    });
-  }
-
   static submitQuiz(String userId, List data, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
@@ -272,6 +262,26 @@ class API{
     post['user_id'] = userId;
     post['data'] = data;
     basePost('/submitkuis', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static checkVerifyAccount(String userId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = userId;
+    basePost('/checkverify', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static finding(String url, String param, String valueParam, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post[param] = valueParam;
+    basePost2(url, post, header, true, (result, error){
       callback(result, error);
     });
   }

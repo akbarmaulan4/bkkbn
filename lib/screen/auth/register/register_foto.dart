@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,14 +57,16 @@ class _RegisterFotoState extends State<RegisterFoto> {
   }
 
   _selectFile() async {
-    // FilePick
-    // FilePickerResult result = await FilePicker.platform.pickFiles();
-    //
-    // if(result != null) {
-    //   File file = File(result.files.single.path);
-    // } else {
-    //   // User canceled the picker
-    // }
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    if(result != null) {
+      File file = File(result.files.single.path);
+      if(file.existsSync()){
+        widget.bloc.changeImage(file);
+        widget.bloc.changePdf(file);
+      }
+    } else {
+      // User canceled the picker
+    }
   }
 
   @override
@@ -128,27 +131,38 @@ class _RegisterFotoState extends State<RegisterFoto> {
                     height: size.height * 0.25,
                     fit: BoxFit.fitHeight,
                   ),
-                ) : Row(
-                  children: [
-                    Image.asset(ImageConstant.noImages, height: size.height * 0.10,),
-                    SizedBox(width: 10),
-                    Expanded(child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                ) : StreamBuilder(
+                  stream: widget.bloc.fileDoc,
+                  builder: (context, snapshot) {
+                    File exist;
+                    String fileName = 'Foto KTP';
+                    if(snapshot.data != null){
+                      exist = snapshot.data;
+                      fileName = exist.path.split('/').last;
+                    }
+                    return Row(
                       children: [
-                        TextAvenir(
-                          'Foto KTP',
-                          size: 12,
-                          color: Utils.colorFromHex(ColorCode.bluePrimary),
-                        ),
-                        SizedBox(height: 8),
-                        TextAvenir(
-                          'File yang didukung: Word/PDF/jpeg/png',
-                          size: 10,
-                          color: Colors.grey[400],
-                        ),
+                        Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
+                        SizedBox(width: 10),
+                        Expanded(child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextAvenir(
+                              fileName,
+                              size: 12,
+                              color: Utils.colorFromHex(ColorCode.bluePrimary),
+                            ),
+                            SizedBox(height: 8),
+                            TextAvenir(
+                              'File yang didukung: Word/PDF/jpeg/png',
+                              size: 10,
+                              color: Colors.grey[400],
+                            ),
+                          ],
+                        ))
                       ],
-                    ))
-                  ],
+                    );
+                  }
                 ),
               ),
             ),
@@ -207,14 +221,14 @@ class _RegisterFotoState extends State<RegisterFoto> {
                       Navigator.of(context).pop();
                     },
                   ),
-                  new ListTile(
-                    leading: new Icon(Icons.file_present),
-                    title: new Text('File'),
-                    onTap: () {
-                      _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                  // new ListTile(
+                  //   leading: new Icon(Icons.file_present),
+                  //   title: new Text('File'),
+                  //   onTap: () {
+                  //     _selectFile();
+                  //     Navigator.of(context).pop();
+                  //   },
+                  // ),
                 ],
               ),
             ),

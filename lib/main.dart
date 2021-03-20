@@ -5,6 +5,8 @@ import 'package:kua/screen/auth/forgotpassword/otp_password_screen.dart';
 import 'package:kua/screen/auth/login/login_screen.dart';
 import 'package:kua/screen/auth/register/register_screen.dart';
 import 'package:kua/screen/gateway/gateway_screen.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/chat/chat_screen.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/notif/list_notif.dart';
 import 'package:kua/screen/home/home_screen.dart';
 import 'package:kua/screen/home/kuesioner/generate_quiz.dart';
 import 'package:kua/screen/home/kuesioner/landing_quiz.dart';
@@ -115,6 +117,27 @@ class MyApp extends StatelessWidget {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
                   return Pdfview(arguments['url'], arguments['code']);
+                },
+                settings: RouteSettings());
+
+          case '/list_notif':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return ListNotif();
+                },
+                settings: RouteSettings());
+          case '/chat_screen':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return ChatScreen();
                 },
                 settings: RouteSettings());
           default: return null;

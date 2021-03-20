@@ -42,10 +42,25 @@ class ConstantStyle {
     );
   }
 
+  static var box_white = BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+  );
+
   static var box_light_blue_dark = BoxDecoration(
       color: Utils.colorFromHex(ColorCode.lightBlueDark),
       borderRadius: BorderRadius.all(Radius.circular(10)),
       border: Border.all(color: Colors.grey[300])
+  );
+
+  static var box_fill_blu = BoxDecoration(
+    color: Utils.colorFromHex(ColorCode.bluePrimary),
+    borderRadius: BorderRadius.all(Radius.circular(25)),
+  );
+
+  static var button_fill_blu = BoxDecoration(
+    color: Utils.colorFromHex(ColorCode.bluePrimary),
+    borderRadius: BorderRadius.all(Radius.circular(10)),
   );
 
   static var box_fill_blue_nd = BoxDecoration(

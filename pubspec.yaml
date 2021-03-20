@@ -37,9 +37,13 @@ dependencies:
   shared_preferences:
   flutter_html: ^0.11.0
   http: ^0.13.0
-  advance_pdf_viewer:
   open_file: ^3.0.3
-  file_picker:
+  file_picker: ^3.0.0
+#  advance_pdf_viewer:
+#  flutter_cached_pdfview:
+#  flutter_plugin_pdf_viewer: ^1.0.7
+  flutter_pdfview: ^1.1.0
+  qr_flutter: ^4.0.0
 #  timelines: ^0.0.2+1
 #  smart_select: ^4.3.2
 #  pinput: ^0.2.6

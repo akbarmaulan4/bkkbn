@@ -6,6 +6,9 @@ class ColorCode {
   static String greenPrimary = '#4D9078';
   static String lightGrey = '#939CBC';
   static String lightBlueDark = '#EBEEF7';
+  static String silver = '#828899';
+  static String yellow_light = '#fcefac';
+  static String yellow_dark = '#DAB707';
 
   static String colorPrimary =  "#febd3f";
   static String colorWhite = "#FFFFFF";

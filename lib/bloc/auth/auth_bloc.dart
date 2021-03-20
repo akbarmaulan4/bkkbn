@@ -25,6 +25,7 @@ class AuthBloc{
   final _regisScreen = PublishSubject<int>();
   final _jenisKelamin = PublishSubject<String>();
   final _imageKtp = PublishSubject<File>();
+  final _fileDoc = PublishSubject<File>();
   final _messageError = PublishSubject<String>();
   final _allowFotoKtpUser = PublishSubject<bool>();
   final _allowDataDiri = PublishSubject<bool>();
@@ -51,6 +52,7 @@ class AuthBloc{
   Stream<int> get regisScreen => _regisScreen.stream;
   Stream<String> get jenisKelamin => _jenisKelamin.stream;
   Stream<File> get imageKtp => _imageKtp.stream;
+  Stream<File> get fileDoc => _fileDoc.stream;
   Stream<String> get messageError => _messageError.stream;
   Stream<bool> get allowFotoKtpUser => _allowFotoKtpUser.stream;
   Stream<bool> get allowDataDiri => _allowDataDiri.stream;
@@ -194,6 +196,13 @@ class AuthBloc{
     _img64 = base64Encode(bytes);
     _imgFotoKtp = val;
     _imageKtp.sink.add(val);
+  }
+  changePdf(File val){
+    if(val.existsSync()){
+      _fileDoc.sink.add(val);
+    }else {
+      _fileDoc.sink.add(null);
+    }
   }
 
   validasiDataUser(){

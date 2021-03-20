@@ -167,6 +167,7 @@ class QuizBloc {
       submit.pertanyaan_id = tanya.pertanyaan_id;
       submit.tipe = tanya.tipe;
       submit.value = tanya.value;
+      submit.file_name = tanya.file_name;
       dataSubmit.add(submit);
     }
     return dataSubmit;

@@ -8,6 +8,7 @@ Pertanyaan _$fromJson(Map<String, dynamic> json) {
     ..tipe = json['tipe'] as String ?? ''
     ..api = json['api'] as String ?? ''
     ..params = json['params'] as String ?? ''
+    ..file_name = json['file_name'] as String ?? ''
     ..element =  (json['element'] as List)
         ?.map((e) =>
     e == null ? null : ListAnswer.fromJson(e as Map<String, dynamic>))
@@ -24,5 +25,6 @@ Map<String, dynamic> _$toJson(Pertanyaan instance) =>
       'tipe': instance.tipe,
       'api': instance.api,
       'params': instance.params,
+      'file_name': instance.file_name,
       'element': instance.element
     };

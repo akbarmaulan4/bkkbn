@@ -26,7 +26,8 @@ class ResultQuiz extends StatefulWidget {
 class _ResultQuizState extends State<ResultQuiz>{
 
   Future<bool> onWillPop() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    // Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    Navigator.of(context).pop();
     return Future.value(true);
   }
 

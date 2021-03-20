@@ -49,25 +49,6 @@ class _NewRegisterScreenState extends State<RegisterData> {
             size: 14,
             color: Utils.colorFromHex(ColorCode.bluePrimary),
           ),
-          // Container(
-          //   // height: 45,
-          //   child: TextField(
-          //     controller: widget.bloc.edtNamaLengkap,
-          //     textAlignVertical: TextAlignVertical.center,
-          //     decoration: InputDecoration(
-          //       // border: InputBorder.none,
-          //       hintText: 'Nama lengkap sesaui KTP',
-          //       border: new OutlineInputBorder(
-          //         borderRadius: const BorderRadius.all(
-          //           const Radius.circular(10.0),
-          //         ),
-          //       ),
-          //       // hintStyle: TextStyle(
-          //       //   fontFamily: 'Avenir'
-          //       // )
-          //     ),
-          //   ),
-          // ),
           SizedBox(height: 5),
           BoxBorderDefault(
               child: TextField(
