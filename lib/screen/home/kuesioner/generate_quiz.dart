@@ -32,8 +32,8 @@ class _GenerateQuizState extends State<GenerateQuiz> {
 
     bloc.resultSubmit.listen((event) {
       if(event != null){
-        // Navigator.of(context).pushNamedAndRemoveUntil('/result_quiz', (Route<dynamic> route) => false, arguments: {"data", event});
-        Navigator.pushNamed(context, '/result_quiz', arguments: {"result": event});
+        Navigator.of(context).pushNamedAndRemoveUntil('/result_quiz', (Route<dynamic> route) => false, arguments: {"data", event});
+        // Navigator.pushNamed(context, '/result_quiz', arguments: {"data": event});
       }
     });
   }

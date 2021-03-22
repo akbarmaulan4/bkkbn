@@ -5,6 +5,8 @@ HeaderSubmit _$fromJson(Map<String, dynamic> json) {
     ..rating = json['rating'] as String ?? ''
     ..rating_color = json['rating_color'] as String ?? ''
     ..created_at = json['created_at'] as String ?? ''
+    ..label = json['label'] as String ?? ''
+    ..deskripsi = json['deskripsi'] as String ?? ''
     ..kuis_max_nilai = json['kuis_max_nilai'] as String ?? ''
     ..member_kuis_nilai = json['member_kuis_nilai'] as String ?? ''
     ..url = json['url'] as String ?? ''
@@ -17,6 +19,8 @@ Map<String, dynamic> _$toJson(HeaderSubmit instance) =>
       'rating': instance.rating,
       'rating_color': instance.rating_color,
       'created_at': instance.created_at,
+      'label': instance.label,
+      'deskripsi': instance.deskripsi,
       'kuis_max_nilai': instance.kuis_max_nilai,
       'member_kuis_nilai': instance.member_kuis_nilai,
       'url': instance.url,

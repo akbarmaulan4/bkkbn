@@ -222,7 +222,6 @@ class _BerandaVIewState extends State<BerandaVIew> {
   }
 
   dialogBarcode(){
-    final size = MediaQuery.of(context).size;
     FocusScope.of(context).requestFocus(FocusNode());
     showDialog(
         context: context,

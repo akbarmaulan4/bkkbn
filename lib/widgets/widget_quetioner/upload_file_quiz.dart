@@ -79,7 +79,10 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
   _selectFile() async {
     changeDocument(true);
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc'],
+    );
     if(result != null) {
       File file = File(result.files.single.path);
       if(file.existsSync()){

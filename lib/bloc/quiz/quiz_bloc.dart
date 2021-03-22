@@ -23,6 +23,7 @@ class QuizBloc {
   final _heightWidget = PublishSubject<double>();
   final _dataFinding = PublishSubject<List<ItemFinding>>();
   final _resultSubmit = PublishSubject<ResultSubmit>();
+  final _infoMaxLenght = PublishSubject<bool>();
 
   Stream<String> get messageError => _messageError.stream;
   Stream<List<DataKuesioner>> get dataListKuesioner => _dataListKuesioner.stream;
@@ -31,6 +32,7 @@ class QuizBloc {
   Stream<double> get heightWidget => _heightWidget.stream;
   Stream<List<ItemFinding>> get dataFinding => _dataFinding.stream;
   Stream<ResultSubmit> get resultSubmit => _resultSubmit.stream;
+  Stream<bool> get infoMaxLenght => _infoMaxLenght.stream;
 
   double _heightW = 0.0;
   double get heightW => _heightW;
@@ -114,6 +116,7 @@ class QuizBloc {
   }
 
   finding(String url, String param, String value){
+    _infoMaxLenght.sink.add(false);
     API.finding(url, param, value, (result, error) {
       if(result != null){
         if(result['code'] == 200){
@@ -129,6 +132,10 @@ class QuizBloc {
         _messageError.sink.add(error['message']);
       }
     });
+  }
+
+  showInfoMaxLeght(bool val){
+    _infoMaxLenght.sink.add(val);
   }
 
 

@@ -26,8 +26,8 @@ class ResultQuiz extends StatefulWidget {
 class _ResultQuizState extends State<ResultQuiz>{
 
   Future<bool> onWillPop() {
-    // Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
-    Navigator.of(context).pop();
+    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    // Navigator.of(context).pop();
     return Future.value(true);
   }
 
@@ -48,7 +48,7 @@ class _ResultQuizState extends State<ResultQuiz>{
           elevation: 0.0,
           backgroundColor: Colors.white,
           leading: InkWell(
-              onTap: ()=>Navigator.of(context).pop(),
+              onTap: ()=> onWillPop,
               child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
           ),
         ),
@@ -67,7 +67,18 @@ class _ResultQuizState extends State<ResultQuiz>{
                     children: [
                       TextAvenir('Pencegahan Stunting', size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                       SizedBox(height: 10),
-                      TextAvenirBook('Berdasarkan jawaban kuesioner diberikan pada tanggal ${widget.data.header.created_at} dengan ID ${widget.data.header.kuis_code}, Sebagai berikut', size: 14, color: Colors.grey),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Berdasarkan jawaban kuesioner diberikan pada tanggal ',
+                          style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Colors.grey),
+                          children: <TextSpan>[
+                            TextSpan(text: widget.data.header.created_at, style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+                            TextSpan(text: ' dengan ID '),
+                            TextSpan(text: widget.data.header.kuis_code, style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+                            TextSpan(text: ', Sebagai berikut:'),
+                          ],
+                        ),
+                      ),
                       SizedBox(height: 30),
                       TextAvenir('Hasil Kuesioner', size: 16, color: Utils.colorFromHex(ColorCode.blueSecondary)),
                       SizedBox(height: 20),
@@ -110,9 +121,9 @@ class _ResultQuizState extends State<ResultQuiz>{
                               ],
                             ),
                             SizedBox(height: 10),
-                            TextAvenir('Berpotensi Stunting', color: Colors.grey, size: 12,),
+                            TextAvenir(widget.data.header.label, color: Colors.grey, size: 12,),
                             SizedBox(height: 3),
-                            TextAvenirBook('At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias', size: 11,)
+                            TextAvenirBook(widget.data.header.deskripsi, size: 11,)
                           ],
                         ),
                       ),
@@ -120,7 +131,7 @@ class _ResultQuizState extends State<ResultQuiz>{
                       InkWell(
                         onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':widget.data.header.url, 'code':widget.data.header.kuis_code}),
                         child: Container(
-                          decoration: ConstantStyle.box_fill_blue_nd,
+                          decoration: ConstantStyle.button_fill_blu,
                           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           child: Row(
@@ -147,26 +158,26 @@ class _ResultQuizState extends State<ResultQuiz>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenir('Ulasan Petugas', size: 16, color: Utils.colorFromHex(ColorCode.blueSecondary)),
-                      SizedBox(height: 10),
-                      Container(
-                        decoration: ConstantStyle.box_light_blue_dark,
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(child: TextAvenir('John Cena', size: 16, color: Utils.colorFromHex(ColorCode.colorGreyText))),
-                                TextAvenirBook('20 Maret 2021, 09:00', size: 10,),
-                              ],
-                            ),
-                            TextAvenirBook('Petugas BKKBN', size: 14, color: Utils.colorFromHex(ColorCode.colorGreyText)),
-                            SizedBox(height: 10),
-                            TextAvenirBook('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis', size: 14, color: Utils.colorFromHex(ColorCode.colorGreyText)),
-                          ],
-                        ),
-                      ),
+                      // TextAvenir('Ulasan Petugas', size: 16, color: Utils.colorFromHex(ColorCode.blueSecondary)),
+                      // SizedBox(height: 10),
+                      // Container(
+                      //   decoration: ConstantStyle.box_light_blue_dark,
+                      //   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     children: [
+                      //       Row(
+                      //         children: [
+                      //           Expanded(child: TextAvenir('John Cena', size: 16, color: Utils.colorFromHex(ColorCode.colorGreyText))),
+                      //           TextAvenirBook('20 Maret 2021, 09:00', size: 10,),
+                      //         ],
+                      //       ),
+                      //       TextAvenirBook('Petugas BKKBN', size: 14, color: Utils.colorFromHex(ColorCode.colorGreyText)),
+                      //       SizedBox(height: 10),
+                      //       TextAvenirBook('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis', size: 14, color: Utils.colorFromHex(ColorCode.colorGreyText)),
+                      //     ],
+                      //   ),
+                      // ),
                       SizedBox(height: 35),
                       InkWell(
                         onTap: ()=> Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false),

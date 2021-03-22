@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kua/bloc/quiz/quiz_bloc.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/debouncher.dart';
+import 'package:kua/widgets/avenir_book.dart';
 
 import '../avenir_text.dart';
 import '../box_border.dart';
 
 class AutoCompleteQuiz extends StatefulWidget {
   int id;
-  // String headerId;
-  // String jenis;
-  // String tipe;
   String question;
   String url;
   String param;
@@ -19,9 +17,6 @@ class AutoCompleteQuiz extends StatefulWidget {
 
   AutoCompleteQuiz({
     this.id,
-    // this.headerId,
-    // this.jenis,
-    // this.tipe,
     this.question,
     this.url,
     this.param,
@@ -95,6 +90,7 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                 return Container(
                   height: size.height * 0.50,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         decoration: BoxDecoration(
@@ -104,33 +100,6 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                         padding: EdgeInsets.only(right: 25),
                         margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                         height: 45,
-                        // child: TypeAheadField(
-                        //   noItemsFoundBuilder: (context){
-                        //     return SizedBox();
-                        //   },
-                        //   textFieldConfiguration: TextFieldConfiguration(
-                        //     controller: edt,
-                        //     decoration: InputDecoration(
-                        //         labelText: 'Pelanggan',
-                        //         border: InputBorder.none,
-                        //         hintText: 'Cari ${type}...'
-                        //     ),
-                        //   ),
-                        //   suggestionsCallback: (pattern) async {
-                        //     return await bloc.finding(url, param, pattern);
-                        //   },
-                        //   itemBuilder: (context, suggestion) {
-                        //     // LocalCustomer cust = suggestion;
-                        //     return ListTile(
-                        //       leading: Icon(Icons.person),
-                        //       title: Text(suggestion.name),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (suggestion) {
-                        //     setAnswer(suggestion.name);
-                        //     edt.text = suggestion.name;
-                        //   },
-                        // ),
                         child: TextField(
                           textAlignVertical: TextAlignVertical.center,
                           keyboardType: TextInputType.emailAddress,
@@ -146,10 +115,25 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                               debouncher.run(() {
                                 bloc.finding(url, param, val);
                               });
+                            }else{
+                              bloc.showInfoMaxLeght(true);
                             }
                             // finding(type, val);
                           },
                         ),
+                      ),
+                      StreamBuilder(
+                        stream: bloc.infoMaxLenght,
+                        builder: (context, snapshot) {
+                          bool show = true;
+                          if(snapshot.data != null){
+                            show = snapshot.data;
+                          }
+                          return show ? Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 25),
+                            child: TextAvenirBook('Ketik minimal 3 karakter..', size: 10, color: Colors.red)
+                          ):SizedBox();
+                        }
                       ),
                       StreamBuilder(
                           stream: bloc.dataFinding,

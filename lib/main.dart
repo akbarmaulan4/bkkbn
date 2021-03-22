@@ -5,6 +5,8 @@ import 'package:kua/screen/auth/forgotpassword/otp_password_screen.dart';
 import 'package:kua/screen/auth/login/login_screen.dart';
 import 'package:kua/screen/auth/register/register_screen.dart';
 import 'package:kua/screen/gateway/gateway_screen.dart';
+import 'package:kua/screen/home/edukasi/detail_artikel.dart';
+import 'package:kua/screen/home/edukasi/list_artikel.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/chat/chat_screen.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/notif/list_notif.dart';
 import 'package:kua/screen/home/home_screen.dart';
@@ -106,7 +108,7 @@ class MyApp extends StatelessWidget {
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
-                  return ResultQuiz(arguments['result']);
+                  return ResultQuiz(arguments['data']);
                 },
                 settings: RouteSettings());
           case '/pdf':
@@ -138,6 +140,30 @@ class MyApp extends StatelessWidget {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
                   return ChatScreen();
+                },
+                settings: RouteSettings());
+          case '/list_artikel':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return ListArtikel(
+                    data: arguments['data'],
+                  );
+                },
+                settings: RouteSettings());
+          case '/detail_artikel':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return DetailArtikel(
+                    data: arguments['data'],
+                  );
                 },
                 settings: RouteSettings());
           default: return null;

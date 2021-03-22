@@ -276,6 +276,44 @@ class API{
     });
   }
 
+  static newsCategory(void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    basePost('/newskategori', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static listArtikel(String kategoriId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['kategori_id'] = kategoriId;
+    basePost('/newslist', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static detailArtikel(String newsId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['news_id'] = newsId;
+    basePost('/newsdetail', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static relatedArtikel(void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    basePost('/newsrelated', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
   static finding(String url, String param, String valueParam, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();

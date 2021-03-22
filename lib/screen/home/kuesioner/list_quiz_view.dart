@@ -6,6 +6,7 @@ import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/avenir_text.dart';
+import 'package:kua/widgets/listQuiz/slider_quiz.dart';
 
 class ListQuizView extends StatefulWidget {
   @override
@@ -111,64 +112,37 @@ class _QuizViewState extends State<ListQuizView> {
                 ),
                 Expanded(
                     flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(left: 22),
-                            child: TextAvenir(data.title)
-                        ),
-                        SliderTheme(
-                          data: SliderTheme.of(context).copyWith(
-                            activeTrackColor: Utils.colorFromHex(ColorCode.blueSecondary),
-                            inactiveTrackColor: Colors.blue[100],
-                            trackShape: RoundedRectSliderTrackShape(),
-                            trackHeight: 4.0,
-                            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 3.0),
-                            thumbColor: Utils.colorFromHex(ColorCode.blueSecondary),
-                            overlayColor: Colors.blue.withAlpha(32),
-                            overlayShape: RoundSliderOverlayShape(overlayRadius: 28.0),
-                            tickMarkShape: RoundSliderTickMarkShape(),
-                            activeTickMarkColor: Utils.colorFromHex(ColorCode.blueSecondary),
-                            inactiveTickMarkColor: Colors.blue[100],
-                            valueIndicatorShape: PaddleSliderValueIndicatorShape(),
-                            valueIndicatorColor: Colors.redAccent,
-                            valueIndicatorTextStyle: TextStyle(
-                              color: Colors.white,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextAvenir(data.title),
+                          SizedBox(height: 15),
+                          TextAvenir('5/10 Pertanyaan telah dijawab', size: 9, color: Colors.grey),
+                          SizedBox(height: 2),
+                          SliderQuiz(
+                            max_questions: 10,
+                            result: 5,
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            decoration: ConstantStyle.box_fill_grey,
+                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            child: Row(
+                              children: [
+                                Container(
+                                    decoration: ConstantStyle.box_fill_red,
+                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                    child: TextAvenir('E', color: Colors.white,)
+                                ),
+                                SizedBox(width: 10),
+                                TextAvenir('Hasil Kuesioner')
+                              ],
                             ),
-                          ),
-                          child: Slider(
-                            value: 30,
-                            min: 0,
-                            max: 100,
-                            divisions: 10,
-                            // label: '$_value',
-                            onChanged: (value) {
-                              // setState(
-                              //       () {
-                              //     _value = value;
-                              //   },
-                              // );
-                            },
-                          ),
-                        ),
-                        Container(
-                          decoration: ConstantStyle.box_fill_grey,
-                          margin: EdgeInsets.only(left: 22),
-                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          child: Row(
-                            children: [
-                              Container(
-                                  decoration: ConstantStyle.box_fill_red,
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                                  child: TextAvenir('E', color: Colors.white,)
-                              ),
-                              SizedBox(width: 10),
-                              TextAvenir('Hasil Kuesioner')
-                            ],
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     )
                 )
               ],

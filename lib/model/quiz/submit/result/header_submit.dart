@@ -3,6 +3,8 @@ class HeaderSubmit{
   HeaderSubmit(){}
   String kuis_code;
   String created_at;
+  String label;
+  String deskripsi;
   String rating;
   String rating_color;
   String kuis_max_nilai;
