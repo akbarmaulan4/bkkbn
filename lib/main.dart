@@ -5,6 +5,9 @@ import 'package:kua/screen/auth/forgotpassword/otp_password_screen.dart';
 import 'package:kua/screen/auth/login/login_screen.dart';
 import 'package:kua/screen/auth/register/register_screen.dart';
 import 'package:kua/screen/gateway/gateway_screen.dart';
+import 'package:kua/screen/home/akun/biodata/biodata_spouse.dart';
+import 'package:kua/screen/home/akun/biodata/tambah_pasangan.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/akun/biodata/biodata_screen.dart';
 import 'package:kua/screen/home/edukasi/detail_artikel.dart';
 import 'package:kua/screen/home/edukasi/list_artikel.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/chat/chat_screen.dart';
@@ -76,9 +79,13 @@ class MyApp extends StatelessWidget {
                 },
                 settings: RouteSettings());
           case '/home':
+            Map<String, dynamic> arguments = null;
+            if (initial.arguments is Map<String, dynamic>) {
+              arguments = initial.arguments as Map<String, dynamic>;
+            }
             return MaterialPageRoute(
-                builder: (context){
-                  return HomeScreen();
+                builder: (context) {
+                  return HomeScreen(loadFirstMenu: arguments["loadFirstMenu"],);
                 },
                 settings: RouteSettings());
           case '/landing_quiz':
@@ -164,6 +171,37 @@ class MyApp extends StatelessWidget {
                   return DetailArtikel(
                     data: arguments['data'],
                   );
+                },
+                settings: RouteSettings());
+
+          case '/biodata':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return BiodataView();
+                },
+                settings: RouteSettings());
+          case '/biodata_pasangan':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return BiodataSpouse();
+                },
+                settings: RouteSettings());
+          case '/tambah_pasangan':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return TambahPasangan();
                 },
                 settings: RouteSettings());
           default: return null;

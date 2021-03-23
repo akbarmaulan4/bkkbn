@@ -69,7 +69,7 @@ class ConstantStyle {
   );
 
   static var box_fill_green = BoxDecoration(
-    color: Utils.colorFromHex(ColorCode.greenPrimary),
+    color: Utils.colorFromHex(ColorCode.greenElsimil),
     borderRadius: BorderRadius.all(Radius.circular(10)),
   );
 

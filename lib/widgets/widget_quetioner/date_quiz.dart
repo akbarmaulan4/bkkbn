@@ -4,7 +4,7 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 
-import '../avenir_text.dart';
+import '../font/avenir_text.dart';
 import '../box_border.dart';
 
 class DateQuiz extends StatefulWidget {

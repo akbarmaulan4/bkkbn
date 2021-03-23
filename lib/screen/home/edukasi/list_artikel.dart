@@ -6,9 +6,10 @@ import 'package:kua/model/edukasi/edukasi_item.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/widgets/avenir_book.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/edukasi/item_artikel.dart';
+import 'package:kua/widgets/pull_refresh_widget.dart';
 
 class ListArtikel extends StatefulWidget {
   EdukasiItem data;
@@ -47,40 +48,45 @@ class _ListArtikelState extends State<ListArtikel> {
             ),
             preferredSize: Size.fromHeight(4.0)),
       ),
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.all(20),
-        child: StreamBuilder(
-          stream: bloc.allArtikel,
-          builder: (context, snapshot) {
-            List<ArtikelItem> data = [];
-            if(snapshot.data != null){
-              data = snapshot.data;
-            }
-            return data.isNotEmpty ? ListView.separated(
-              itemCount: data.length,
-              separatorBuilder: (context, index){
-                return Container(
-                  width: double.infinity,
-                  height: 0.5,
-                  color: Colors.grey.shade200,
-                  margin: EdgeInsets.symmetric(vertical: 5),
-                );
-              },
-              itemBuilder: (context, index){
-                ArtikelItem item = data[index];
-                return InkWell(
-                  onTap: ()=>Navigator.pushNamed(context, '/detail_artikel', arguments: {'data': item}),
-                  child: ItemArtikelWidget(
-                    item: item,
-                  ),
+      body: PullRefreshWidget(
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.all(20),
+          child: StreamBuilder(
+              stream: bloc.allArtikel,
+              builder: (context, snapshot) {
+                List<ArtikelItem> data = [];
+                if(snapshot.data != null){
+                  data = snapshot.data;
+                }
+                return data.isNotEmpty ? ListView.separated(
+                    itemCount: data.length,
+                    separatorBuilder: (context, index){
+                      return Container(
+                        width: double.infinity,
+                        height: 0.5,
+                        color: Colors.grey.shade200,
+                        margin: EdgeInsets.symmetric(vertical: 5),
+                      );
+                    },
+                    itemBuilder: (context, index){
+                      ArtikelItem item = data[index];
+                      return InkWell(
+                        onTap: ()=>Navigator.pushNamed(context, '/detail_artikel', arguments: {'data': item}),
+                        child: ItemArtikelWidget(
+                          item: item,
+                        ),
+                      );
+                    }
+                ):Container(
+                  color: Colors.white,
                 );
               }
-            ):Container(
-              color: Colors.white,
-            );
-          }
+          ),
         ),
+        onRefresh: (){
+          bloc.listArtikel(widget.data.id.toString());
+        },
       ),
     );
   }

@@ -5,8 +5,8 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
 
-import '../avenir_book.dart';
-import '../avenir_text.dart';
+import '../font/avenir_book.dart';
+import '../font/avenir_text.dart';
 
 class ItemArtikelWidget extends StatefulWidget {
   ArtikelItem item;

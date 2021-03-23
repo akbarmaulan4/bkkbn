@@ -4,8 +4,8 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
 
-import '../avenir_book.dart';
-import '../avenir_text.dart';
+import '../font/avenir_book.dart';
+import '../font/avenir_text.dart';
 
 class ItemInfoProfile extends StatefulWidget {
   @override
@@ -63,7 +63,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
             ),
           ),
           SizedBox(height: 10),
-          TextAvenir('Pasangan Kamu', size: 14, color: Utils.colorFromHex(ColorCode.silver)),
+          TextAvenir('Pasangan Kamu', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
           SizedBox(height: 5),
           Container(
             decoration: BoxDecoration(
@@ -103,7 +103,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenir('Tambahkan Pasanganmu', size: 10, color: Utils.colorFromHex(ColorCode.silver)),
+                      TextAvenir('Tambahkan Pasanganmu', size: 10, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                       // TextAvenir('Amanda Manopo', size: 13),
                       // TextAvenirBook('Medan, 23 Oktober 2000', size: 11),
                     ],

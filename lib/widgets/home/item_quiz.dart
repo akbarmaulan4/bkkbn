@@ -4,7 +4,7 @@ import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../avenir_text.dart';
+import '../font/avenir_text.dart';
 
 class ItemQuiz extends StatefulWidget {
 

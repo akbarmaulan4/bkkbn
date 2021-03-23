@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/widgets/avenir_book.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 
 class ListNotif extends StatefulWidget {
   @override

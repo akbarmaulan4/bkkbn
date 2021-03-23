@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:kua/bloc/quiz/quiz_bloc.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/debouncher.dart';
-import 'package:kua/widgets/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
 
-import '../avenir_text.dart';
+import '../font/avenir_text.dart';
 import '../box_border.dart';
 
 class AutoCompleteQuiz extends StatefulWidget {

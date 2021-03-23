@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 
 class ColorCode {
+
   static String bluePrimary = '#192A59';
   static String blueSecondary = '#3F5AA6';
-  static String greenPrimary = '#4D9078';
-  static String lightGrey = '#939CBC';
   static String lightBlueDark = '#EBEEF7';
-  static String silver = '#828899';
+  static String redElsimil = '#B0413E';
+  static String yellowElsimil = '#DAB707';
+  static String greenElsimil = '#4D9078';
+  static String lightGreyElsimil = '#939CBC';
+  static String darkGreyElsimil = '#828899';
+  static String bluePurplelsimil = '#BACAFF';
   static String yellow_light = '#fcefac';
-  static String yellow_dark = '#DAB707';
+  static String softGreyElsimil = '#FAFBFF';
 
   static String colorPrimary =  "#febd3f";
   static String colorWhite = "#FFFFFF";

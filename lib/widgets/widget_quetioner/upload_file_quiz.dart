@@ -8,10 +8,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/widgets/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../avenir_text.dart';
+import '../font/avenir_text.dart';
 
 class UploadFileQuiz extends StatefulWidget {
   int id;

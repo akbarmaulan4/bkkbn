@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/box_border.dart';
 
 class OTPScreen extends StatefulWidget {

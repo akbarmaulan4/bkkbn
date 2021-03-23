@@ -7,8 +7,8 @@ import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../avenir_book.dart';
-import '../avenir_text.dart';
+import '../font/avenir_book.dart';
+import '../font/avenir_text.dart';
 
 class ItemResultQuiz extends StatefulWidget {
   DetailSubmit detail;

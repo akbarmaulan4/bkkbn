@@ -5,8 +5,8 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/widgets/avenir_book.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/home/item_info_profile.dart';
 import 'package:kua/widgets/home/item_quiz.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -181,9 +181,9 @@ class _BerandaVIewState extends State<BerandaVIew> {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Icon(Icons.info_outline_rounded, color: Utils.colorFromHex(ColorCode.yellow_dark)),
+              Icon(Icons.info_outline_rounded, color: Utils.colorFromHex(ColorCode.yellowElsimil)),
               SizedBox(width: 15),
-              Expanded(child: TextAvenirBook(str, size: 13, color: Utils.colorFromHex(ColorCode.yellow_dark)))
+              Expanded(child: TextAvenirBook(str, size: 13, color: Utils.colorFromHex(ColorCode.yellowElsimil)))
             ],
           );
         }

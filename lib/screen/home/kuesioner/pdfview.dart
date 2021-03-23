@@ -6,7 +6,7 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:kua/bloc/pdf/PdfBloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;

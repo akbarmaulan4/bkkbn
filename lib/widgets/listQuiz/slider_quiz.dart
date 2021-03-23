@@ -14,14 +14,15 @@ class _SliderQuizState extends State<SliderQuiz> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var lebarMax = size.width/widget.max_questions;
+    var totalLebal = size.width * 0.52;
+    var lebarMax = totalLebal/widget.max_questions;
     var lebarPart = lebarMax/widget.max_questions;
     double lebar = ((lebarPart * widget.result))*widget.result;
     return Container(
       child: Stack(
         children: [
           Container(
-            width: size.width,
+            width: totalLebal,
             height: 5,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(25)),

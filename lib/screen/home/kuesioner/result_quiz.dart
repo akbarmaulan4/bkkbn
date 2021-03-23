@@ -4,16 +4,14 @@ import 'package:kua/model/quiz/submit/result/result_submit.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'package:kua/widgets/avenir_book.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/widget_quetioner/item_result_quiz.dart';
 
 import '../../../util/Utils.dart';
 import '../../../util/color_code.dart';
 import '../../../util/constant_style.dart';
 import '../../../util/image_constant.dart';
-import '../../../widgets/avenir_book.dart';
-import '../../../widgets/avenir_text.dart';
 
 class ResultQuiz extends StatefulWidget {
   ResultSubmit data;
@@ -26,7 +24,7 @@ class ResultQuiz extends StatefulWidget {
 class _ResultQuizState extends State<ResultQuiz>{
 
   Future<bool> onWillPop() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu':0});
     // Navigator.of(context).pop();
     return Future.value(true);
   }

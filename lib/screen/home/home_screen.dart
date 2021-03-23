@@ -10,6 +10,8 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 
 class HomeScreen extends StatefulWidget {
+  int loadFirstMenu;
+  HomeScreen({this.loadFirstMenu});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -17,17 +19,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   HomeBloc bloc = new HomeBloc();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: ()=> null,
       child: Scaffold(
         body: StreamBuilder(
           stream: bloc.viewScreen,
           builder: (context, snapshot) {
-            int view = 0;
+            int view = widget.loadFirstMenu;
             if(snapshot.data != null){
               view = snapshot.data;
             }

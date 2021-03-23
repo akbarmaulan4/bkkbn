@@ -3,14 +3,20 @@ import 'package:kua/util/constant_style.dart';
 
 class BoxBorderDefault extends StatelessWidget {
   final Widget child;
+  final Color backgroundColor;
   BoxBorderDefault({
-    @required this.child
+    @required this.child,
+    this.backgroundColor
   });
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 15),
-      decoration: ConstantStyle.box_border_field,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Colors.grey[300]),
+        color: backgroundColor != null ? backgroundColor : Colors.white
+      ),
       child: child,
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kua/util/constant_style.dart';
 
-import '../avenir_text.dart';
+import '../font/avenir_text.dart';
 
 class DropDownQuiz extends StatefulWidget {
   String question;

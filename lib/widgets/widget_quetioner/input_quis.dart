@@ -3,7 +3,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:kua/util/constant_style.dart';
 import 'dart:ui' as ui;
 
-import '../avenir_text.dart';
+import '../font/avenir_text.dart';
 import '../box_border.dart';
 
 class InputQuiz extends StatefulWidget {

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   checkUser() async{
     var user = await LocalData.getUser();
     if(user != null){
-      Navigator.popAndPushNamed(context, '/home');
+      Navigator.popAndPushNamed(context, '/home', arguments: {'loadFirstMenu':0});
     }else{
       Navigator.popAndPushNamed(context, '/gateway');
     }

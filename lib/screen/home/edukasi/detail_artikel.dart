@@ -7,8 +7,8 @@ import 'package:kua/model/edukasi/detail_edukasi.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/widgets/avenir_book.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/edukasi/item_artikel.dart';
 
 class DetailArtikel extends StatefulWidget {
@@ -128,7 +128,9 @@ class _DetailArtikelState extends State<DetailArtikel> {
                     ),
 
                   ),
-                  child: Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+                  child: InkWell(
+                      onTap: ()=>Navigator.of(context).pop(),
+                      child: Icon(Icons.arrow_back_ios_rounded, color: Colors.white)),
                 )
               ],
             ),

@@ -4,7 +4,8 @@ import 'package:kua/bloc/berita/edukasi_bloc.dart';
 import 'package:kua/model/edukasi/edukasi_item.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
+import 'package:kua/widgets/pull_refresh_widget.dart';
 
 class EdukasiView extends StatefulWidget {
   @override
@@ -39,30 +40,35 @@ class _EdukasiViewState extends State<EdukasiView> {
             ),
             preferredSize: Size.fromHeight(4.0)),
       ),
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: CustomScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              sliver: SliverToBoxAdapter(
-                child: TextAvenir('Kategori Edukasi', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+      body: PullRefreshWidget(
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                sliver: SliverToBoxAdapter(
+                  child: TextAvenir('Kategori Edukasi', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                ),
               ),
-            ),
-            StreamBuilder(
-              stream: bloc.categoryEdukasi,
-              builder: (context, snapshot) {
-                List<EdukasiItem> data = [];
-                if(snapshot.data != null){
-                  data = snapshot.data;
-                }
-                return itemCategory(data);
-              }
-            ),
-          ],
+              StreamBuilder(
+                  stream: bloc.categoryEdukasi,
+                  builder: (context, snapshot) {
+                    List<EdukasiItem> data = [];
+                    if(snapshot.data != null){
+                      data = snapshot.data;
+                    }
+                    return itemCategory(data);
+                  }
+              ),
+            ],
+          ),
         ),
+        onRefresh: (){
+          bloc.newsCategory();
+        },
       ),
     );
   }

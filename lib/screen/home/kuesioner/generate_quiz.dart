@@ -5,7 +5,7 @@ import 'package:kua/model/quiz/generate_kuesioner/pertanyaan.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/widget_quetioner/autocomplete_quiz.dart';
 import 'package:kua/widgets/widget_quetioner/date_quiz.dart';
 import 'package:kua/widgets/widget_quetioner/input_quis.dart';

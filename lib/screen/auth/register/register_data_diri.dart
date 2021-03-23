@@ -4,7 +4,7 @@ import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/box_border.dart';
 
 class RegisterDataDiri extends StatefulWidget {
@@ -28,9 +28,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
     dataGender.add('Laki-laki');
     dataGender.add('Perempuan');
 
-    // if(widget.bloc.allProvinsi.length < 1){
+    if(widget.bloc.allProvinsi.length < 1){
       widget.bloc.getProvinsi();
-    // }
+    }
 
     widget.bloc.messageError.listen((event) {
       if(event != null){

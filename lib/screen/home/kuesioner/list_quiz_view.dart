@@ -5,8 +5,9 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/listQuiz/slider_quiz.dart';
+import 'package:kua/widgets/pull_refresh_widget.dart';
 
 class ListQuizView extends StatefulWidget {
   @override
@@ -33,56 +34,61 @@ class _QuizViewState extends State<ListQuizView> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Divider(),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  border: Border.all(color: Colors.grey[300])
-              ),
-              padding: EdgeInsets.only(right: 25),
-              margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              height: 45,
-              child: TextField(
-                // controller: bloc.edtUsername,
-                textAlignVertical: TextAlignVertical.center,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Cari',
-                    fillColor: Colors.grey,
-                    prefixIcon: Icon(Icons.search, size: 20),
-                    contentPadding: EdgeInsets.only(bottom: 7)
+      body: PullRefreshWidget(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Divider(),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    border: Border.all(color: Colors.grey[300])
                 ),
-                onChanged: (val){
-                  // finding(type, val);
-                },
+                padding: EdgeInsets.only(right: 25),
+                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                height: 45,
+                child: TextField(
+                  // controller: bloc.edtUsername,
+                  textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Cari',
+                      fillColor: Colors.grey,
+                      prefixIcon: Icon(Icons.search, size: 20),
+                      contentPadding: EdgeInsets.only(bottom: 7)
+                  ),
+                  onChanged: (val){
+                    // finding(type, val);
+                  },
+                ),
               ),
-            ),
-            Expanded(
-              child: StreamBuilder(
-                stream: bloc.dataListKuesioner,
-                builder: (context, snapshot) {
-                  List<DataKuesioner> data = [];
-                  if(snapshot.data != null){
-                    data = snapshot.data;
-                  }
-                  return Container(
-                    child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index){
-                        return itemQuiz(data[index], data.length == index+1);
+              Expanded(
+                child: StreamBuilder(
+                    stream: bloc.dataListKuesioner,
+                    builder: (context, snapshot) {
+                      List<DataKuesioner> data = [];
+                      if(snapshot.data != null){
+                        data = snapshot.data;
                       }
-                    ),
-                  );
-                }
+                      return Container(
+                        child: ListView.builder(
+                            itemCount: data.length,
+                            itemBuilder: (context, index){
+                              return itemQuiz(data[index], data.length == index+1);
+                            }
+                        ),
+                      );
+                    }
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        onRefresh: (){
+          bloc.quizList();
+        },
       ),
     );
   }
@@ -123,7 +129,7 @@ class _QuizViewState extends State<ListQuizView> {
                           SizedBox(height: 2),
                           SliderQuiz(
                             max_questions: 10,
-                            result: 5,
+                            result: 6,
                           ),
                           SizedBox(height: 10),
                           Container(

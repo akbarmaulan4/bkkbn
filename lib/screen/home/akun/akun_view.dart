@@ -4,8 +4,8 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/widgets/avenir_book.dart';
-import 'package:kua/widgets/avenir_text.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 
 class AkunView extends StatefulWidget {
   @override
@@ -63,29 +63,39 @@ class _AkunScreenState extends State<AkunView> {
                 ),
               ),
               SizedBox(height: 20),
-              Container(
-                decoration: ConstantStyle.box_border_grey,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextAvenir('Biodata', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                  ],
+              InkWell(
+                onTap: (){
+                  Navigator.pushNamed(context, '/biodata');
+                },
+                child: Container(
+                  decoration: ConstantStyle.box_border_grey,
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextAvenir('Biodata', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                      ),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 10),
-              Container(
-                decoration: ConstantStyle.box_border_grey,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextAvenir('Biodata Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                  ],
+              InkWell(
+                onTap: (){
+                  Navigator.pushNamed(context, '/biodata_pasangan');
+                },
+                child: Container(
+                  decoration: ConstantStyle.box_border_grey,
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: TextAvenir('Biodata Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                      ),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 10),
