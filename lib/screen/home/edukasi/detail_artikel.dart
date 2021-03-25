@@ -29,6 +29,12 @@ class _DetailArtikelState extends State<DetailArtikel> {
     super.initState();
     bloc.getDetailArtikel(widget.data.id.toString());
     bloc.getRelatedlArtikel();
+
+    bloc.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
   }
 
   @override

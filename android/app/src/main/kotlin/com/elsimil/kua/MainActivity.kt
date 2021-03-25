@@ -1,4 +1,4 @@
-package com.kedaisayur.kua
+package com.elsimil.kua
 
 import io.flutter.embedding.android.FlutterActivity
 

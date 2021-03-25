@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kua/bloc/berita/edukasi_bloc.dart';
 import 'package:kua/model/edukasi/artikel_item.dart';
 import 'package:kua/model/edukasi/edukasi_item.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/edukasi/item_artikel.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
@@ -26,6 +23,12 @@ class _ListArtikelState extends State<ListArtikel> {
     // TODO: implement initState
     super.initState();
     bloc.listArtikel(widget.data.id.toString());
+
+    bloc.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
   }
 
   @override

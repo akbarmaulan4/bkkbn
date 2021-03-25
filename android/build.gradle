@@ -3,18 +3,31 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
+        maven { url "http://dl.bintray.com/pt-midtrans/maven" }
+        maven { url "https://jitpack.io" }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.4'
+        classpath 'com.google.gms:google-services:4.3.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'io.fabric.tools:gradle:1.28.1'
     }
+
 }
 
 allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
+        maven { url "http://dl.bintray.com/pt-midtrans/maven" }
+        maven { url "https://jitpack.io" }
     }
 }
 

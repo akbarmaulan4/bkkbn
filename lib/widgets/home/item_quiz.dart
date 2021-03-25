@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kua/model/home/item_result.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
@@ -7,7 +8,8 @@ import 'package:rxdart/rxdart.dart';
 import '../font/avenir_text.dart';
 
 class ItemQuiz extends StatefulWidget {
-
+  List<ItemResult> result;
+  ItemQuiz({this.result});
   @override
   _ItemQuizState createState() => _ItemQuizState();
 }
@@ -37,8 +39,8 @@ class _ItemQuizState extends State<ItemQuiz> {
               scrollDirection: Axis.horizontal,
               controller: _pageController,
               onPageChanged: _onPageChanged,
-              itemCount: 3,
-              itemBuilder: (context, index) => item()
+              itemCount: widget.result.length,
+              itemBuilder: (context, index) => item(widget.result[index])
           ),
         ),
         StreamBuilder(
@@ -70,7 +72,7 @@ class _ItemQuizState extends State<ItemQuiz> {
     );
   }
 
-  item(){
+  item(ItemResult data){
     final size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.only(left: 20),
@@ -87,13 +89,13 @@ class _ItemQuizState extends State<ItemQuiz> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: size.height * 0.13,),
-                TextAvenir('Pencegahan Stunting', size: 16,),
+                TextAvenir(data.kuis_title, size: 16,),
               ],
             ),
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: Utils.colorFromHex(data.rating_color),
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ), //ConstantStyle.box_fill_green,
             margin: EdgeInsets.symmetric(horizontal: 15),
@@ -102,9 +104,9 @@ class _ItemQuizState extends State<ItemQuiz> {
             width: double.maxFinite,
             child: Column(
               children: [
-                TextAvenir('?', size: 75, color: Colors.white),
-                TextAvenir('95/100', color: Colors.white),
-                TextAvenir('Sehat',  color: Colors.white)
+                TextAvenir(data.rating, size: 75, color: Colors.white),
+                TextAvenir('${data.member_kuis_nilai}/${data.kuis_max_nilai}', color: Colors.white),
+                TextAvenir(data.label,  color: Colors.white)
               ],
             ),
           )
@@ -115,7 +117,7 @@ class _ItemQuizState extends State<ItemQuiz> {
 
   indicator(int selected){
     List<Widget> data = [];
-    for(int i=0; i<3; i++){
+    for(int i=0; i<widget.result.length; i++){
       data.add(Container(
         width: 8.3,
         height: 8.3,

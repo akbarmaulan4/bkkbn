@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     bloc.loginSucces.listen((event) {
       if(event != null){
         if(event){
-          Navigator.popAndPushNamed(context, '/home');
+          Navigator.popAndPushNamed(context, '/home', arguments: {'loadFirstMenu':0});
         }
       }
     });

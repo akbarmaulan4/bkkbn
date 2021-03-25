@@ -185,6 +185,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.id = quest.pertanyaan_id;
         input.question = quest.title;
         input.tipe = quest.tipe;
+        input.satuan = quest.satuan;
         input.changeValue = (val){
           quest.value = val;
         };
@@ -235,6 +236,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         input.id = quest.pertanyaan_id;
         input.question = quest.title;
         input.tipe = quest.tipe;
+        input.satuan = quest.satuan;
         input.changeValue = (val){
           quest.value = val;
         };

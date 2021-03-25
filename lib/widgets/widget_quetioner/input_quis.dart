@@ -9,9 +9,8 @@ import '../box_border.dart';
 class InputQuiz extends StatefulWidget {
   String question;
   int id;
-  // String headerId;
-  // String jenis;
   String tipe;
+  String satuan;
   Function changeValue;
 
   String tile;
@@ -21,9 +20,8 @@ class InputQuiz extends StatefulWidget {
 
   InputQuiz({
     this.id,
-    // this.headerId,
-    // this.jenis,
     this.tipe,
+    this.satuan,
     this.question,
     this.changeValue
   });
@@ -86,7 +84,7 @@ class _InputQuizState extends State<InputQuiz> {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: TextAvenir('Kg', size: 16,)
+                      child: TextAvenir(widget.satuan, size: 16,)
                     )
                   ],
                 )

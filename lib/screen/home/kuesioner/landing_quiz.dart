@@ -65,13 +65,6 @@ class _LandingQuizState extends State<LandingQuiz> {
                       children: [
                         TextAvenir(data.title != null ? data.title : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                         SizedBox(height: 10),
-                        // TextAvenir("Apa itu stunting...", size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                        // SizedBox(height: 5),
-                        // TextAvenirBook('drasydvhbsadpioasndosandoandoansoaksl acjbascibaabo cibsaduagdu agdoiadnafioaufagyud aoidhaidgaufbaidha8dgwb90dhwoijqwqtcasvhdbjandadha diakmdadadadaadad'),
-                        // SizedBox(height: 10),
-                        // TextAvenir("Hal yang harus dipersiapkan sebelum Kuesioner", size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                        // SizedBox(height: 5),
-                        // TextAvenirBook('drasydvhbsadpioasndosandoandoansoaksl acjbascibaabo cibsaduagdu agdoiadnafioaufagyud aoidhaidgaufbaidha8dgwb90dhwoijqwqtcasvhdbjandadha diakmdadadadaadad'),
                         Html(
                           data: data.deskripsi != null ? data.deskripsi : '',
                           defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book'),

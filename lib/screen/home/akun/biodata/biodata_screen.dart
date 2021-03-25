@@ -54,12 +54,12 @@ class _BiodataViewState extends State<BiodataView> {
         centerTitle: true,
         elevation: 0,
         automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Icon(Icons.add, color: Utils.colorFromHex(ColorCode.bluePrimary))
-          )
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.symmetric(horizontal: 10),
+        //     child: Icon(Icons.add, color: Utils.colorFromHex(ColorCode.bluePrimary))
+        //   )
+        // ],
       ),
       body: Container(
         color: Utils.colorFromHex(ColorCode.softGreyElsimil),

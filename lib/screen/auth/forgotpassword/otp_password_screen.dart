@@ -28,6 +28,17 @@ class _OTPScreenState extends State<OTPPasswordScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bloc.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(

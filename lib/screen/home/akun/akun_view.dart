@@ -26,6 +26,8 @@ class _AkunScreenState extends State<AkunView> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
+        color: Utils.colorFromHex(ColorCode.lightBlueDark),
+        height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -112,21 +114,39 @@ class _AkunScreenState extends State<AkunView> {
                 ),
               ),
               SizedBox(height: 10),
-              Container(
-                decoration: ConstantStyle.box_border_grey,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextAvenir('Bantuan', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                  ],
+              InkWell(
+                onTap: ()=>Navigator.pushNamed(context, '/bantuan'),
+                child: Container(
+                  decoration: ConstantStyle.box_border_grey,
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: TextAvenir('Bantuan', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                      ),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                    ],
+                  ),
                 ),
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  itemList(String title){
+    return Container(
+      decoration: ConstantStyle.box_border_grey,
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      child: Row(
+        children: [
+          Expanded(
+              child: TextAvenir(title, size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
+          ),
+          Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
+        ],
       ),
     );
   }
