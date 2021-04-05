@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:kua/util/Utils.dart';
 import 'package:kua/util/constant_style.dart';
 import 'dart:ui' as ui;
 
@@ -66,7 +67,7 @@ class _InputQuizState extends State<InputQuiz> {
                     Expanded(
                       flex: 3,
                       child: Directionality(
-                        textDirection:  widget.tipe == 'angka' ? ui.TextDirection.ltr:ui.TextDirection.rtl,
+                        textDirection:  widget.tipe == 'angka' ? ui.TextDirection.ltr : ui.TextDirection.rtl,
                         child: TextField(
                           textAlignVertical: TextAlignVertical.center,
                           keyboardType: widget.tipe == 'angka' ? TextInputType.number : TextInputType.text,
@@ -75,7 +76,13 @@ class _InputQuizState extends State<InputQuiz> {
                           //   new BlacklistingTextInputFormatter(
                           //       new RegExp('[\\-|\\,|\\.]')),
                           // ],
-                          decoration: ConstantStyle.decorTextField,
+                          // textAlign:  widget.tipe == 'angka' ? TextAlign.right:TextAlign.left,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.only(bottom:16),
+                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                              hintText: widget.question
+                          ),
                           onChanged: (val){
                             setAnswer(val);
                           },

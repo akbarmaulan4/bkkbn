@@ -22,7 +22,9 @@ class _ListArtikelState extends State<ListArtikel> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.listArtikel(widget.data.id.toString());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.listArtikel(context, widget.data.id.toString());
+    });
 
     bloc.messageError.listen((event) {
       if(event != null){
@@ -46,7 +48,7 @@ class _ListArtikelState extends State<ListArtikel> {
         ),
         bottom: PreferredSize(
             child: Container(
-              color: Colors.grey.shade300,
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
               height: 0.5,
             ),
             preferredSize: Size.fromHeight(4.0)),
@@ -68,16 +70,22 @@ class _ListArtikelState extends State<ListArtikel> {
                       return Container(
                         width: double.infinity,
                         height: 0.5,
-                        color: Colors.grey.shade200,
+                        color: Utils.colorFromHex(ColorCode.lightBlueDark),
                         margin: EdgeInsets.symmetric(vertical: 5),
                       );
                     },
                     itemBuilder: (context, index){
                       ArtikelItem item = data[index];
                       return InkWell(
-                        onTap: ()=>Navigator.pushNamed(context, '/detail_artikel', arguments: {'data': item}),
-                        child: ItemArtikelWidget(
-                          item: item,
+                        onTap: ()=>Navigator.pushNamed(context, '/detail_artikel', arguments: {'id': item.id.toString()}),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            ItemArtikelWidget(
+                              item: item,
+                            ),
+                            SizedBox(height: 10),
+                          ],
                         ),
                       );
                     }
@@ -88,7 +96,7 @@ class _ListArtikelState extends State<ListArtikel> {
           ),
         ),
         onRefresh: (){
-          bloc.listArtikel(widget.data.id.toString());
+          bloc.listArtikel(context, widget.data.id.toString());
         },
       ),
     );

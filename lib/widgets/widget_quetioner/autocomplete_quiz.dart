@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kua/bloc/quiz/quiz_bloc.dart';
+import 'package:kua/util/Utils.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/debouncher.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
@@ -63,7 +64,12 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                 child: TextField(
                   controller: edt,
                   textAlignVertical: TextAlignVertical.center,
-                  decoration: ConstantStyle.decorTextField,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(bottom:16),
+                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                      hintText: widget.question
+                  ),
                   enabled: false,
                   onChanged: (val){
                     setAnswer(val);

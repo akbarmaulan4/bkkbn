@@ -18,7 +18,7 @@ class ConstantStyle {
 
   static const decorTextField = InputDecoration(
       border: InputBorder.none,
-      contentPadding: EdgeInsets.only(bottom:16)
+      contentPadding: EdgeInsets.only(bottom:16),
   );
 
   static decorTextField2(String hint){
@@ -39,6 +39,76 @@ class ConstantStyle {
             offset: Offset(1,1),
           )
         ]
+    );
+  }
+
+  static boxShadowButon({
+    double radius,
+    Color color,
+    Color colorShadow,
+    double spreadRadius,
+    double blurRadius,
+    Offset offset,
+  }){
+    return BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(radius)),
+      color: color,
+      boxShadow: [
+        BoxShadow(
+          color: colorShadow,
+          spreadRadius: spreadRadius,
+          blurRadius: blurRadius,
+          offset: offset,
+        ),
+      ],
+    );
+  }
+
+  static boxButton({
+    double radius,
+    Color color,
+  }){
+    return BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        color: color
+    );
+  }
+
+  static boxButtonBorder({
+    double radius,
+    Color color,
+    Color colorBorder,
+    double widthBorder
+  }){
+    return BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(radius)),
+      color: color,
+      border: Border.all(color: colorBorder, width: widthBorder)
+    );
+  }
+
+  static boxShadowButtonBorder({
+    double radius,
+    Color color,
+    Color colorBorder,
+    double widthBorder,
+    Color colorShadow,
+    double spreadRadius,
+    double blurRadius,
+    Offset offset,
+  }){
+    return BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        color: color,
+        border: Border.all(color: colorBorder, width: widthBorder),
+        boxShadow: [
+          BoxShadow(
+            color: colorShadow,
+            spreadRadius: spreadRadius,
+            blurRadius: blurRadius,
+            offset: offset,
+          ),
+        ],
     );
   }
 

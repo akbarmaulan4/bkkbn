@@ -7,7 +7,7 @@ DetailEdukasi _$fromJson(Map<String, dynamic> json) {
     ..judul = json['judul'] as String ?? ''
     ..content = json['content'] as String ?? ''
     ..tgl_publish = json['tgl_publish'] as String ?? ''
-    ..url = json['url'] as String ?? ''
+    ..image = json['image'] as String ?? ''
     ..creator = json['creator'] as String ?? ''
   ;
 }
@@ -20,6 +20,6 @@ Map<String, dynamic> _$toJson(DetailEdukasi instance) =>
       'deskripsi': instance.deskripsi,
       'content': instance.content,
       'tgl_publish': instance.tgl_publish,
-      'url': instance.url,
+      'image': instance.image,
       'creator': instance.creator
     };

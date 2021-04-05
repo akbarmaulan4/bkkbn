@@ -30,7 +30,7 @@ class _OTPScreenState extends State<OTPScreen> {
             child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))),
         bottom: PreferredSize(
             child: Container(
-              color: Colors.grey[300],
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
               height: 1,
             ),
             preferredSize: Size.fromHeight(4.0)),

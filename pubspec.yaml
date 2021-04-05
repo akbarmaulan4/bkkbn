@@ -47,6 +47,14 @@ dependencies:
 #  pull_to_refresh: ^1.6.4
   liquid_pull_to_refresh: ^3.0.0
   onesignal_flutter: ^2.0.0
+  imei_plugin: 1.1.6
+  flutter_image_compress: ^1.0.0
+  pdf_compressor: ^0.0.1
+  exif: ^2.0.0
+  device_info: 0.4.2+4
+#  avatar_glow: ^1.1.0
+#  font_awesome_flutter: ^9.0.0
+#  connectivity:
 #  timelines: ^0.0.2+1
 #  smart_select: ^4.3.2
 #  pinput: ^0.2.6
@@ -80,14 +88,23 @@ flutter:
   assets:
      - assets/images/bkkbn.png
      - assets/images/bkkbn_white.png
-     - assets/images/lp_register.png
-     - assets/images/foto_icon.png
-     - assets/images/forgot_pass_lp.png
+#     - assets/images/foto_icon.png
      - assets/images/noimages.png
      - assets/images/bg_login.png
      - assets/images/family_placeholder.png
+     - assets/images/bg_elsimil.jpg
+     - assets/images/logo.png
+     - assets/images/logo_elsimil_putih.png
+     - assets/images/ellipse.png
+     - assets/images/place_holder_elsimil.png
+     - assets/images/place_holder_account.png
      - assets/icon/ic_mail_open.png
      - assets/icon/icon_pdf.png
+     - assets/icon/ic_pdf.png
+     - assets/icon/ic_pdf_2.png
+     - assets/icon/ic_book_open.png
+     - assets/icon/ic_chat.png
+     - assets/icon/ic_account.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

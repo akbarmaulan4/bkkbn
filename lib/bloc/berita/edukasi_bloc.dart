@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:kua/api/api.dart';
 import 'package:kua/model/edukasi/all_artikel.dart';
 import 'package:kua/model/edukasi/all_category_edukasi.dart';
@@ -5,6 +6,7 @@ import 'package:kua/model/edukasi/artikel_item.dart';
 import 'package:kua/model/edukasi/detail_edukasi.dart';
 import 'package:kua/model/edukasi/edukasi_item.dart';
 import 'package:kua/screen/home/edukasi/detail_artikel.dart';
+import 'package:kua/util/Utils.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EdukasiBloc{
@@ -20,8 +22,10 @@ class EdukasiBloc{
   Stream<DetailEdukasi> get detailEdukasi => _detailEdukasi.stream;
 
 
-  newsCategory() async{
+  newsCategory(BuildContext context) async{
+    Utils.progressDialog(context);
     API.newsCategory((result, error) {
+      Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
@@ -38,8 +42,10 @@ class EdukasiBloc{
     });
   }
 
-  listArtikel(String catId) async{
+  listArtikel(BuildContext context, String catId) async{
+    Utils.progressDialog(context);
     API.listArtikel(catId, (result, error) {
+      Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
@@ -56,8 +62,10 @@ class EdukasiBloc{
     });
   }
 
-  getDetailArtikel(String newsId) async{
+  getDetailArtikel(BuildContext context, String newsId) async{
+    Utils.progressDialog(context);
     API.detailArtikel(newsId, (result, error) {
+      Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;

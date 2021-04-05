@@ -28,19 +28,28 @@ class _ItemQuizState extends State<ItemQuiz> {
     _selected.sink.add(index);
   }
 
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
         Container(
-          height: size.height * 0.25,
+          height:  is5Inc() ? size.height * 0.26:size.height * 0.27,
           child: PageView.builder(
               scrollDirection: Axis.horizontal,
               controller: _pageController,
               onPageChanged: _onPageChanged,
-              itemCount: widget.result.length,
-              itemBuilder: (context, index) => item(widget.result[index])
+              itemCount: widget.result.length > 0 ? widget.result.length : 1,
+              itemBuilder: (context, index) => item(widget.result.length > 0 ? widget.result[index]:null)
           ),
         ),
         StreamBuilder(
@@ -54,7 +63,7 @@ class _ItemQuizState extends State<ItemQuiz> {
               // bottom: 0.0,
               child: Container(
                 alignment: Alignment.bottomRight,
-                height: size.height * 0.25,
+                height: is5Inc() ? size.height * 0.26:size.height * 0.27,
                 child: Container(
                   height: 25,
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -74,56 +83,94 @@ class _ItemQuizState extends State<ItemQuiz> {
 
   item(ItemResult data){
     final size = MediaQuery.of(context).size;
-    return Container(
-      padding: EdgeInsets.only(left: 20),
-      margin: EdgeInsets.symmetric(horizontal: 8),
-      child: Stack(
-        children: [
-          Container(
-            decoration: ConstantStyle.box_white,
-            margin: EdgeInsets.only(top: 40),
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            height: size.height * 0.20,
-            width: double.maxFinite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: size.height * 0.13,),
-                TextAvenir(data.kuis_title, size: 16,),
-              ],
+    return InkWell(
+      onTap: (){
+        // if(data.result_id < 1){
+          Navigator.pushNamed(context, '/landing_quiz', arguments: {'id': data.kuis_id, 'result_id': data.result_id});
+        // }else{
+        //   Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id':data.result_id});
+        // }
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.symmetric(horizontal: 12),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Utils.colorFromHex(ColorCode.lightBlueDark),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              margin: EdgeInsets.only(top: is5Inc() ? 24 : 35),
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              height: is5Inc() ? size.height * 0.22 : size.height * 0.24,
+              width: double.maxFinite,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: (data != null && data.rating_color != '') ? Utils.colorFromHex(data.rating_color):Utils.colorFromHex(ColorCode.darkGreyElsimil),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    padding: EdgeInsets.all(is5Inc() ? 2:5),
+                    // margin: EdgeInsets.symmetric(horizontal: 15),
+                    height: is5Inc() ? size.height * 0.12 : size.height * 0.13,
+                    width: double.maxFinite,
+                    child: Column(
+                      children: [
+                        SizedBox(height: is5Inc() ? size.height * 0.04 : size.height * 0.05),
+                        TextAvenir((data != null && data.rating_color != '') ? data.label:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:16),
+                        TextAvenir((data != null && data.rating_color != '') ? '${data.member_kuis_nilai}/${data.kuis_max_nilai}':'-', color: Colors.white, size: is5Inc() ? 12:14),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // SizedBox(height: is5Inc() ? size.height * 0.14 : size.height * 0.148),
+                  TextAvenir(data != null ? data.kuis_title : '', size: is5Inc() ? 12:16,),
+                ],
+              ),
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Utils.colorFromHex(data.rating_color),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ), //ConstantStyle.box_fill_green,
-            margin: EdgeInsets.symmetric(horizontal: 15),
-            padding: EdgeInsets.all(10),
-            height: size.height * 0.16,
-            width: double.maxFinite,
-            child: Column(
-              children: [
-                TextAvenir(data.rating, size: 75, color: Colors.white),
-                TextAvenir('${data.member_kuis_nilai}/${data.kuis_max_nilai}', color: Colors.white),
-                TextAvenir(data.label,  color: Colors.white)
-              ],
-            ),
-          )
-        ],
+            // Container(
+            //   decoration: BoxDecoration(
+            //     color: (data != null && data.rating_color != '') ? Utils.colorFromHex(data.rating_color):Utils.colorFromHex(ColorCode.darkGreyElsimil),
+            //     borderRadius: BorderRadius.all(Radius.circular(10)),
+            //   ), //ConstantStyle.box_fill_green,
+            //   margin: EdgeInsets.symmetric(horizontal: 15),
+            //   padding: EdgeInsets.all(is5Inc() ? 2:5),
+            //   height: is5Inc() ? size.height * 0.18 : size.height * 0.18,
+            //   width: double.maxFinite,
+            //   child: Center(
+            //     child: Column(
+            //       children: [
+            //         SizedBox(height:  is5Inc() ? 5:10),
+            //         TextAvenir((data != null && data.rating_color != '') ? data.rating : '?', size: is5Inc() ? 50:75, color: Colors.white),
+            //         TextAvenir((data != null && data.rating_color != '') ? '${data.member_kuis_nilai}/${data.kuis_max_nilai}':'-', color: Colors.white, size: is5Inc() ? 12:14),
+            //         TextAvenir((data != null && data.rating_color != '') ? data.label:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:14)
+            //       ],
+            //     ),
+            //   ),
+            // )
+          ],
+        ),
       ),
     );
   }
 
   indicator(int selected){
     List<Widget> data = [];
-    for(int i=0; i<widget.result.length; i++){
+    var totalDot = widget.result.length;
+    if(totalDot < 1){
+      totalDot = 1;
+    }
+    for(int i=0; i<totalDot; i++){
       data.add(Container(
         width: 8.3,
         height: 8.3,
         margin: EdgeInsets.symmetric(horizontal: 2),
         decoration: new BoxDecoration(
-          color: i == selected ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey.shade200,
+          color: i == selected ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey,
           shape: BoxShape.circle,
         ),
       ));

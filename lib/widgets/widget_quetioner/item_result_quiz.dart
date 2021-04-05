@@ -36,62 +36,69 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-
+    var size = MediaQuery.of(context).size;
     var color =  Utils.colorFromHex(ColorCode.blueSecondary);
     if(widget.detail.rating_color != null && widget.detail.rating_color != ''){
       color =  Utils.colorFromHex(widget.detail.rating_color);
     }
 
     return Container(
-      decoration: ConstantStyle.box_border_field,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Utils.colorFromHex(ColorCode.greyElsimil))
+      ),
+      // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       margin: EdgeInsets.symmetric(vertical: 5),
       child: Column(
         children: [
-          Row(
-            children: [
-              Container(
-                height: 30,
-                width: 30,
-                decoration: new BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            margin: EdgeInsets.only(top: 10, bottom: bloc.isOpen ? 0 : 10),
+            child: Row(
+              children: [
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: new BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.only(top: size.width < 430 ? 0:4),
+                  child: Center(child: TextAvenir(widget.detail.rating, size: size.width < 430 ? 17:20, color: Colors.white,)),
                 ),
-                padding: EdgeInsets.only(top: 4),
-                child: Center(child: TextAvenir(widget.detail.rating, size: 20, color: Colors.white,)),
-              ),
-              SizedBox(width: 15),
-              Expanded(child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.ideographic,
-                  children: [
-                    TextAvenir('${widget.detail.value} - ${widget.detail.label}', size: 15, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                    TextAvenirBook(widget.detail.caption, size: 14, color: Colors.grey)
-                  ],
-                ),
-              )),
-              AnimatedBuilder(
-                animation: _arrowAnimationController,
-                builder: (context, child) => Transform.rotate(
-                  angle: _arrowAnimation.value,
-                  child: InkWell(
-                    onTap: (){
-                      _arrowAnimationController.isCompleted
-                          ? _arrowAnimationController.reverse()
-                          : _arrowAnimationController.forward();
-                      bloc.changeOpen(!bloc.isOpen);
-                    },
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      size: 30,
-                      color: Colors.grey,
+                SizedBox(width: 15),
+                Expanded(child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.ideographic,
+                    children: [
+                      TextAvenir(widget.detail.value == ''? widget.detail.label : '${widget.detail.value} - ${widget.detail.label}', size: size.width < 430 ? 13:15, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                      TextAvenirBook(widget.detail.caption, size: size.width < 430 ? 12:14, color: Utils.colorFromHex(ColorCode.greyElsimil))
+                    ],
+                  ),
+                )),
+                AnimatedBuilder(
+                  animation: _arrowAnimationController,
+                  builder: (context, child) => Transform.rotate(
+                    angle: _arrowAnimation.value,
+                    child: InkWell(
+                      onTap: (){
+                        _arrowAnimationController.isCompleted
+                            ? _arrowAnimationController.reverse()
+                            : _arrowAnimationController.forward();
+                        bloc.changeOpen(!bloc.isOpen);
+                      },
+                      child: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        size: 30,
+                        color: Utils.colorFromHex(ColorCode.greyElsimil),
+                      ),
                     ),
                   ),
-                ),
-              )
-              // Icon(Icons.keyboard_arrow_down_rounded, size: 30, color: Colors.grey,)
-            ],
+                )
+                // Icon(Icons.keyboard_arrow_down_rounded, size: 30, color: Colors.grey,)
+              ],
+            ),
           ),
           StreamBuilder(
             stream: bloc.open,
@@ -105,8 +112,12 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Divider(),
-                    Column(
-                      children: loadFile(widget.detail.file),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        children: loadFile(widget.detail.file),
+                      ),
                     )
                   ],
                 ),
@@ -119,23 +130,28 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
   }
 
   loadFile(List<FileDetailSubmit> data){
+    var size = MediaQuery.of(context).size;
     List<Widget> widgets = [];
     for(FileDetailSubmit submit in data){
       widgets.add(InkWell(
         onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':submit.file, 'code':submit.name}),
         child: Container(
-          decoration: ConstantStyle.box_fill_grey,
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          margin: EdgeInsets.symmetric(horizontal: 50),
+          decoration: BoxDecoration(
+            color: Utils.colorFromHex(ColorCode.lightBlueDark),
+            border: Border.all(color: Utils.colorFromHex(ColorCode.greyElsimil)),
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          padding: EdgeInsets.symmetric(vertical: size.width < 430 ? 5: 8, horizontal: size.width < 430 ?15:20),
+          margin: EdgeInsets.symmetric(horizontal: size.width < 430 ? 35:50),
           child: Row(
             children: [
-              Image.asset(ImageConstant.icPdf, height: 20,),
+              Image.asset(ImageConstant.icPdf2, height: 30,),
               SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenirBook('Unduh file berikut ini.', size: 13,),
-                  TextAvenirBook(submit.name, size: 13),
+                  TextAvenirBook('Unduh file berikut ini.', size: size.width < 430 ? 12:13, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                  TextAvenirBook(submit.name, size: size.width < 430 ?12:13, weight: FontWeight.bold, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                 ],
               )
             ],

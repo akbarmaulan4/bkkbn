@@ -1,9 +1,11 @@
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kua/bloc/berita/edukasi_bloc.dart';
 import 'package:kua/model/edukasi/edukasi_item.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
+import 'package:kua/util/image_constant.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
 
@@ -21,7 +23,25 @@ class _EdukasiViewState extends State<EdukasiView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.newsCategory();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.newsCategory(context);
+    });
+
+
+    bloc.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
+  }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   @override
@@ -35,7 +55,7 @@ class _EdukasiViewState extends State<EdukasiView> {
         backgroundColor: Colors.white,
         bottom: PreferredSize(
             child: Container(
-              color: Colors.grey.shade300,
+              color:Utils.colorFromHex(ColorCode.lightBlueDark),
               height: 0.5,
             ),
             preferredSize: Size.fromHeight(4.0)),
@@ -67,7 +87,7 @@ class _EdukasiViewState extends State<EdukasiView> {
           ),
         ),
         onRefresh: (){
-          bloc.newsCategory();
+          bloc.newsCategory(context);
         },
       ),
     );
@@ -76,7 +96,7 @@ class _EdukasiViewState extends State<EdukasiView> {
   itemCategory(List<EdukasiItem> data){
     var size = MediaQuery.of(context).size;
     final double itemWidth = size.width / 2.7;
-    final double itemHeight = size.height / 15;
+    final double itemHeight = size.height / (is5Inc() ? 12:15);
     return SliverPadding(
       key: scaffoldKey,
       padding: EdgeInsets.all(10.0),
@@ -93,17 +113,28 @@ class _EdukasiViewState extends State<EdukasiView> {
               onTap: ()=>Navigator.pushNamed(context, '/list_artikel', arguments: {'data':item}),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                  color: Utils.colorFromHex(item.background),//Colors.primaries[Random().nextInt(Colors.primaries.length)],
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                padding: EdgeInsets.symmetric(vertical: is5Inc()?10:10, horizontal: 13),
                 child: Row(
                   children: [
-                    Icon(Icons.card_giftcard_sharp, color: Colors.white, size: 30,),
+                    // Icon(Icons.card_giftcard_sharp, color: Colors.white, size: 30,),
+                    Container(
+                      width: is5Inc() ? 20:32,
+                      height: is5Inc() ? 20:32,
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Center(
+                          child: Image.asset(ImageConstant.logoElsimil),
+                        ),
+                        imageUrl: item != null ? item.image:'',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     Container(
                       width: 0.5,
                       height: size.height / 18,
-                      color: Colors.grey,
+                      color: Utils.colorFromHex('#26000000'),
                       margin: EdgeInsets.symmetric(horizontal: 10),
                     ),
                     Expanded(child: TextAvenir(item.kategori, size: 14, color: Colors.white,))

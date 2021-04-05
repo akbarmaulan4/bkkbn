@@ -7,7 +7,7 @@ class DetailEdukasi{
   String content;
   String deskripsi;
   String tgl_publish;
-  String url;
+  String image;
   String creator;
 
   factory DetailEdukasi.fromJson(Map<String, dynamic> json) => _$fromJson(json);

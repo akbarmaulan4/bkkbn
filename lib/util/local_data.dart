@@ -48,4 +48,23 @@ class LocalData{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.remove(TextConstant.user);
   }
+
+  static void savePlayerId(String val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString(TextConstant.playerId, val);
+  }
+
+  static Future<String> getPlayerId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = prefs.getString(TextConstant.playerId);
+    if (data != null && data.isNotEmpty) {
+      return data;
+    }
+    return null;
+  }
+
+  static Future<bool> removePlayerId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.remove(TextConstant.playerId);
+  }
 }

@@ -4,14 +4,16 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
+import 'package:pdf_compressor/pdf_compressor.dart';
 import 'package:rxdart/rxdart.dart';
-
-import '../font/avenir_text.dart';
+import 'package:path_provider/path_provider.dart';
 
 class UploadFileQuiz extends StatefulWidget {
   int id;
@@ -43,16 +45,35 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
   _imgFromCamera() async {
     changeDocument(false);
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-    setState(() {
+    final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    setState(() async {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
-        final bytes = image.readAsBytesSync();
-        String img = base64Encode(bytes);
         String fileName = image.path.split('/').last;
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath = tempDir.path;
+        File file = new File('$tempPath/$fileName');
+        var fileCompressed = await FlutterImageCompress.compressAndGetFile(
+          image.path, file.path,
+          quality: 88,
+          // rotate: 180,
+        );
+
+        final bytes = fileCompressed.readAsBytesSync();
+        String img = base64Encode(bytes);
         widget.changeFileName(fileName);
         widget.changeValue(img);
         changeDoc(image);
+
+        // File fileFixed = await Utils.fixExifRotation(image.path);
+        // final bytes = fileFixed.readAsBytesSync();
+
+        // final bytes = image.readAsBytesSync();
+        // String img = base64Encode(bytes);
+        // String fileName = image.path.split('/').last;
+        // widget.changeFileName(fileName);
+        // widget.changeValue(img);
+        // changeDoc(image);
       } else {
         print('No image selected.');
       }
@@ -61,7 +82,7 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
   _imgFromGallery() async {
     changeDocument(false);
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
@@ -86,9 +107,17 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
     if(result != null) {
       File file = File(result.files.single.path);
       if(file.existsSync()){
-        final bytes = file.readAsBytesSync();
-        String img = base64Encode(bytes);
         String fileName = file.path.split('/').last;
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath = tempDir.path;
+        File fileCompressed = new File('$tempPath/$fileName');
+        await PdfCompressor.compressPdfFile(
+            file.path, fileCompressed.path, CompressQuality.LOW);
+
+        var sizeFile = Utils.formatFileSize(fileCompressed.lengthSync().toDouble());
+        final bytes = fileCompressed.readAsBytesSync();
+        // final bytes = file.readAsBytesSync();
+        String img = base64Encode(bytes);
         widget.changeFileName(fileName);
         widget.changeValue(img);
         changeDoc(file);
@@ -104,6 +133,15 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
     }
   }
 
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -113,7 +151,7 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
         children: [
           SizedBox(height: 15),
           DottedBorder(
-            color: Colors.black,
+            color: Utils.colorFromHex(ColorCode.lightBlueDark),
             strokeWidth: 1,
             child: Container(
               color: Utils.colorFromHex(ColorCode.lightBlueDark),
@@ -142,7 +180,7 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
                     ):Row(
                       children: [
                         Container(
-                          child: Image.asset(data != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.08),
+                          child: Image.asset(data != null ? ImageConstant.icPdf : ImageConstant.noImages, height: is5Inc() ? size.height * 0.11:size.height * 0.08),
                           margin: EdgeInsets.all(5),
                         ),
                         SizedBox(width: 10),
@@ -151,14 +189,14 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
                           children: [
                             TextAvenir(
                               fileName,
-                              size: 14,
+                              size: is5Inc() ? 13:14,
                               color: Utils.colorFromHex(ColorCode.bluePrimary),
                             ),
                             SizedBox(height: 8),
                             TextAvenirBook(
                               'File yang didukung: Word/PDF/jpeg/png',
-                              size: 13,
-                              color: Colors.grey[400],
+                              size: is5Inc() ? 13:14,
+                              color: Utils.colorFromHex(ColorCode.darkGreyElsimil),
                             ),
                           ],
                         ))
@@ -166,50 +204,6 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
                     );
                   }
                 ),
-                // child: _image != null ? Container(
-                //   child: Image.file(
-                //     _image,
-                //     width: size.width * 0.88,
-                //     height: size.height * 0.25,
-                //     fit: BoxFit.fitHeight,
-                //   ),
-                // ) : StreamBuilder(
-                //   stream: fileDoc,
-                //   builder: (context, snapshot) {
-                //     File exist;
-                //     String fileName =  widget.question;
-                //     if(snapshot.data != null){
-                //       exist = snapshot.data;
-                //       fileName = exist.path.split('/').last;
-                //     }
-                //
-                //     return Row(
-                //       children: [
-                //         Container(
-                //           child: Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.08),
-                //           margin: EdgeInsets.all(5),
-                //         ),
-                //         SizedBox(width: 10),
-                //         Expanded(child: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: [
-                //             TextAvenir(
-                //               fileName,
-                //               size: 14,
-                //               color: Utils.colorFromHex(ColorCode.bluePrimary),
-                //             ),
-                //             SizedBox(height: 8),
-                //             TextAvenirBook(
-                //               'File yang didukung: Word/PDF/jpeg/png',
-                //               size: 13,
-                //               color: Colors.grey[400],
-                //             ),
-                //           ],
-                //         ))
-                //       ],
-                //     );
-                //   }
-                // ),
               ),
             ),
           ),

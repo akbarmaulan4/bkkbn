@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:kua/bloc/home/home_bloc.dart';
+import 'package:kua/model/home/data_home.dart';
+import 'package:kua/model/home/item_edukasi.dart';
+import 'package:kua/model/home/item_info.dart';
+import 'package:kua/model/home/own.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/home/item_info_profile.dart';
 import 'package:kua/widgets/home/item_quiz.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -24,7 +28,11 @@ class _BerandaVIewState extends State<BerandaVIew> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.checkVerify();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.checkVerify();
+      bloc.home(context);
+    });
 
     bloc.messageError.listen((event) {
       if(event != null){
@@ -38,79 +46,103 @@ class _BerandaVIewState extends State<BerandaVIew> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: size.height * 0.40,
-                width: double.infinity,
-                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    SizedBox(height: size.height * 0.03),
-                    titleNotif(),
-                    SizedBox(height: 15),
-                    infoData()
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-              StreamBuilder(
-                stream: bloc.verifyOK,
-                builder: (context, snapshot) {
-                  bool verify = false;
-                  if(snapshot.data != null){
-                    verify = snapshot.data;
-                  }
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
-                    child: verify ? infoBarcode() : infoValidation(),
-                  );
-                }
-              ),
-              SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    Row(
+      body: StreamBuilder(
+        stream: bloc.dataHome,
+        builder: (context, snapshot) {
+          DataHome data;
+          if(snapshot.data != null){
+            data = snapshot.data;
+          }
+          return data != null ? Container(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    height: is5Inc() ? size.height * 0.45:size.height * 0.42,
+                    width: double.infinity,
+                    color: Utils.colorFromHex(ColorCode.bluePrimary),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
                       children: [
-                        Icon(Icons.map, color: Utils.colorFromHex(ColorCode.blueSecondary)),
-                        SizedBox(width: 10),
-                        TextAvenir('Edukasi', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary)),
+                        SizedBox(height: size.height * 0.05),
+                        titleNotif(),
+                        // SizedBox(height: 15),
+                        infoData(data)
                       ],
                     ),
-                    SizedBox(height: 10),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          itemList(),
-                          itemList(),
-                          itemList(),
-                          itemList(),
-                          itemList(),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
+                  ),
+                  SizedBox(height: is5Inc() ? 15:30),
+                  StreamBuilder(
+                    stream: bloc.verifyOK,
+                    builder: (context, snapshot) {
+                      bool verify = bloc.verifikasi;
+                      if(snapshot.data != null){
+                        verify = snapshot.data;
+                      }
+                      return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        child: verify ? infoBarcode(data.own) : SizedBox(),
+                      );
+                    }
+                  ),
+                  data.info.length > 0 ? Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10),
+                        infoValidation(data.info),
+                      ],
+                    ),
+                  ):SizedBox(),
+                  SizedBox(height: is5Inc() ? 15:30),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            // Icon(Icons.map, color: Utils.colorFromHex(ColorCode.blueSecondary)),
+                            Image.asset(ImageConstant.icBookOpen, height: 20, width: 20),
+                            SizedBox(width: 10),
+                            TextAvenir('Edukasi', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: loadItemEdukasi(data.edukasi),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: is5Inc() ? size.height * 0.15:0)
+                ],
+              ),
+            ),
+          ):SizedBox();
+        }
       ),
     );
+  }
+
+  loadItemEdukasi(List<ItemEdukasi> data){
+    List<Widget> dataWidget = [];
+    for(ItemEdukasi item in data){
+      dataWidget.add(itemList(item));
+    }
+    return dataWidget;
   }
 
   titleNotif(){
     final size = MediaQuery.of(context).size;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      margin: EdgeInsets.only(top: 20),
+      margin: EdgeInsets.only(top: 10),
       child: Row(
         children: [
           Expanded(
@@ -118,85 +150,100 @@ class _BerandaVIewState extends State<BerandaVIew> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10),
-                  TextAvenir('ELSIMIL', size: 24, color: Colors.white),
-                  TextAvenir('Skrining Kesiapan Menikah dan Hamil', size: 14, color: Colors.white)
+                  Row(
+                    children: [
+                      TextAvenir('ELSIMIL',
+                          size: size.width < 430 ? 19 : 24,
+                          color: Utils.colorFromHex(ColorCode.lightBlueDark)),
+                      Expanded(child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: ()=> Navigator.pushNamed(context, '/chat_screen'),
+                            child: Image.asset(ImageConstant.icChat, height: is5Inc() ? 17:20, width: is5Inc() ? 17:20,),
+                            // child: Icon(Icons.chat_bubble, color: Colors.white, size: 20)
+                          ),
+                          SizedBox(width: 15),
+                          InkWell(
+                              onTap: ()=> Navigator.pushNamed(context, '/list_notif'),
+                              child: Icon(Icons.notifications, color: Colors.grey.shade400, size: is5Inc() ? 20:22)
+                          ),
+                        ],
+                      ))
+                    ],
+                  ),
+                  TextAvenir('Cek Kesiapan Menikah dan Hamil', size: is5Inc() ? 13:14, color: Utils.colorFromHex(ColorCode.lightBlueDark))
                 ],
               )
           ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  InkWell(
-                    onTap: ()=> Navigator.pushNamed(context, '/chat_screen'),
-                    child: Icon(Icons.chat_bubble, color: Colors.white, size: 16)
-                  ),
-                  SizedBox(width: 15),
-                  InkWell(
-                    onTap: ()=> Navigator.pushNamed(context, '/list_notif'),
-                    child: Icon(Icons.notifications, color: Colors.white, size: 18)
-                  ),
-                ],
-              ),
-              SizedBox(height: size.height * 0.03),
-            ],
-          )
         ],
       ),
     );
   }
 
-  infoData(){
+  infoData(DataHome data){
     return Container(
       child: Row(
         children: [
           Expanded(
             flex: 2,
-            child: ItemQuiz()
+            child: ItemQuiz(result: data.result)
           ),
           SizedBox(width: 10),
           Expanded(
             flex: 2,
-            child: ItemInfoProfile()
+            child: ItemInfoProfile(
+              dataOwn: data.own,
+              dataCouple: data.couple,
+            )
           )
         ],
       ),
     );
   }
 
-  infoValidation(){
+  infoValidation(List<ItemInfo> data){
+    final size = MediaQuery.of(context).size;
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-        color: Utils.colorFromHex(ColorCode.yellow_light)
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: StreamBuilder(
-        stream: bloc.messageVerify,
-        builder: (context, snapshot) {
-          String str = '';
-          if(snapshot.data != null){
-            str = snapshot.data;
-          }
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Icon(Icons.info_outline_rounded, color: Utils.colorFromHex(ColorCode.yellowElsimil)),
-              SizedBox(width: 15),
-              Expanded(child: TextAvenirBook(str, size: 13, color: Utils.colorFromHex(ColorCode.yellowElsimil)))
-            ],
+      height: is5Inc() ? size.height * 0.073 : size.height * 0.07,
+      child: PageView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: data.length,
+        itemBuilder: (context, index){
+          ItemInfo info = data[index];
+          return Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: Utils.colorFromHex(ColorCode.yellow_light)
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: is5Inc() ? 8: 9),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(Icons.info_outline_rounded, color: Utils.colorFromHex(ColorCode.yellowElsimil)),
+                SizedBox(width: 15),
+                Expanded(child: InkWell(
+                  onTap: ()=>bloc.resendVerification(context, info.link, info.additional),
+                  child: Html(
+                    data: info.content != null ? info.content : '',
+                    defaultTextStyle: TextStyle(fontSize: is5Inc() ? 11: 13, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.yellowElsimil)),
+                  ),
+                ))
+              ],
+            ),
           );
         }
       ),
     );
   }
 
-  infoBarcode(){
+  infoBarcode(Own data){
+    final size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: ()=>dialogBarcode(),
+      onTap: ()=>dialogBarcode(data),
       child: Container(
         decoration: ConstantStyle.box_fill_blu,
-        // padding: EdgeInsets.symmetric(horizontal: 15),
+        margin: EdgeInsets.symmetric(horizontal: is5Inc() ? 0:0),
         child: Row(
           children: [
             Expanded(child: Container(
@@ -207,7 +254,7 @@ class _BerandaVIewState extends State<BerandaVIew> {
               padding: EdgeInsets.symmetric(vertical: 15),
               margin: EdgeInsets.symmetric(vertical: 1, horizontal: 1),
               child: Center(
-                child: TextAvenir('PROFILE ID : DPK-123456'),
+                child: TextAvenir('PROFILE ID : ${data.profile_id}'),
               ),
             )),
             SizedBox(width: 20),
@@ -221,7 +268,7 @@ class _BerandaVIewState extends State<BerandaVIew> {
     );
   }
 
-  dialogBarcode(){
+  dialogBarcode(Own data){
     FocusScope.of(context).requestFocus(FocusNode());
     showDialog(
         context: context,
@@ -238,7 +285,7 @@ class _BerandaVIewState extends State<BerandaVIew> {
                     width: 200.0,
                     height: 200.0,
                     child: QrImage(
-                      data: "1234567890",
+                      data: data.profile_id.toString(),
                       version: QrVersions.auto,
                       size: 200,
                     ),
@@ -253,50 +300,88 @@ class _BerandaVIewState extends State<BerandaVIew> {
 
 
 
-  itemList(){
+  itemList(ItemEdukasi data){
     final size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              offset: Offset(1,1),
-            )
-          ]
-      ),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-      width: size.width * 0.35,
-      child: Column(
-        children: [
-          Container(
-            height: size.height * 0.16 ,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10)
+    return InkWell(
+      onTap: (){
+        Navigator.pushNamed(context, '/detail_artikel', arguments: {'id': data.id.toString()});
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                // color: Colors.grey.withOpacity(0.5),
+                color: Utils.colorFromHex(ColorCode.lightBlueDark),
+                spreadRadius: 1.5,
+                blurRadius: 4,
+                offset: Offset(0,0), // changes position of shadow
+              ),
+            ]
+
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+        width: size.width * 0.35,
+        child: Column(
+          children: [
+            Container(
+              height: size.height * 0.16 ,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10)
+                  ),
+                  // image: DecorationImage(
+                  //     fit: BoxFit.cover,
+                  //     image: NetworkImage(data.image)//ExactAssetImage(ImageConstant.logo)
+                  // )
+              ),
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Center(
+                  child: Image.asset(ImageConstant.placeHolderElsimil),
                 ),
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU')//ExactAssetImage(ImageConstant.logo)
-                )
+                imageUrl: data.image,
+                imageBuilder: (context, imageProvider) => Container(
+                  // width: size.height * 0.10,
+                  height: size.height * 0.16,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        topLeft: Radius.circular(10)
+                    ),
+                    image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover
+                    ),
+                  ),
+                ),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextAvenir('Kesahatan Pra Nikah', size: 11, color: Colors.grey),
-                SizedBox(height: 3),
-                TextAvenir('Ingin menikah? Yuk check', size: 13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-              ],
-            ),
-          )
-        ],
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAvenir(data.kategori, size: 11, color: Colors.grey),
+                  SizedBox(height: 3),
+                  TextAvenir(data.title, size: 13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
   }
 }

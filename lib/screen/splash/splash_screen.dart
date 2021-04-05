@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
       padding: EdgeInsets.symmetric(horizontal: 40),
       color: Colors.white,
       child: Image.asset(
-        ImageConstant.logo,
+        ImageConstant.logoElsimil,
         width: 70),
     );
   }

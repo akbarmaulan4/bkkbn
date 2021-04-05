@@ -11,6 +11,7 @@ import 'package:kua/model/quiz/submit/pertanyaan_submit.dart';
 import 'package:kua/model/quiz/submit/result/result_submit.dart';
 import 'package:kua/model/quiz/tab_kuesioner/all_result_quiz.dart';
 import 'package:kua/model/quiz/tab_kuesioner/data_kuesioner.dart';
+import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -34,6 +35,8 @@ class QuizBloc {
   Stream<ResultSubmit> get resultSubmit => _resultSubmit.stream;
   Stream<bool> get infoMaxLenght => _infoMaxLenght.stream;
 
+  TextEditingController edtFind = TextEditingController();
+
   double _heightW = 0.0;
   double get heightW => _heightW;
 
@@ -42,30 +45,54 @@ class QuizBloc {
     _heightW = val;
   }
 
-  quizList(){
-    API.quizList((result, error) {
-      if(result != null){
-        if(result['code'] == 200){
-          if(result['error'] == true){
-            _messageError.sink.add(result['message']);
-          }else{
-            var json = result as Map<String, dynamic>;
-            var data = AllResultQuiz.fromJson(json);
-            if(data != null){
-              _dataListKuesioner.sink.add(data.data);
+  List<DataKuesioner> _allListQuiz = [];
+  List<DataKuesioner> get allListQuiz => _allListQuiz;
+
+  quizList(BuildContext context) async {
+    Utils.progressDialog(context);
+    var user = await LocalData.getUser();
+    if(user != null){
+      API.quizList(user.id.toString(), (result, error) {
+        Navigator.of(context).pop();
+        if(result != null){
+          if(result['code'] == 200){
+            if(result['error'] == true){
+              _messageError.sink.add(result['message']);
+            }else{
+              var json = result as Map<String, dynamic>;
+              var data = AllResultQuiz.fromJson(json);
+              if(data != null){
+                _allListQuiz.addAll(data.data);
+                _dataListKuesioner.sink.add(data.data);
+              }
             }
+          }else{
+            _messageError.sink.add(result['message']);
           }
         }else{
-          _messageError.sink.add(result['message']);
+          _messageError.sink.add(error['message']);
         }
-      }else{
-        _messageError.sink.add(error['message']);
-      }
-    });
+      });
+    }else{
+      _messageError.sink.add('Anda belum login, silahkan login terlebih dahulu');
+    }
   }
 
-  quizIntro(int id){
+  findQuiz(String title){
+    if(title.length < 1){
+      _dataListKuesioner.sink.add(allListQuiz);
+    }else{
+      var dataQuery = allListQuiz.where((element) => element.title.toLowerCase().contains(title.toLowerCase()));
+      if(dataQuery != null){
+        _dataListKuesioner.sink.add(dataQuery.toList());
+      }
+    }
+  }
+
+  quizIntro(BuildContext context, int id){
+    Utils.progressDialog(context);
     API.quizIntro(id, (result, error) {
+      Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200){
           if(result['error'] == true){
@@ -86,14 +113,34 @@ class QuizBloc {
     });
   }
 
+  bool _verifikasi = false;
+  bool get verifkasi => _verifikasi;
+  checkVerify(BuildContext context, int id) async{
+    var user = await LocalData.getUser();
+    API.checkVerifyAccount(user.id.toString(), (result, error) {
+      if(result != null){
+        if(result['code'] == 200 && !result['error']){
+          _verifikasi = true;
+        }else{
+          _verifikasi = false;
+        }
+      }else{
+        _verifikasi = false;
+      }
+      quizIntro(context, id);
+    });
+  }
+
   List<GroupQuestion> _dataGroup = [];
   List<GroupQuestion> get dataGroup => _dataGroup;
   changeDataGroup(List<GroupQuestion> val){
     _dataGroup = val;
   }
 
-  listPertanyaanQuiz(int id){
+  listPertanyaanQuiz(BuildContext context, int id){
+    Utils.progressDialog(context);
     API.listPertanyaanQuiz(id, (result, error) {
+      Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200){
           if(result['error'] == true){
@@ -139,7 +186,9 @@ class QuizBloc {
   }
 
 
-  submitQuiz() async{
+
+  submitQuiz(BuildContext context) async{
+    Utils.progressDialog(context);
     List<GroupQuizSubmit> dataGroup2 = [];
     for(GroupQuestion group in  dataGroup){
       GroupQuizSubmit groupSubmit = new GroupQuizSubmit();
@@ -151,6 +200,7 @@ class QuizBloc {
     }
     var user = await LocalData.getUser();
     API.submitQuiz(user.id.toString(), dataGroup2, (result, error) {
+      Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200){
           var json = result as Map<String, dynamic>;
@@ -178,6 +228,27 @@ class QuizBloc {
       dataSubmit.add(submit);
     }
     return dataSubmit;
+  }
+
+  String _quizCode = '';
+  String get quizCode => _quizCode;
+  detailQuiz(BuildContext context, String id){
+    Utils.progressDialog(context);
+    API.riwayatQuizDetail(id, (result, error) {
+      Navigator.of(context).pop();
+      if(result != null){
+        if(result['code'] == 200){
+          var json = result as Map<String, dynamic>;
+          var data = ResultSubmit.fromJson(json['data']);
+          _quizCode = data.header.kuis_code;
+          _resultSubmit.sink.add(data);
+        }else{
+          _messageError.sink.add(result['message']);
+        }
+      }else{
+        _messageError.sink.add(error['message']);
+      }
+    });
   }
 
 }

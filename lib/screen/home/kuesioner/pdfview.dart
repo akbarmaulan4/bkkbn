@@ -35,7 +35,7 @@ class _PdfviewState extends State<Pdfview> {
     // TODO: implement initState
     super.initState();
     // loadDocument();
-    getFileFromUrl(widget.url).then((value){
+    getFileFromUrl(context, widget.url).then((value){
       if(value != null) {
         bloc.changeDoc(value);
       }
@@ -69,8 +69,9 @@ class _PdfviewState extends State<Pdfview> {
     );
   }
 
-  Future<File> getFileFromUrl(String url, {name}) async {
+  Future<File> getFileFromUrl(BuildContext context, String url, {name}) async {
     try {
+      // Utils.progressDialog(context);
       var data = await http.get(Uri.parse(url));
       var bytes = data.bodyBytes;
       var dir = await getApplicationDocumentsDirectory();
@@ -80,8 +81,11 @@ class _PdfviewState extends State<Pdfview> {
       setState(() {
         isLoading = false;
       });
+      // Navigator.of(context).pop();
       return urlFile;
     } catch (e) {
+      // Navigator.of(context).pop();
+      Utils.alertError(context, 'File tidak ditemukan', () { });
       throw Exception("Error opening url file");
     }
   }
@@ -90,7 +94,7 @@ class _PdfviewState extends State<Pdfview> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor:Colors.white,
+      backgroundColor:Utils.colorFromHex(ColorCode.lightBlueDark),
       appBar: AppBar(
         leading: InkWell(
             onTap: ()=>Navigator.of(context).pop(),
@@ -100,61 +104,69 @@ class _PdfviewState extends State<Pdfview> {
         backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Divider(),
-          Expanded(
-            child: StreamBuilder(
-                stream: bloc.fileDoc,
-                builder: (context, snapshot) {
-                  File data;
-                  if(snapshot.data != null){
-                    data = snapshot.data;
-                  }
-                  return data != null ? Stack(
-                    children: [
-                      Container(
-                        child: PDFView(
-                          filePath: data.path,
-                          autoSpacing: true,
-                          enableSwipe: true,
-                          pageSnap: true,
-                          swipeHorizontal: true,
-                          nightMode: false,
-                          onError: (e) {
-                            //Show some error message or UI
-                          },
-                          onRender: (_pages) {
-                            // setState(() {
-                            //   _totalPages = _pages;
-                            //   pdfReady = true;
-                            // });
-                          },
-                          onViewCreated: (PDFViewController vc) {
-                            // setState(() {
-                            //   _pdfViewController = vc;
-                            // });
-                          },
-                          onPageChanged: (int page, int total) {
-                            // setState(() {
-                            //   _currentPage = page;
-                            // });
-                          },
-                          onPageError: (page, e) {},
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: inbox(),
-                      )
-                    ],
-                  ): Center(child: CircularProgressIndicator());
-                }
+        bottom: PreferredSize(
+            child: Container(
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
+              height: 0.5,
             ),
-          ),
-        ],
+            preferredSize: Size.fromHeight(4.0)),
+      ),
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                  stream: bloc.fileDoc,
+                  builder: (context, snapshot) {
+                    File data;
+                    if(snapshot.data != null){
+                      data = snapshot.data;
+                    }
+                    return data != null ? Stack(
+                      children: [
+                        Container(
+                          child: PDFView(
+                            filePath: data.path,
+                            autoSpacing: true,
+                            enableSwipe: true,
+                            pageSnap: true,
+                            swipeHorizontal: true,
+                            nightMode: false,
+                            onError: (e) {
+                              //Show some error message or UI
+                            },
+                            onRender: (_pages) {
+                              // setState(() {
+                              //   _totalPages = _pages;
+                              //   pdfReady = true;
+                              // });
+                            },
+                            onViewCreated: (PDFViewController vc) {
+                              // setState(() {
+                              //   _pdfViewController = vc;
+                              // });
+                            },
+                            onPageChanged: (int page, int total) {
+                              // setState(() {
+                              //   _currentPage = page;
+                              // });
+                            },
+                            onPageError: (page, e) {},
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: inbox(),
+                        )
+                      ],
+                    ): Center(child: CircularProgressIndicator());
+                  }
+              ),
+            ),
+          ],
+        ),
       )
       // isLoading ? Center(child: CircularProgressIndicator()):
         // Stack(

@@ -67,7 +67,12 @@ class _InputQuizState extends State<DateQuiz> {
                   child: TextField(
                     controller: edt,
                     textAlignVertical: TextAlignVertical.center,
-                    decoration: ConstantStyle.decorTextField,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(bottom:16),
+                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                      hintText: widget.question
+                    ),
                     enabled: false,
                   )
               ),

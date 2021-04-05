@@ -5,11 +5,13 @@ ResultSubmit _$fromJson(Map<String, dynamic> json) {
     ..detail = (json['detail'] as List)
         ?.map((e) => e == null ? null : DetailSubmit.fromJson(e as Map<String, dynamic>))
         ?.toList()
+    ..ulasan = json["ulasan"] == null ? null : Ulasan.fromJson(json["ulasan"] as Map<String, dynamic>)
   ;
 }
 
 Map<String, dynamic> _$toJson(ResultSubmit instance) =>
     <String, dynamic>{
       'header': instance.header,
-      'detail': instance.detail
+      'detail': instance.detail,
+      'ulasan': instance.ulasan
     };

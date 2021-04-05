@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kua/model/quiz/generate_kuesioner/list_answers.dart';
+import 'package:kua/util/Utils.dart';
+import 'package:kua/util/color_code.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -60,6 +62,7 @@ class _RadioQuizState extends State<RadioQuiz> {
               Radio(
                   value: str.id,
                   groupValue: selectedId,
+                  activeColor: Utils.colorFromHex(ColorCode.bluePrimary),
                   onChanged: (val){
                     _choise.sink.add(str);
                     setAnswer(str);

@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kua/bloc/akun/akun_bloc.dart';
+import 'package:kua/model/user/user.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
+import 'package:kua/util/local_data.dart';
+import 'package:kua/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 
 class AkunView extends StatefulWidget {
   @override
@@ -13,122 +16,140 @@ class AkunView extends StatefulWidget {
 }
 
 class _AkunScreenState extends State<AkunView> {
+  AkunBloc bloc = AkunBloc();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   loadData();
+  }
+
+  loadData() async {
+    var user = await LocalData.getUser();
+    bloc.getProfile(user.id.toString());
+  }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: TextAvenir('AKUN', size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary),),
+        title: TextAvenir('AKUN', size: is5Inc() ? 17:20, color: Utils.colorFromHex(ColorCode.bluePrimary),),
         centerTitle: true,
         elevation: 0,
         automaticallyImplyLeading: false,
+        bottom: PreferredSize(
+            child: Container(
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
+              height: 0.5,
+            ),
+            preferredSize: Size.fromHeight(4.0))
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
-        color: Utils.colorFromHex(ColorCode.lightBlueDark),
+        color: Utils.colorFromHex(ColorCode.softGreyElsimil),
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: size.height * 0.04),
-              Center(
-                child: Container(
-                  height: 64,
-                  width: 64,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: ClipOval(
-                    child: CachedNetworkImage(
-                      placeholder: (context, url) => Center(
-                        child: Image.asset(ImageConstant.logo),
+              SizedBox(height: is5Inc() ?  size.height * 0.02:size.height * 0.04),
+              StreamBuilder(
+                stream: bloc.dataUser,
+                builder: (context, snapshot) {
+                  Map user;
+                  if(snapshot.data != null){
+                    user = snapshot.data;
+                  }
+                  return Column(
+                    children: [
+                      Center(
+                        child: Container(
+                          height: is5Inc() ? 55:64,
+                          width: is5Inc() ? 55:64,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => Center(
+                                child: Image.asset(ImageConstant.placeHolderElsimil),
+                              ),
+                              imageUrl: user != null ? user['pic']:'', //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
                       ),
-                      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                      SizedBox(height: 10),
+                      TextAvenir(user  != null ? user['nama'] : '', size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                      SizedBox(height: is5Inc() ?4:7),
+                      TextAvenirBook(user  != null ? '${user['umur']},${user['kota']}':'', size: is5Inc() ? 12:14, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
+                      SizedBox(height: 3),
+                      RichText(
+                        text: TextSpan(
+                          text: 'PROFILE ID : ',
+                          style: TextStyle(height: 1.5, fontSize: is5Inc() ?10:12, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
+                          children: <TextSpan>[
+                            TextSpan(text: user  != null ? user['profile_id'] : '', style: TextStyle(height: 1.5, fontSize: is5Inc() ? 10:12, fontFamily: 'Avenir', color: Colors.grey)),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                    ],
+                  );
+                }
               ),
-              SizedBox(height: 10),
-              TextAvenir('Amanda Manopo', size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-              SizedBox(height: 7),
-              TextAvenirBook('25 Tahun, Depok - Jawa Barat', size: 14, color: Colors.grey),
-              SizedBox(height: 3),
-              RichText(
-                text: TextSpan(
-                  text: 'PROFILE ID : ',
-                  style: TextStyle(height: 1.5, fontSize: 12, fontFamily: 'Avenir', color: Colors.grey.shade300),
-                  children: <TextSpan>[
-                    TextSpan(text: 'DPK-129373', style: TextStyle(height: 1.5, fontSize: 12, fontFamily: 'Avenir', color: Colors.grey)),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
               InkWell(
                 onTap: (){
-                  Navigator.pushNamed(context, '/biodata');
+                  Navigator.pushNamed(context, '/biodata').then((value) => loadData());
                 },
-                child: Container(
-                  decoration: ConstantStyle.box_border_grey,
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextAvenir('Biodata', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ],
-                  ),
-                ),
+                child: itemList('Perbaharui Biodata'),
               ),
               SizedBox(height: 10),
               InkWell(
                 onTap: (){
                   Navigator.pushNamed(context, '/biodata_pasangan');
                 },
-                child: Container(
-                  decoration: ConstantStyle.box_border_grey,
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TextAvenir('Biodata Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ],
-                  ),
-                ),
+                child: itemList('Biodata Pasangan'),
               ),
               SizedBox(height: 10),
-              Container(
-                decoration: ConstantStyle.box_border_grey,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextAvenir('Riwayat Kuesioner', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                  ],
-                ),
+              InkWell(
+                onTap: ()=> Navigator.pushNamed(context, '/riwayat'),
+                child: itemList('Riwayat Kuesioner'),
               ),
               SizedBox(height: 10),
               InkWell(
                 onTap: ()=>Navigator.pushNamed(context, '/bantuan'),
-                child: Container(
-                  decoration: ConstantStyle.box_border_grey,
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TextAvenir('Bantuan', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                      ),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
-                    ],
-                  ),
-                ),
-              )
+                child: itemList('Bantuan'),
+              ),
+              SizedBox(height: 10),
+              InkWell(
+                onTap: ()=>Navigator.pushNamed(context, '/ubah_password'),
+                child: itemList('Ubah Kata Sandi'),
+              ),
+              SizedBox(height: 10),
+              InkWell(
+                onTap: (){
+                  Utils.dialogMessage(
+                    context: context,
+                    title: 'Apakah anda ingin keluar aplikasi?',
+                    ok: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false)
+                  );
+                },
+                child: itemList('Keluar'),
+              ),
+              SizedBox(height: is5Inc() ? size.height * 0.15:0,)
             ],
           ),
         ),
@@ -138,7 +159,11 @@ class _AkunScreenState extends State<AkunView> {
 
   itemList(String title){
     return Container(
-      decoration: ConstantStyle.box_border_grey,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
+      ),
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Row(
         children: [

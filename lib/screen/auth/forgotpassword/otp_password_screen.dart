@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
+import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
-import 'package:kua/widgets/box_border.dart';
+import 'package:kua/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 
 class OTPPasswordScreen extends StatefulWidget {
   @override
@@ -56,7 +56,7 @@ class _OTPScreenState extends State<OTPPasswordScreen> {
             child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))),
         bottom: PreferredSize(
             child: Container(
-              color: Colors.grey[300],
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
               height: 1,
             ),
             preferredSize: Size.fromHeight(4.0)),
@@ -250,9 +250,13 @@ class _OTPScreenState extends State<OTPPasswordScreen> {
         child: InkWell(
           onTap: ()=> Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false),
           child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Utils.colorFromHex(ColorCode.blueSecondary)
+              decoration: ConstantStyle.boxShadowButon(
+                  color: Utils.colorFromHex(ColorCode.blueSecondary),
+                  radius: 10,
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  colorShadow: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                  offset: Offset(0, 0)
               ),
               padding: EdgeInsets.symmetric(horizontal: 20),
               alignment: Alignment.center,

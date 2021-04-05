@@ -5,13 +5,12 @@ import 'package:kua/model/quiz/generate_kuesioner/pertanyaan.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/widget_quetioner/autocomplete_quiz.dart';
 import 'package:kua/widgets/widget_quetioner/date_quiz.dart';
 import 'package:kua/widgets/widget_quetioner/input_quis.dart';
 import 'package:kua/widgets/widget_quetioner/radio_quiz.dart';
-
-import '../../../widgets/widget_quetioner/upload_file_quiz.dart';
+import 'package:kua/widgets/widget_quetioner/upload_file_quiz.dart';
 
 class GenerateQuiz extends StatefulWidget {
   int id;
@@ -28,14 +27,30 @@ class _GenerateQuizState extends State<GenerateQuiz> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.listPertanyaanQuiz(widget.id);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.listPertanyaanQuiz(context, widget.id);
+    });
 
     bloc.resultSubmit.listen((event) {
       if(event != null){
-        Navigator.of(context).pushNamedAndRemoveUntil('/result_quiz', (Route<dynamic> route) => false, arguments: {"data", event});
-        // Navigator.pushNamed(context, '/result_quiz', arguments: {"data": event});
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/result_quiz',
+            (Route<dynamic> route) => false,
+            arguments: {'data': event}
+            // arguments: {"data", event}
+        );
       }
     });
+  }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   @override
@@ -77,9 +92,16 @@ class _GenerateQuizState extends State<GenerateQuiz> {
               ),
               SizedBox(height: 15),
               InkWell(
-                onTap: ()=> bloc.submitQuiz(),
+                onTap: ()=> bloc.submitQuiz(context),
                 child: Container(
-                  decoration: ConstantStyle.box_fill_blue_nd,
+                  decoration: ConstantStyle.boxShadowButon(
+                      color: Utils.colorFromHex(ColorCode.blueSecondary),
+                      colorShadow: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                      radius: 10,
+                      spreadRadius: 2,
+                      blurRadius: 7,
+                      offset: Offset(0, 0)
+                  ),
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   margin: EdgeInsets.symmetric(horizontal: 40),
                   child: Center(
@@ -108,9 +130,9 @@ class _GenerateQuizState extends State<GenerateQuiz> {
     var tinggi = 0.0;
     for(Pertanyaan quest in data){
       if(quest.tipe == 'angka'){
-        tinggi = tinggi + (size.height * 0.12);
+        tinggi = tinggi + (is5Inc() ? size.height * 0.17 : size.height * 0.13);
       }else if(quest.tipe == 'radio'){
-        tinggi = tinggi + (size.height * 0.08);
+        tinggi = tinggi + (is5Inc() ? size.height * 0.14 : size.height * 0.09);
       }
     }
     return tinggi;
@@ -119,6 +141,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
   loadGroupQuestion(List<GroupQuestion> data){
     List<Widget> dataWidget = [];
     var sdda = data.where((element) => element.deskripsi == 'widget');
+    // String before = '';
     for(int i=0; i<data.length; i++){
       String nomor = '${i}';
       if(sdda.isNotEmpty){
@@ -126,6 +149,9 @@ class _GenerateQuizState extends State<GenerateQuiz> {
       }else if(i < 10){
         nomor = '0${i}';
       }
+      // if(i==0){
+      //   before = data[i].jenis;
+      // }
       dataWidget.add(Container(
         child: Column(
           children: [
@@ -169,10 +195,12 @@ class _GenerateQuizState extends State<GenerateQuiz> {
                   ),
                 ),
               ],
-            )
+            ),
+            data[i].jenis == 'widget'  ? Divider():SizedBox()
           ],
         ),
       ));
+      // before = data[i].jenis;
     }
     return dataWidget;
   }

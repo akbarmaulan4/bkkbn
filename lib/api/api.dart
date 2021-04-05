@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 // import 'package:http/http.dart' as http;
+import 'package:imei_plugin/imei_plugin.dart';
+import 'package:kua/model/home/additional.dart';
 import 'package:kua/util/Utils.dart';
+import 'package:kua/util/local_data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -68,7 +71,7 @@ class API{
       bool encode,
       void callback(dynamic, Exception)) async {
 
-    Utils.log("URL ${BASE_URL + url}");
+    Utils.log("URL ${url}");
     Utils.log("POST Header ${json.encode(headers)}");
     Utils.log("POST VALUE ${json.encode(post)}");
 
@@ -115,6 +118,14 @@ class API{
     header['Content-Type'] = 'application/json';
     post['username'] = username;
     post['password'] = pas;
+    var playerId = await LocalData.getPlayerId();
+    var imei = await ImeiPlugin.getImei();
+    if(playerId != null){
+      post['player_id '] = playerId;
+    }
+    if(playerId != null){
+      post['imei '] = imei;
+    }
     basePost('/login', post, header, true, (result, error){
       callback(result, error);
     });
@@ -161,6 +172,14 @@ class API{
     post['rt'] = rt;
     post['rw'] = rw;
     post['kodepos'] = kodepos;
+    var playerId = await LocalData.getPlayerId();
+    var imei = await ImeiPlugin.getImei();
+    if(playerId != null){
+      post['player_id '] = playerId;
+    }
+    if(playerId != null){
+      post['imei '] = imei;
+    }
     basePost('/register', post, header, true, (result, error){
       callback(result, error);
     });
@@ -189,7 +208,7 @@ class API{
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
-    post['provinsi_id'] = provinsiId;
+    post['provinsi_code'] = provinsiId;
     basePost('/kabupaten', post, header, true, (result, error){
       callback(result, error);
     });
@@ -199,7 +218,7 @@ class API{
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
-    post['kabupaten_id'] = kabId;
+    post['kabupaten_code'] = kabId;
     basePost('/kecamatan', post, header, true, (result, error){
       callback(result, error);
     });
@@ -209,7 +228,7 @@ class API{
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
-    post['kecamatan_id'] = kecId;
+    post['kecamatan_code'] = kecId;
     basePost('/kelurahan', post, header, true, (result, error){
       callback(result, error);
     });
@@ -226,10 +245,11 @@ class API{
     });
   }
 
-  static quizList(void callback(Map, Exception)) async {
+  static quizList(String id, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
+    post['id'] = id;
     basePost('/kuislist', post, header, true, (result, error){
       callback(result, error);
     });
@@ -310,6 +330,256 @@ class API{
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
     basePost('/newsrelated', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static bantuan(void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    basePost('/pagelist', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static detailBantuan(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/pagedetail', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static home(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/home', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static getprofile(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/profile', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static updateprofile(
+      String id,
+      String name,
+      String no_telp,
+      String email,
+      String no_ktp,
+      String tempat_lahir,
+      String tgl_lahir,
+      String gender,
+      String alamat,
+      String provinsi_id,
+      String kabupaten_id,
+      String kecamatan_id,
+      String kelurahan_id,
+      String rt,
+      String rw,
+      String kodepos,
+      String foto_name,
+      String foto_ktp,
+      void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    post['name'] = name;
+    post['no_telp'] = no_telp;
+    post['email'] = email;
+    post['no_ktp'] = no_ktp;
+    post['tempat_lahir'] = tempat_lahir;
+    post['tgl_lahir'] = tgl_lahir;
+    post['gender'] = gender;
+    post['alamat'] = alamat;
+    post['provinsi_id'] = provinsi_id;
+    post['kabupaten_id'] = kabupaten_id;
+    post['kecamatan_id'] = kecamatan_id;
+    post['kelurahan_id'] = kelurahan_id;
+    post['rt'] = rt;
+    post['rw'] = rw;
+    post['kodepos'] = kodepos;
+    post['pic_name'] = foto_name;
+    post['foto_pic'] = foto_ktp;
+    basePost('/updateprofile', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static listSpouse(String userId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = userId;
+    basePost('/couplelist', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static addSpouse(String userId, String ktp, String profileId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = userId;
+    post['no_ktp'] = ktp;
+    post['profile_id'] = profileId;
+    basePost('/addcouple', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static pendingSpouse(String userId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = userId;
+    basePost('/pendingcouple', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static confirmSpouse(String userId, String requestId, String action, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = userId;
+    post['request_id'] = requestId;
+    post['action'] = action;
+    basePost('/confirmcouple', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static riwayatQuiz(String userId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = userId;
+    basePost('/resultlist', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static riwayatQuizDetail(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/resultdetail', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static listChat(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    post['page'] = '1';
+    basePost('/chatlist', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static postChat(String id, String mesage, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    post['message'] = mesage;
+    basePost('/chatsubmit', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static listNotif(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/notiflist', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static deletetNotif(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/notifdelete', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static insertNotif(void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    basePost('/notifinsert', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static riwayatPasangan(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/resultcouple', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static checkVersion(void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    if (Platform.isAndroid) {
+      post['tipe'] = 'android';
+    }else{
+      post['tipe'] = 'ios';
+    }
+    basePost('/version', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static changePassword(String id, String oldPass, String newPass, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    post['old_password'] = oldPass;
+    post['new_password'] = newPass;
+    basePost('/changepassword', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static resendVerificaion(String url, List<Additional> params, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    if(params.isNotEmpty){
+      for(Additional add in params){
+        post[add.params] = add.value;
+      }
+    }
+    basePost2(url, post, header, true, (result, error){
       callback(result, error);
     });
   }
@@ -397,6 +667,16 @@ class API{
     }
     return false;
   }
+
+  // static Future<bool> isConnected2() async {
+  //   var connectivityResult = await (Connectivity().checkConnectivity());
+  //   // if (connectivityResult == ConnectivityResult.none) {
+  //   //   setState(() {
+  //   //     isInternetOn = false;
+  //   //   });
+  //   // }
+  //   return false;
+  // }
 
   static baseDelete(String module, Map<String, String> headers,
       void callback(dynamic, exception)) async {

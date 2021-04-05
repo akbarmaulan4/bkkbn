@@ -3,6 +3,8 @@ class EdukasiItem{
   EdukasiItem(){}
   int id;
   String kategori;
+  String image;
+  String background;
   String deskripsi;
   String created_at;
   String creator;

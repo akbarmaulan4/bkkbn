@@ -7,13 +7,14 @@ import 'package:kua/model/edukasi/detail_edukasi.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/edukasi/item_artikel.dart';
+import 'package:kua/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 
 class DetailArtikel extends StatefulWidget {
-  ArtikelItem data;
-  DetailArtikel({this.data});
+  // ArtikelItem data;
+  String id;
+  DetailArtikel({this.id});
 
   @override
   _DetailArtikelState createState() => _DetailArtikelState();
@@ -27,8 +28,10 @@ class _DetailArtikelState extends State<DetailArtikel> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.getDetailArtikel(widget.data.id.toString());
-    bloc.getRelatedlArtikel();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.getDetailArtikel(context, widget.id);
+      bloc.getRelatedlArtikel();
+    });
 
     bloc.messageError.listen((event) {
       if(event != null){
@@ -56,13 +59,13 @@ class _DetailArtikelState extends State<DetailArtikel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        height: size.height * 0.45,
+                        height: size.height * 0.35,
                         width: double.infinity,
                         child: CachedNetworkImage(
                           placeholder: (context, url) => Center(
-                            child: Image.asset(ImageConstant.logo),
+                            child: Image.asset(ImageConstant.placeHolderElsimil),
                           ),
-                          imageUrl: detail.url,
+                          imageUrl: detail.image,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -72,15 +75,16 @@ class _DetailArtikelState extends State<DetailArtikel> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextAvenir(detail.judul, size: 14, color: Colors.grey.shade400),
-                            SizedBox(height: 20),
-                            TextAvenir(detail.deskripsi, size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                             SizedBox(height: 10),
-                            TextAvenirBook(detail.tgl_publish, color: Colors.grey, size: 12,),
+                            TextAvenir(detail.kategori, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                            SizedBox(height: 10),
+                            TextAvenir(detail.judul, size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                            SizedBox(height: 7),
+                            TextAvenirBook(detail.tgl_publish, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 12,),
                             SizedBox(height: 10),
                             Html(
                               data: detail.content != null ? detail.content : '',
-                              defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                              defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                             )
                           ],
                         ),
@@ -91,7 +95,7 @@ class _DetailArtikelState extends State<DetailArtikel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 15),
-                            TextAvenir('Edukasi Lainnya', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary)),
+                            TextAvenir('Edukasi Lainnya', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                             SizedBox(height: 15),
                             StreamBuilder(
                                 stream: bloc.allArtikel,
@@ -136,7 +140,10 @@ class _DetailArtikelState extends State<DetailArtikel> {
                   ),
                   child: InkWell(
                       onTap: ()=>Navigator.of(context).pop(),
-                      child: Icon(Icons.arrow_back_ios_rounded, color: Colors.white)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+                      )),
                 )
               ],
             ),
@@ -149,8 +156,22 @@ class _DetailArtikelState extends State<DetailArtikel> {
   loadItemRelated(List<ArtikelItem> items){
     List<Widget> data = [];
     for(ArtikelItem item in items){
-      data.add(ItemArtikelWidget(
-        item: item,
+      data.add(InkWell(
+        onTap: (){
+          // bloc.getDetailArtikel(item.id.toString());
+          // bloc.getRelatedlArtikel();
+          Navigator.popAndPushNamed(context, '/detail_artikel', arguments: {'id': item.id.toString()});
+        },
+        child: Column(
+          children: [
+            ItemArtikelWidget(
+              item: item,
+            ),
+            SizedBox(height: 10),
+            Divider(),
+            SizedBox(height: 10),
+          ],
+        ),
       ));
     }
     return data;

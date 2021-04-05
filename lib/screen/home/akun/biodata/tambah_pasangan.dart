@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kua/bloc/akun/akun_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
@@ -12,6 +13,30 @@ class TambahPasangan extends StatefulWidget {
 }
 
 class _TambahPasanganState extends State<TambahPasangan> {
+
+  AkunBloc bloc = AkunBloc();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    bloc.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
+
+    bloc.addCouple.listen((event) {
+      if(event != null){
+        if(event){
+          Utils.showConfirmDialog(context, 'Informasi', 'Anda berhasil menambahkan pasangan', () {
+            Navigator.of(context).pop();
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,12 +46,6 @@ class _TambahPasanganState extends State<TambahPasangan> {
         centerTitle: true,
         elevation: 0,
         automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Icon(Icons.add, color: Utils.colorFromHex(ColorCode.bluePrimary))
-          )
-        ],
       ),
       body: Container(
         color: Utils.colorFromHex(ColorCode.softGreyElsimil),
@@ -43,7 +62,7 @@ class _TambahPasanganState extends State<TambahPasangan> {
             SizedBox(height: 5),
             BoxBorderDefault(
                 child: TextField(
-                  // controller: widget.bloc.edtKtp,
+                  controller: bloc.edtNoKtp,
                   textAlignVertical: TextAlignVertical.center,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -63,14 +82,13 @@ class _TambahPasanganState extends State<TambahPasangan> {
             SizedBox(height: 5),
             BoxBorderDefault(
                 child: TextField(
-                  // controller: widget.bloc.edtKtp,
+                  controller: bloc.edtIdProfile,
                   textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(16),
-                    new BlacklistingTextInputFormatter(
-                        new RegExp('[\\-|\\,|\\.]')),
-                  ],
+                  // inputFormatters: [
+                  //   LengthLimitingTextInputFormatter(16),
+                  //   new BlacklistingTextInputFormatter(
+                  //       new RegExp('[\\-|\\,|\\.]')),
+                  // ],
                   decoration: ConstantStyle.decorTextField,
                 )
             ),
@@ -79,14 +97,23 @@ class _TambahPasanganState extends State<TambahPasangan> {
       ),
       floatingActionButton: InkWell(
         onTap: (){
-          Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu':3});
+          // Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu':3});
+          bloc.validationAddSpouse(context);
         },
         child: Container(
             alignment: Alignment.bottomCenter,
             height: 60,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Utils.colorFromHex(ColorCode.blueSecondary)
+                color: Utils.colorFromHex(ColorCode.blueSecondary),
+                boxShadow: [
+                  BoxShadow(
+                    color: Utils.colorFromHex('#939CBC'),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: Offset(0,0),
+                  ),
+                ],
             ),
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
             margin: EdgeInsets.symmetric(horizontal: 30),

@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:kua/model/quiz/submit/result/result_submit.dart';
+import 'package:flutter/services.dart';
 import 'package:kua/screen/auth/forgotpassword/forgot_password_screen.dart';
 import 'package:kua/screen/auth/forgotpassword/otp_password_screen.dart';
 import 'package:kua/screen/auth/login/login_screen.dart';
 import 'package:kua/screen/auth/register/register_screen.dart';
 import 'package:kua/screen/gateway/gateway_screen.dart';
+import 'package:kua/screen/home/akun/bantuan/detail_bantuan.dart';
+import 'package:kua/screen/home/akun/bantuan/list_bantuan.dart';
+import 'package:kua/screen/home/akun/biodata/biodata_screen.dart';
 import 'package:kua/screen/home/akun/biodata/biodata_spouse.dart';
 import 'package:kua/screen/home/akun/biodata/tambah_pasangan.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/akun/biodata/biodata_screen.dart';
+import 'package:kua/screen/home/akun/password/ubah_password.dart';
+import 'package:kua/screen/home/akun/riwayat/detail_riwayat.dart';
+import 'package:kua/screen/home/akun/riwayat/riwayat.dart';
+import 'package:kua/screen/home/akun/riwayat/riwayat_pasangan.dart';
+import 'package:kua/screen/home/beranda/chat/chat_screen.dart';
 import 'package:kua/screen/home/edukasi/detail_artikel.dart';
 import 'package:kua/screen/home/edukasi/list_artikel.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/chat/chat_screen.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/screen/home/beranda/notif/list_notif.dart';
 import 'package:kua/screen/home/home_screen.dart';
+import 'package:kua/screen/home/kuesioner/edit_quiz.dart';
 import 'package:kua/screen/home/kuesioner/generate_quiz.dart';
 import 'package:kua/screen/home/kuesioner/landing_quiz.dart';
 import 'package:kua/screen/home/kuesioner/pdfview.dart';
 import 'package:kua/screen/home/kuesioner/result_quiz.dart';
 import 'package:kua/screen/splash/splash_screen.dart';
 
+import 'screen/home/beranda/notif/list_notif.dart';
+
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   runApp(MyApp());
 }
 
@@ -29,6 +38,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -95,7 +105,7 @@ class MyApp extends StatelessWidget {
             }
             return MaterialPageRoute(
                 builder: (context) {
-                  return LandingQuiz(arguments["id"]);
+                  return LandingQuiz(id: arguments["id"], result_id: arguments["result_id"],);
                 },
                 settings: RouteSettings());
           case '/generate_quiz':
@@ -169,7 +179,7 @@ class MyApp extends StatelessWidget {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
                   return DetailArtikel(
-                    data: arguments['data'],
+                    id: arguments['id'],
                   );
                 },
                 settings: RouteSettings());
@@ -202,6 +212,76 @@ class MyApp extends StatelessWidget {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
                   return TambahPasangan();
+                },
+                settings: RouteSettings());
+          case '/bantuan':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return ListBantuan();
+                },
+                settings: RouteSettings());
+          case '/detail_bantuan':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return DetailBantuan(data: arguments['data']);
+                },
+                settings: RouteSettings());
+          case '/riwayat':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return Riwayat();
+                },
+                settings: RouteSettings());
+          case '/detail_riwayat':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return DetailRiwayat(id: arguments['id']);
+                },
+                settings: RouteSettings());
+          case '/edit_quiz':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return EditQuiz(arguments['id']);
+                },
+                settings: RouteSettings());
+          case '/riwayat_pasangan':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return RiwayatPasangan(arguments['id']);
+                },
+                settings: RouteSettings());
+          case '/ubah_password':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return UbahPassword();
                 },
                 settings: RouteSettings());
           default: return null;

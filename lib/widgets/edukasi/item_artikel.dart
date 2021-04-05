@@ -30,7 +30,7 @@ class _ItemArtikelWidgetState extends State<ItemArtikelWidget> {
             children: [
               TextAvenir(widget.item.judul, color: Utils.colorFromHex(ColorCode.bluePrimary), size: 16),
               SizedBox(height: 7),
-              TextAvenirBook(widget.item.deskripsi, color: Colors.grey.shade400, size: 14)
+              TextAvenirBook(widget.item.deskripsi, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
             ],
           )),
           SizedBox(width: 15),
@@ -42,9 +42,9 @@ class _ItemArtikelWidgetState extends State<ItemArtikelWidget> {
             ),
             child: CachedNetworkImage(
               placeholder: (context, url) => Center(
-                child: Image.asset(ImageConstant.logo),
+                child: Image.asset(ImageConstant.placeHolderElsimil),
               ),
-              imageUrl: widget.item.url, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+              imageUrl: widget.item.image, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
               imageBuilder: (context, imageProvider) => Container(
                 width: size.height * 0.10,
                 height: size.height * 0.10,

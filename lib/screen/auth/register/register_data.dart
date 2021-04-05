@@ -5,9 +5,8 @@ import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/box_border.dart';
-import 'package:kua/widgets/widget_quetioner/input_quis.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 
 class RegisterData extends StatefulWidget {
   AuthBloc bloc;
@@ -38,9 +37,20 @@ class _NewRegisterScreenState extends State<RegisterData> {
       }
     });
   }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -56,11 +66,8 @@ class _NewRegisterScreenState extends State<RegisterData> {
                 textAlignVertical: TextAlignVertical.center,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: 'Nama lengkap sesaui KTP',
-                  // hintStyle: TextStyle(
-                  //   fontFamily: 'Avenir'
-                  // )
-
+                  hintText: 'Nama lengkap sesuai KTP',
+                  hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                   contentPadding: EdgeInsets.only(bottom:16)
                 ),
               )
@@ -113,7 +120,12 @@ class _NewRegisterScreenState extends State<RegisterData> {
                 controller: widget.bloc.edtEmail,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.emailAddress,
-                decoration: ConstantStyle.decorTextField,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Email aktif anda',
+                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                    contentPadding: EdgeInsets.only(bottom:16)
+                ),
               )
           ),
           SizedBox(height: 15),
@@ -144,6 +156,8 @@ class _NewRegisterScreenState extends State<RegisterData> {
                         obscureText: showPass ? false : true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
+                          hintText: 'Kata sandi minimal 4 digit karakter',
+                          hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                           suffixIcon: type ? InkWell(
                             onTap: ()=>widget.bloc.openPassData(!showPass),
                               child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
@@ -190,6 +204,8 @@ class _NewRegisterScreenState extends State<RegisterData> {
                         obscureText: showPass ? false : true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
+                          hintText: 'Ulangi Kata sandi',
+                          hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                           suffixIcon: type ? InkWell(
                             onTap: ()=>widget.bloc.openRePassData(!showPass),
                               child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
@@ -218,10 +234,26 @@ class _NewRegisterScreenState extends State<RegisterData> {
             },
             child: Container(
               alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Utils.colorFromHex(ColorCode.blueSecondary)
+              decoration: ConstantStyle.boxShadowButon(
+                color: Utils.colorFromHex(ColorCode.blueSecondary),
+                radius: 10,
+                spreadRadius: 2,
+                blurRadius: 7,
+                colorShadow: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                offset: Offset(0, 0)
               ),
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.all(Radius.circular(10)),
+              //   color: Utils.colorFromHex(ColorCode.blueSecondary),
+              //   boxShadow: [
+              //     BoxShadow(
+              //       color: Utils.colorFromHex('#939CBC'),
+              //       spreadRadius: 2,
+              //       blurRadius: 7,
+              //       offset: Offset(0,0),
+              //     ),
+              //   ],
+              // ),
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Center(
                 child: TextAvenir(
@@ -231,7 +263,8 @@ class _NewRegisterScreenState extends State<RegisterData> {
                 ),
               ),
             ),
-          )
+          ),
+          SizedBox(height: is5Inc() ? 40:0,)
         ],
       ),
     );

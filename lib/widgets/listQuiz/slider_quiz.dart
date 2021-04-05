@@ -14,10 +14,15 @@ class _SliderQuizState extends State<SliderQuiz> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var maxQuestion = widget.max_questions;
+    var answered = widget.result;
     var totalLebal = size.width * 0.52;
-    var lebarMax = totalLebal/widget.max_questions;
-    var lebarPart = lebarMax/widget.max_questions;
-    double lebar = ((lebarPart * widget.result))*widget.result;
+    double lebar = 0;
+    if(answered > 0){
+      var lebarMax = totalLebal/maxQuestion;
+      var lebarPart = lebarMax/maxQuestion;
+      lebar = ((lebarPart * answered))*answered;
+    }
     return Container(
       child: Stack(
         children: [
@@ -26,7 +31,7 @@ class _SliderQuizState extends State<SliderQuiz> {
             height: 5,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(25)),
-              color: Colors.blue[100],//Utils.colorFromHex(ColorCode.blueSecondary)
+              color: Utils.colorFromHex(ColorCode.greyElsimil)
             ),
           ),
           Container(

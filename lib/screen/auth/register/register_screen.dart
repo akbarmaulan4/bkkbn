@@ -27,30 +27,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          centerTitle: true,
-          leading: InkWell(
-            onTap: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false),
-            child: Icon(Icons.arrow_back_rounded, color: Colors.black87,)
-          ),
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: Colors.white,
+        //   elevation: 0,
+        //   centerTitle: true,
+        //   leading: InkWell(
+        //     onTap: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false),
+        //     child: Icon(Icons.arrow_back_rounded, color: Colors.black87,)
+        //   ),
+        //   bottom: PreferredSize(
+        //       child: Container(
+        //         color: Utils.colorFromHex(ColorCode.lightBlueDark),
+        //         height: 1,
+        //       ),
+        //       preferredSize: Size.fromHeight(4.0))
+        // ),
         body: Container(
           color: Colors.white,
           height: double.infinity,
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(height: size.height * 0.06,),
                 // Text("REGISTRASI", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: InkWell(
+                    onTap: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                        child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary), size: 20,)),
+                  ),
+                ),
+                SizedBox(height: 10),
                 TextAvenir(
                   'REGISTRASI',
                   size: 24,
@@ -72,17 +97,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             children: [
                               Expanded(
                                   flex: 3,
-                                  child: Container(height: 3, color:Utils.colorFromHex(ColorCode.bluePrimary))
+                                  child: Container(
+                                    height: 3, 
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      color:Utils.colorFromHex(ColorCode.bluePrimary),
+                                    ),
+                                  )
                               ),
                               SizedBox(width: 5),
                               Expanded(
                                   flex: 3,
-                                  child: Container(height: 3, color: screenAt > 0 ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey[300])
+                                  child: Container(
+                                    height: 3,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      color: screenAt > 1 ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey[300],
+                                    ),
+                                  )
                               ),
                               SizedBox(width: 5),
                               Expanded(
                                   flex: 3,
-                                  child: Container(height: 3, color: screenAt == 2 ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey[300])
+                                  child: Container(
+                                    height: 3,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                                      color: screenAt > 2 ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey[300],
+                                    ),
+                                  )
                               ),
                             ],
                           ),

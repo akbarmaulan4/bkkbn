@@ -23,7 +23,10 @@ class _DetailBantuanState extends State<DetailBantuan> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.getDetailBantuan(widget.data.id.toString());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.getDetailBantuan(context, widget.data.id.toString());
+    });
+
     bloc.messageError.listen((event) {
       if(event != null){
         Utils.alertError(context, event, () { });
@@ -44,15 +47,24 @@ class _DetailBantuanState extends State<DetailBantuan> {
             onTap: ()=>Navigator.of(context).pop(),
             child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
         ),
+        bottom: PreferredSize(
+            child: Container(
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
+              height: 0.5,
+            ),
+            preferredSize: Size.fromHeight(4.0))
       ),
       body: Container(
+        color: Colors.white,
+        height: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Divider(),
-              Container(
-                  child: Image.asset(ImageConstant.placeHolderFamily)
-              ),
+              // Divider(),
+              // Container(
+              //     child: Image.asset(ImageConstant.placeHolderFamily)
+              // ),
               SizedBox(height: 10),
               StreamBuilder(
                   stream: bloc.detailBantuan,
@@ -70,7 +82,7 @@ class _DetailBantuanState extends State<DetailBantuan> {
                           SizedBox(height: 10),
                           Html(
                             data: data.content != null ? data.content : '',
-                            defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book'),
+                            defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                           )
                         ],
                       ),

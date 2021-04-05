@@ -4,8 +4,10 @@ import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
+import 'package:kua/util/local_data.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/box_border.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class RegisterDataDiri extends StatefulWidget {
 
@@ -25,6 +27,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    setupPlayerId();
+
     dataGender.add('Laki-laki');
     dataGender.add('Perempuan');
 
@@ -41,7 +46,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
     widget.bloc.allowDataDiri.listen((event) {
       if(event != null){
         if(event){
-          Utils.infoDialog(context, 'Informasi', 'Registrasi berhasil', () {
+          Utils.infoDialog(context, 'Informasi', 'Registrasi berhasil, silahkan aktivasi akun kamu melalui email yang kami kirim', () {
             Navigator.popAndPushNamed(context, '/login');
           });
         }
@@ -50,10 +55,29 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
 
   }
 
+  void setupPlayerId() async {
+    var hasPlayerId = await LocalData.getPlayerId();
+    if (hasPlayerId == null) {
+      var status = await OneSignal.shared.getPermissionSubscriptionState();
+      var playerId = status.subscriptionStatus.userId;
+      widget.bloc.setPlayerId(playerId);
+    }
+  }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -74,7 +98,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         child: TextField(
                           controller: widget.bloc.edtTmptLahir,
                           textAlignVertical: TextAlignVertical.center,
-                          decoration: ConstantStyle.decorTextField,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Tempat Lahir',
+                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                              contentPadding: EdgeInsets.only(bottom:16)
+                          )
                         )
                     ),
                   ],
@@ -102,9 +131,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
-                                enabled: false,
+                                hintText: 'Tanggal Lahir',
+                                hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                                 contentPadding: EdgeInsets.only(bottom:16)
                             ),
+                            enabled: false,
                           )
                       ),
                     )
@@ -127,31 +158,41 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                       color: Utils.colorFromHex(ColorCode.bluePrimary),
                     ),
                     SizedBox(height: 5),
-                    BoxBorderDefault(
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            hint: TextAvenir(
-                              'Jenis Kelamin',
-                              size: 12,
-                            ),
-                            value: genderSelected,
-                            items: dataGender.map((value) {
-                              return DropdownMenuItem(
-                                child: Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 10),
-                                    child: Text(value)),
-                                value: value,
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              widget.bloc.changeGender(value);
-                              setState(() {
-                                genderSelected = value;
-                              });
-                              // widget.bloc.pilihJenisKelamin(value);
-                            },
-                          )
-                        )
+                    StreamBuilder(
+                      stream: widget.bloc.jenisKelamin,
+                      builder: (context, snapshot) {
+                        String data = widget.bloc.strGender;
+                        if(snapshot.data != null){
+                          data = snapshot.data;
+                        }
+                        return BoxBorderDefault(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                hint: TextAvenir(
+                                  'Jenis Kelamin',
+                                  size: 12,
+                                ),
+                                value: data,
+                                items: dataGender.map((value) {
+                                  return DropdownMenuItem(
+                                    child: Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                        child: Text(value)),
+                                    value: value,
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  // widget.bloc.changeGender(value);
+                                  widget.bloc.pilihJenisKelamin(value);
+                                  // setState(() {
+                                  //   genderSelected = value;
+                                  // });
+                                  // widget.bloc.pilihJenisKelamin(value);
+                                },
+                              )
+                            )
+                        );
+                      }
                     ),
                   ],
                 ),
@@ -174,7 +215,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               child: TextField(
                 controller: widget.bloc.edtAlamatKtp,
                 textAlignVertical: TextAlignVertical.center,
-                decoration: ConstantStyle.decorTextField,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Alamat Sesuai KTP',
+                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                    contentPadding: EdgeInsets.only(bottom:16)
+                ),
               )
           ),
           SizedBox(height: 15),
@@ -235,14 +281,19 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               child: TextField(
                 controller: widget.bloc.edtProvinsi,
                 textAlignVertical: TextAlignVertical.center,
-                decoration: ConstantStyle.decorTextField,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Provinsi',
+                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                    contentPadding: EdgeInsets.only(bottom:16)
+                ),
                 enabled: false,
               ),
             ),
           ),
           SizedBox(height: 15),
           TextAvenir(
-            'Kota',
+            'Kabupaten/Kota',
             size: 14,
             color: Utils.colorFromHex(ColorCode.bluePrimary),
           ),
@@ -263,7 +314,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                           child: TextField(
                             controller: widget.bloc.edtKotaKab,
                             textAlignVertical: TextAlignVertical.center,
-                            decoration: ConstantStyle.decorTextField,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Kabupaten/Kota',
+                                hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                contentPadding: EdgeInsets.only(bottom:16)
+                            ),
                             enabled: false,
                           ),
                           // child: TypeAheadField(
@@ -331,7 +387,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                     child: TextField(
                                       controller: widget.bloc.edtKecamatan,
                                       textAlignVertical: TextAlignVertical.center,
-                                      decoration: ConstantStyle.decorTextField,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Kecamatan',
+                                          hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                          contentPadding: EdgeInsets.only(bottom:16)
+                                      ),
                                       enabled: false,
                                     ),
                                     // child: TypeAheadField(
@@ -400,7 +461,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                     child: TextField(
                                       controller: widget.bloc.edtDesa,
                                       textAlignVertical: TextAlignVertical.center,
-                                      decoration: ConstantStyle.decorTextField,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Kelurahan',
+                                          hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                          contentPadding: EdgeInsets.only(bottom:16)
+                                      ),
                                       enabled: false,
                                     ),
                                     // child: TypeAheadField(
@@ -466,7 +532,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                 controller: widget.bloc.edtRT,
                                 textAlignVertical: TextAlignVertical.center,
                                 keyboardType: TextInputType.number,
-                                decoration: ConstantStyle.decorTextField,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'RT',
+                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                    contentPadding: EdgeInsets.only(bottom:16)
+                                ),
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(3),
                                   new BlacklistingTextInputFormatter(
@@ -494,7 +565,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                 controller: widget.bloc.edtRW,
                                 textAlignVertical: TextAlignVertical.center,
                                 keyboardType: TextInputType.number,
-                                decoration: ConstantStyle.decorTextField,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'RW',
+                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                    contentPadding: EdgeInsets.only(bottom:16)
+                                ),
                                 inputFormatters: [
                                   LengthLimitingTextInputFormatter(3),
                                   new BlacklistingTextInputFormatter(
@@ -525,7 +601,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                           controller: widget.bloc.edtKodePos,
                           textAlignVertical: TextAlignVertical.center,
                           keyboardType: TextInputType.number,
-                          decoration: ConstantStyle.decorTextField,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Kode POS',
+                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                              contentPadding: EdgeInsets.only(bottom:16)
+                          ),
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(5),
                             new BlacklistingTextInputFormatter(
@@ -546,8 +627,16 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
             child: Container(
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Utils.colorFromHex(ColorCode.blueSecondary)
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Utils.colorFromHex(ColorCode.blueSecondary),
+                boxShadow: [
+                  BoxShadow(
+                    color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: Offset(0,0),
+                  ),
+                ],
               ),
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Center(
@@ -558,7 +647,8 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                 ),
               ),
             ),
-          )
+          ),
+          SizedBox(height: is5Inc() ? 40:0)
         ],
       ),
     );

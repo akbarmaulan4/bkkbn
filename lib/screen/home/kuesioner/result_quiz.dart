@@ -4,14 +4,11 @@ import 'package:kua/model/quiz/submit/result/result_submit.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
+import 'package:kua/util/image_constant.dart';
+import 'package:kua/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/widget_quetioner/item_result_quiz.dart';
-
-import '../../../util/Utils.dart';
-import '../../../util/color_code.dart';
-import '../../../util/constant_style.dart';
-import '../../../util/image_constant.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ResultQuiz extends StatefulWidget {
   ResultSubmit data;
@@ -35,20 +32,44 @@ class _ResultQuizState extends State<ResultQuiz>{
     super.initState();
   }
 
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: TextAvenir('Hasil Kuesioner', color: Utils.colorFromHex(ColorCode.bluePrimary)),
-          centerTitle: true,
-          elevation: 0.0,
           backgroundColor: Colors.white,
+          title: TextAvenir('Riwayat', size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary),),
+          centerTitle: true,
+          elevation: 0,
           leading: InkWell(
-              onTap: ()=> onWillPop,
+              onTap: ()=>Navigator.of(context).pop(),
               child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
           ),
+          bottom: PreferredSize(
+              child: Container(
+                color: Utils.colorFromHex(ColorCode.lightBlueDark),
+                height: 0.5,
+              ),
+              preferredSize: Size.fromHeight(4.0)),
+          actions: [
+            InkWell(
+              onTap: ()=>dialogBarcode(widget.data.header.kuis_code),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Icon(Icons.qr_code_outlined, size: 20, color: Colors.grey,),
+              ),
+            )
+          ],
         ),
         body: Container(
           color: Colors.white,
@@ -56,96 +77,110 @@ class _ResultQuizState extends State<ResultQuiz>{
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(),
                 SizedBox(height: 10),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenir('Pencegahan Stunting', size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                      TextAvenir('Pencegahan Stunting', size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                       SizedBox(height: 10),
                       RichText(
                         text: TextSpan(
-                          text: 'Berdasarkan jawaban kuesioner diberikan pada tanggal ',
-                          style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Colors.grey),
+                          text: 'Berdasarkan jawaban kuesioner yang diberikan pada tanggal ',
+                          style: TextStyle(height: 1.5, fontSize: is5Inc() ? 13:14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                           children: <TextSpan>[
-                            TextSpan(text: widget.data.header.created_at, style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+                            TextSpan(text: widget.data.header.tanggal_kuis, style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
                             TextSpan(text: ' dengan ID '),
-                            TextSpan(text: widget.data.header.kuis_code, style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+                            TextSpan(text: widget.data.header.kuis_code, style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
                             TextSpan(text: ', Sebagai berikut:'),
                           ],
                         ),
                       ),
                       SizedBox(height: 30),
-                      TextAvenir('Hasil Kuesioner', size: 16, color: Utils.colorFromHex(ColorCode.blueSecondary)),
+                      TextAvenir('Hasil Kuesioner', size: is5Inc() ? 14:16, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                       SizedBox(height: 20),
                       Container(
-                        decoration: ConstantStyle.box_card(),
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        decoration: ConstantStyle.boxShadowButon(
+                            radius: 8,
+                            color: Colors.white,
+                            colorShadow: Utils.colorFromHex(ColorCode.lightBlueDark),
+                            spreadRadius: 1.5,
+                            blurRadius: 4,
+                            offset: Offset(0,0)
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Stack(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(
-                                    color: Utils.colorFromHex(widget.data.header.rating_color),
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  decoration: ConstantStyle.boxButton(
+                                      color: widget.data.header.rating_color != '' ? Utils.colorFromHex(widget.data.header.rating_color):Utils.colorFromHex(ColorCode.blueSecondary),
+                                      radius: 10
                                   ),
                                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                                   child: Row(
                                     children: [
-                                      TextAvenir(widget.data.header.rating, size: 50, color: Colors.white,),
-                                      SizedBox(width: 10),
-                                      Container(width: 0.5,color: Colors.grey, height: 30,),
-                                      SizedBox(width: 10),
+                                      // TextAvenir(widget.data.header.rating, size: 50, color: Colors.white,),
+                                      // SizedBox(width: 10),
+                                      // Container(width: 0.5,color: Colors.grey, height: 30,),
+                                      // SizedBox(width: 10),
                                       Expanded(child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.baseline,
                                         textBaseline: TextBaseline.ideographic,
                                         children: [
-                                          TextAvenir('${widget.data.header.member_kuis_nilai}/${widget.data.header.kuis_max_nilai}', size: 15, color: Colors.white,),
-                                          TextAvenir('Sehat', size: 13, color: Colors.white,),
+                                          // SizedBox(height: 5),
+                                          TextAvenir(widget.data.header.label, size: 16, color: Colors.white,),
+                                          // SizedBox(height: 5),
+                                          TextAvenir('${widget.data.header.member_kuis_nilai}/${widget.data.header.kuis_max_nilai}', size: 14, color: Colors.white,),
                                         ],
                                       ))
                                     ],
                                   ),
                                 ),
                                 Positioned(
-                                  right: 0,
+                                    right: 0,
                                     child: Padding(
-                                      padding: EdgeInsets.all(6),
-                                        child: Image.asset(ImageConstant.logoPutih, height: 30,)))
+                                        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                                        child: Image.asset(ImageConstant.logoElsimilPutih, height: is5Inc() ? 18:20,)))
                               ],
                             ),
                             SizedBox(height: 10),
-                            TextAvenir(widget.data.header.label, color: Colors.grey, size: 12,),
+                            TextAvenir(widget.data.header.label, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,),
                             SizedBox(height: 3),
-                            TextAvenirBook(widget.data.header.deskripsi, size: 11,)
+                            TextAvenirBook(widget.data.header.deskripsi, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,)
                           ],
                         ),
                       ),
                       SizedBox(height: 20),
-                      InkWell(
-                        onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':widget.data.header.url, 'code':widget.data.header.kuis_code}),
-                        child: Container(
-                          decoration: ConstantStyle.button_fill_blu,
-                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                          margin: EdgeInsets.symmetric(horizontal: 50),
-                          child: Row(
-                            children: [
-                              Image.asset(ImageConstant.icPdf, height: 20,),
-                              SizedBox(width: 10),
-                              TextAvenir('Download Sertificate Siap Nikah', size: 13, color: Colors.white,)
-                            ],
+                      Center(
+                        child: InkWell(
+                          onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':widget.data.header.url, 'code':widget.data.header.kuis_code}),
+                          child: Container(
+                            width: 200,
+                            decoration: BoxDecoration(
+                              color: Utils.colorFromHex(ColorCode.greyElsimil),
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                            margin: EdgeInsets.symmetric(horizontal: 50),
+                            child: Row(
+                              children: [
+                                Image.asset(ImageConstant.icPdf3, height: 25,),
+                                SizedBox(width: 10),
+                                TextAvenir('Unduh Sertifikat', size: 13, color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 50),
-                      TextAvenir('Detail Hasil', size: 16, color: Utils.colorFromHex(ColorCode.blueSecondary)),
+                      SizedBox(height:is5Inc() ? 30:50),
+                      TextAvenir('Detail Hasil', size: is5Inc() ? 14:16, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                       SizedBox(height: 10),
                       Column(
-                        children: loadHasilQuiz(widget.data.detail),
+                        children: loadHasilQuiz(widget.data.detail.isNotEmpty ? widget.data.detail:[]),
                       ),
                     ],
                   ),
@@ -156,29 +191,9 @@ class _ResultQuizState extends State<ResultQuiz>{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // TextAvenir('Ulasan Petugas', size: 16, color: Utils.colorFromHex(ColorCode.blueSecondary)),
-                      // SizedBox(height: 10),
-                      // Container(
-                      //   decoration: ConstantStyle.box_light_blue_dark,
-                      //   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Row(
-                      //         children: [
-                      //           Expanded(child: TextAvenir('John Cena', size: 16, color: Utils.colorFromHex(ColorCode.colorGreyText))),
-                      //           TextAvenirBook('20 Maret 2021, 09:00', size: 10,),
-                      //         ],
-                      //       ),
-                      //       TextAvenirBook('Petugas BKKBN', size: 14, color: Utils.colorFromHex(ColorCode.colorGreyText)),
-                      //       SizedBox(height: 10),
-                      //       TextAvenirBook('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis', size: 14, color: Utils.colorFromHex(ColorCode.colorGreyText)),
-                      //     ],
-                      //   ),
-                      // ),
                       SizedBox(height: 35),
                       InkWell(
-                        onTap: ()=> Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false),
+                        onTap: ()=> Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu': 0}),
                         child: Container(
                           decoration: ConstantStyle.box_fill_blue_nd,
                           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
@@ -209,5 +224,35 @@ class _ResultQuizState extends State<ResultQuiz>{
       items.add(ItemResultQuiz(detail));
     }
     return items;
+  }
+
+  dialogBarcode(String data){
+    FocusScope.of(context).requestFocus(FocusNode());
+    showDialog(
+        context: context,
+        builder: (contex){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))
+            ),
+            content:SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 200.0,
+                    height: 200.0,
+                    child: QrImage(
+                      data: data,
+                      version: QrVersions.auto,
+                      size: 200,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
   }
 }

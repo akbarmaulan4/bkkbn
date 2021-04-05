@@ -27,7 +27,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
   final picker = ImagePicker();
 
   _imgFromCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
@@ -42,7 +42,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
   }
 
   _imgFromGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
@@ -89,10 +89,20 @@ class _RegisterFotoState extends State<RegisterFoto> {
     });
   }
 
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -112,12 +122,17 @@ class _RegisterFotoState extends State<RegisterFoto> {
                   new BlacklistingTextInputFormatter(
                       new RegExp('[\\-|\\,|\\.]')),
                 ],
-                decoration: ConstantStyle.decorTextField,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Masukan 16 digit No KTP anda',
+                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                    contentPadding: EdgeInsets.only(bottom:16)
+                ) //ConstantStyle.decorTextField,
               )
           ),
           SizedBox(height: 25),
           DottedBorder(
-            color: Colors.black,
+            color: Utils.colorFromHex(ColorCode.lightBlueDark),
             strokeWidth: 1,
             child: Container(
               child: InkWell(
@@ -129,7 +144,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
                     _image,
                     width: size.width * 0.88,
                     height: size.height * 0.25,
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.cover,
                   ),
                 ) : StreamBuilder(
                   stream: widget.bloc.fileDoc,
@@ -149,13 +164,13 @@ class _RegisterFotoState extends State<RegisterFoto> {
                           children: [
                             TextAvenir(
                               fileName,
-                              size: 12,
+                              size: 14,
                               color: Utils.colorFromHex(ColorCode.bluePrimary),
                             ),
                             SizedBox(height: 8),
                             TextAvenir(
                               'File yang didukung: Word/PDF/jpeg/png',
-                              size: 10,
+                              size: 12,
                               color: Colors.grey[400],
                             ),
                           ],
@@ -167,7 +182,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
               ),
             ),
           ),
-          SizedBox(height: _image != null ? size.height * 0.33 : size.height * 0.49),
+          SizedBox(height: _image != null ? is5Inc() ? size.height * 0.23 : size.height * 0.33 : is5Inc() ? size.height * 0.37:size.height * 0.49),
           InkWell(
             onTap: (){
               widget.bloc.validasiFotoKtp();
@@ -176,8 +191,16 @@ class _RegisterFotoState extends State<RegisterFoto> {
             child: Container(
               alignment: Alignment.bottomCenter,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Utils.colorFromHex(ColorCode.blueSecondary)
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Utils.colorFromHex(ColorCode.blueSecondary),
+                boxShadow: [
+                  BoxShadow(
+                    color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                    spreadRadius: 2,
+                    blurRadius: 7,
+                    offset: Offset(0,0),
+                  ),
+                ],
               ),
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Center(

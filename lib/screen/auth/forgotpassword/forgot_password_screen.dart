@@ -23,6 +23,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         Utils.alertError(context, event, () { });
       }
     });
+
+    bloc.forgotPass.listen((event) {
+      if(event != null){
+        Utils.infoDialog(context, 'informasi', event, () {
+          Navigator.popAndPushNamed(context, '/otp_password');
+        });
+      }
+    });
   }
 
   @override
@@ -43,7 +51,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))),
         bottom: PreferredSize(
             child: Container(
-              color: Colors.grey[300],
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
               height: 1,
             ),
             preferredSize: Size.fromHeight(4.0)),
@@ -97,12 +105,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         child: InkWell(
           onTap: (){
             bloc.forgotPassword(context);
-            // Navigator.popAndPushNamed(context, '/otp_password');
           },
           child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Utils.colorFromHex(ColorCode.blueSecondary)
+              decoration: ConstantStyle.boxShadowButon(
+                  color: Utils.colorFromHex(ColorCode.blueSecondary),
+                  radius: 10,
+                  spreadRadius: 2,
+                  blurRadius: 7,
+                  colorShadow: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                  offset: Offset(0, 0)
               ),
               padding: EdgeInsets.symmetric(horizontal: 20),
               alignment: Alignment.center,

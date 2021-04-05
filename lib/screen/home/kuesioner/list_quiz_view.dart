@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kua/bloc/quiz/quiz_bloc.dart';
 import 'package:kua/model/quiz/tab_kuesioner/data_kuesioner.dart';
@@ -21,46 +22,65 @@ class _QuizViewState extends State<ListQuizView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.quizList();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.quizList(context);
+    });
+
+  }
+
+  is5Inc(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: TextAvenir('Daftra Kuesioner', color: Utils.colorFromHex(ColorCode.bluePrimary),),
+        title: TextAvenir('Daftar Kuesioner', color: Utils.colorFromHex(ColorCode.bluePrimary)),
         centerTitle: true,
         elevation: 0.0,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
+        bottom: PreferredSize(
+            child: Container(
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
+              height: 0.5,
+            ),
+            preferredSize: Size.fromHeight(4.0)),
       ),
       body: PullRefreshWidget(
         child: Container(
           color: Colors.white,
           child: Column(
             children: [
-              Divider(),
               Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    border: Border.all(color: Colors.grey[300])
+                    border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
                 ),
                 padding: EdgeInsets.only(right: 25),
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 height: 45,
                 child: TextField(
-                  // controller: bloc.edtUsername,
+                  controller: bloc.edtFind,
                   textAlignVertical: TextAlignVertical.center,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Cari',
+                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                       fillColor: Colors.grey,
-                      prefixIcon: Icon(Icons.search, size: 20),
+                      prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
                       contentPadding: EdgeInsets.only(bottom: 7)
                   ),
                   onChanged: (val){
-                    // finding(type, val);
+                    bloc.findQuiz(val);
                   },
                 ),
               ),
@@ -87,7 +107,7 @@ class _QuizViewState extends State<ListQuizView> {
           ),
         ),
         onRefresh: (){
-          bloc.quizList();
+          bloc.quizList(context);
         },
       ),
     );
@@ -96,25 +116,44 @@ class _QuizViewState extends State<ListQuizView> {
   itemQuiz(DataKuesioner data, bool lastItem){
     var size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: ()=>Navigator.pushNamed(context, '/landing_quiz', arguments: {'id': data.id}),
+      onTap: (){
+        Navigator.pushNamed(context, '/landing_quiz', arguments: {'id': data.id, 'result_id': data.result_id});
+      },
       child: Column(
         children: [
           Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark)),
-                color: Colors.white
+            decoration: ConstantStyle.boxShadowButtonBorder(
+              radius: 5,
+              color: Colors.white,
+              colorBorder: Utils.colorFromHex(ColorCode.lightBlueDark),
+              widthBorder: 0,
+              spreadRadius: 1.5,
+              colorShadow: Colors.grey[200],
+              blurRadius: 4,
+              offset: Offset(0, 0)
             ),
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: Row(
               children: [
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                        child: Image.asset(
-                            ImageConstant.placeHolderFamily)
-                    )
+                Container(
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => Center(
+                      child: Image.asset(ImageConstant.placeHolderElsimil, width: size.height * 0.11, height: size.height * 0.11),
+                    ),
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: size.height * 0.11,
+                      height: size.height * 0.11,
+                      decoration: BoxDecoration(
+                        // shape: BoxShape.circle,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.cover),
+                      ),
+                    ),
+                    imageUrl: data != null ? data.thumbnail:'',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Expanded(
                     flex: 3,
@@ -123,27 +162,36 @@ class _QuizViewState extends State<ListQuizView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextAvenir(data.title),
-                          SizedBox(height: 15),
-                          TextAvenir('5/10 Pertanyaan telah dijawab', size: 9, color: Colors.grey),
+                          TextAvenir(data.title, size: is5Inc() ? 14:18, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                          SizedBox(height: is5Inc() ? 10:15),
+                          TextAvenir('${data.answered}/${data.total_pertanyaan} Pertanyaan telah dijawab', size: is5Inc() ? 11:12.5, color: Colors.grey),
                           SizedBox(height: 2),
                           SliderQuiz(
-                            max_questions: 10,
-                            result: 6,
+                            max_questions: data.total_pertanyaan.toDouble(),
+                            result: data.answered.toDouble(),
                           ),
-                          SizedBox(height: 10),
+                          SizedBox(height: is5Inc() ? 8:10),
                           Container(
-                            decoration: ConstantStyle.box_fill_grey,
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: data.action == 'start' ? Utils.colorFromHex(ColorCode.blueSecondary) : Utils.colorFromHex(ColorCode.lightBlueDark),
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            width: is5Inc() ? size.width * 0.40:size.width * 0.39,
                             child: Row(
                               children: [
                                 Container(
-                                    decoration: ConstantStyle.box_fill_red,
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                                    child: TextAvenir('E', color: Colors.white,)
+                                    decoration: BoxDecoration(
+                                      color: data.action == 'start' ? Utils.colorFromHex(ColorCode.lightBlueDark) : (data.background != '' ? Utils.colorFromHex(data.background) : Utils.colorFromHex(ColorCode.greyElsimil)),
+                                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                                    ),
+                                    height: size.height * 0.025,
+                                    width: size.height * 0.025,
+                                    child: data.action == 'start' ? Center(child: Icon(Icons.play_arrow_rounded, size: is5Inc()?15:20, color: Utils.colorFromHex(ColorCode.blueSecondary)))
+                                        :Center(child: TextAvenir('', color: Colors.white,))//data.rating
                                 ),
                                 SizedBox(width: 10),
-                                TextAvenir('Hasil Kuesioner')
+                                TextAvenir(data.action == 'start' ? 'Mulai':'Hasil Kuesioner', size: 13, color: data.action == 'start' ? Utils.colorFromHex(ColorCode.lightBlueDark) : Utils.colorFromHex(ColorCode.bluePrimary))
                               ],
                             ),
                           )

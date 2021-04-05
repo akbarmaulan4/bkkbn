@@ -8,6 +8,7 @@ class ColorCode {
   static String redElsimil = '#B0413E';
   static String yellowElsimil = '#DAB707';
   static String greenElsimil = '#4D9078';
+  static String greyElsimil = '#CED1D9';
   static String lightGreyElsimil = '#939CBC';
   static String darkGreyElsimil = '#828899';
   static String bluePurplelsimil = '#BACAFF';

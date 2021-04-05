@@ -4,6 +4,7 @@ IntroQuiz _$fromJson(Map<String, dynamic> json) {
     ..id = json['id'] as int ?? -1
     ..title = json['title'] as String ?? ''
     ..deskripsi = json['deskripsi'] as String ?? ''
+    ..image = json['image'] as String ?? ''
   ;
 }
 
@@ -11,5 +12,6 @@ Map<String, dynamic> _$toJson(IntroQuiz instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'deskripsi': instance.deskripsi
+      'deskripsi': instance.deskripsi,
+      'image': instance.image
     };
