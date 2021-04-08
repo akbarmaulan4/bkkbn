@@ -9,6 +9,7 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
+import 'package:kua/util/local_data.dart';
 import 'package:kua/widgets/box_border.dart';
 import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
@@ -30,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _focus.addListener(_onFocusChange);
     bloc.getAllChat();
+    removeIndicatorChat();
 
     bloc.finishCat.listen((event) {
       if(event != null){
@@ -38,6 +40,10 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       }
     });
+  }
+
+  removeIndicatorChat() async {
+    await LocalData.removeChat();
   }
 
   void _onFocusChange(){
@@ -88,7 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           controller: controller,
                           itemCount: data.length,
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          // physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (contex, index){
                             // var alignCross = index.isOdd ? MainAxisAlignment.end : MainAxisAlignment.start;
                             ChatItem item = data[index];
@@ -211,7 +217,25 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         mainAxisAlignment:  MainAxisAlignment.end,
         children: [
-          Container(
+          msg.message.length > 50 ? Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: Utils.colorFromHex(ColorCode.softGreyElsimil)
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                  Align(
+                    alignment: (Alignment.topRight),
+                    child: TextAvenirBook(msg.jam, size: 9, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                  ),
+                ],
+              ),
+            ),
+          ):Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 color: Utils.colorFromHex(ColorCode.softGreyElsimil)
@@ -282,7 +306,33 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           SizedBox(width: 10),
-          Container(
+          msg.message.length > 50 ? Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  color: Utils.colorFromHex(ColorCode.blueSecondary)
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAvenir(msg.jabatan, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
+                  SizedBox(height: 5),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextAvenirBook(msg.message, size: 14, color: Colors.white),
+                      SizedBox(width: 10),
+                      Align(
+                        alignment: (Alignment.topRight),
+                        child: TextAvenirBook(msg.jam, size: 9, color: Colors.white),
+                      ),
+                    ],
+                  ) ,
+                ],
+              ),
+            ),
+          ):Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 color: Utils.colorFromHex(ColorCode.blueSecondary)
@@ -291,12 +341,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  children: [
-                    TextAvenir(msg.jabatan, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
-                  ],
-                ),
-
+                TextAvenir(msg.jabatan, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
                 SizedBox(height: 5),
                 Row(
                   children: [

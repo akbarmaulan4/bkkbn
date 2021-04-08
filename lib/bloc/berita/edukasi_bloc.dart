@@ -23,9 +23,9 @@ class EdukasiBloc{
 
 
   newsCategory(BuildContext context) async{
-    Utils.progressDialog(context);
+    // Utils.progressDialog(context);
     API.newsCategory((result, error) {
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;

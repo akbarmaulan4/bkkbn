@@ -49,11 +49,11 @@ class QuizBloc {
   List<DataKuesioner> get allListQuiz => _allListQuiz;
 
   quizList(BuildContext context) async {
-    Utils.progressDialog(context);
+    // Utils.progressDialog(context);
     var user = await LocalData.getUser();
     if(user != null){
       API.quizList(user.id.toString(), (result, error) {
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
         if(result != null){
           if(result['code'] == 200){
             if(result['error'] == true){
@@ -89,6 +89,8 @@ class QuizBloc {
     }
   }
 
+  IntroQuiz _dataIntro;
+  IntroQuiz get dataIntro => _dataIntro;
   quizIntro(BuildContext context, int id){
     Utils.progressDialog(context);
     API.quizIntro(id, (result, error) {
@@ -102,6 +104,7 @@ class QuizBloc {
             var data = IntroQuiz.fromJson(json['data']);
             if(data != null){
               _introQuiz.sink.add(data);
+              _dataIntro = data;
             }
           }
         }else{

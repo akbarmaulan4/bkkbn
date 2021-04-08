@@ -9,6 +9,7 @@ import 'package:kua/util/image_constant.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AkunView extends StatefulWidget {
   @override
@@ -56,22 +57,22 @@ class _AkunScreenState extends State<AkunView> {
             ),
             preferredSize: Size.fromHeight(4.0))
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        color: Utils.colorFromHex(ColorCode.softGreyElsimil),
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: is5Inc() ?  size.height * 0.02:size.height * 0.04),
-              StreamBuilder(
-                stream: bloc.dataUser,
-                builder: (context, snapshot) {
-                  Map user;
-                  if(snapshot.data != null){
-                    user = snapshot.data;
-                  }
-                  return Column(
+      body: StreamBuilder<Object>(
+        stream: bloc.dataUser,
+        builder: (context, snapshot) {
+          Map user;
+          if(snapshot.data != null){
+            user = snapshot.data;
+          }
+          return user != null ? Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            color: Utils.colorFromHex(ColorCode.softGreyElsimil),
+            height: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: is5Inc() ?  size.height * 0.02:size.height * 0.04),
+                  Column(
                     children: [
                       Center(
                         child: Container(
@@ -107,52 +108,52 @@ class _AkunScreenState extends State<AkunView> {
                       ),
                       SizedBox(height: 20),
                     ],
-                  );
-                }
+                  ),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, '/biodata').then((value) => loadData());
+                    },
+                    child: itemList('Perbaharui Biodata'),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, '/biodata_pasangan');
+                    },
+                    child: itemList('Biodata Pasangan'),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: ()=> Navigator.pushNamed(context, '/riwayat'),
+                    child: itemList('Riwayat Kuesioner'),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: ()=>Navigator.pushNamed(context, '/bantuan'),
+                    child: itemList('Bantuan'),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: ()=>Navigator.pushNamed(context, '/ubah_password'),
+                    child: itemList('Ubah Kata Sandi'),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: (){
+                      Utils.dialogMessage(
+                        context: context,
+                        title: 'Apakah anda ingin keluar aplikasi?',
+                        ok: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false)
+                      );
+                    },
+                    child: itemList('Keluar'),
+                  ),
+                  SizedBox(height: is5Inc() ? size.height * 0.15:0,)
+                ],
               ),
-              InkWell(
-                onTap: (){
-                  Navigator.pushNamed(context, '/biodata').then((value) => loadData());
-                },
-                child: itemList('Perbaharui Biodata'),
-              ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: (){
-                  Navigator.pushNamed(context, '/biodata_pasangan');
-                },
-                child: itemList('Biodata Pasangan'),
-              ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: ()=> Navigator.pushNamed(context, '/riwayat'),
-                child: itemList('Riwayat Kuesioner'),
-              ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: ()=>Navigator.pushNamed(context, '/bantuan'),
-                child: itemList('Bantuan'),
-              ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: ()=>Navigator.pushNamed(context, '/ubah_password'),
-                child: itemList('Ubah Kata Sandi'),
-              ),
-              SizedBox(height: 10),
-              InkWell(
-                onTap: (){
-                  Utils.dialogMessage(
-                    context: context,
-                    title: 'Apakah anda ingin keluar aplikasi?',
-                    ok: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false)
-                  );
-                },
-                child: itemList('Keluar'),
-              ),
-              SizedBox(height: is5Inc() ? size.height * 0.15:0,)
-            ],
-          ),
-        ),
+            ),
+          ):shimmerAkun();
+        }
       ),
     );
   }
@@ -171,6 +172,84 @@ class _AkunScreenState extends State<AkunView> {
               child: TextAvenir(title, size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
           ),
           Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
+        ],
+      ),
+    );
+  }
+
+  shimmerAkun(){
+    final size = MediaQuery.of(context).size;
+    return Container(
+      color: Utils.colorFromHex('#f2f2f2'),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          SizedBox(height: is5Inc() ?  size.height * 0.02:size.height * 0.04),
+          Center(
+            child: Shimmer.fromColors(child: Container(
+              height: is5Inc() ? 55:64,
+              width: is5Inc() ? 55:64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Utils.colorFromHex('#dfdfdf'),
+              ),
+            ),
+            baseColor: Utils.colorFromHex('#dfdfdf'),
+            highlightColor: Utils.colorFromHex('#eeeeee')),
+          ),
+          SizedBox(height: 10),
+          Shimmer.fromColors(child: Container(
+            height: size.height * 0.03,
+            width: size.width * 0.7,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Utils.colorFromHex('#dfdfdf'),
+            ),
+          ),
+          baseColor: Utils.colorFromHex('#dfdfdf'),
+          highlightColor: Utils.colorFromHex('#eeeeee')),
+          SizedBox(height: is5Inc() ? 5:10),
+          Shimmer.fromColors(child: Container(
+            height: size.height * 0.02,
+            width: size.width * 0.50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Utils.colorFromHex('#dfdfdf'),
+            ),
+          ),
+          baseColor: Utils.colorFromHex('#dfdfdf'),
+          highlightColor: Utils.colorFromHex('#eeeeee')),
+          // SizedBox(height: 3),
+          // Shimmer.fromColors(child: Container(
+          //   height: size.height * 0.02,
+          //   width: size.width * 0.50,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.all(Radius.circular(5)),
+          //     color: Utils.colorFromHex('#dfdfdf'),
+          //   ),
+          // ),
+          // baseColor: Utils.colorFromHex('#dfdfdf'),
+          // highlightColor: Utils.colorFromHex('#eeeeee')),
+          SizedBox(height: 40),
+          Shimmer.fromColors(child: Container(
+            height: size.height * 0.07,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Utils.colorFromHex('#dfdfdf'),
+            ),
+          ),
+          baseColor: Utils.colorFromHex('#dfdfdf'),
+          highlightColor: Utils.colorFromHex('#eeeeee')),
+          SizedBox(height: 20),
+          Shimmer.fromColors(child: Container(
+            height: size.height * 0.07,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Utils.colorFromHex('#dfdfdf'),
+            ),
+          ),
+          baseColor: Utils.colorFromHex('#dfdfdf'),
+          highlightColor: Utils.colorFromHex('#eeeeee')),
         ],
       ),
     );

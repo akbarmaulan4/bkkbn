@@ -314,7 +314,7 @@ class AuthBloc{
         context: context,
         initialDate:  dateTime,
         firstDate: new DateTime(1900),
-        lastDate: new DateTime(2100)
+        lastDate: dateTime //new DateTime(2100)
     );
     if (picked != null){
       final dateFormat = DateFormat("yyyy-MM-dd");
@@ -557,10 +557,16 @@ class AuthBloc{
       edtRW.text,
       edtKodePos.text,
         (result, error) {
+          Navigator.of(context).pop();
       if(result != null){
-        _allowDataDiri.sink.add(true);
+        if(result['code'] == 200 && !result['error']){
+          _allowDataDiri.sink.add(true);
+        }else{
+          _messageError.sink.add(result['message']);
+        }
+      }else{
+        _messageError.sink.add(error['message']);
       }
-      Navigator.of(context).pop();
     });
   }
 

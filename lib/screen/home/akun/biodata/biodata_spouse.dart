@@ -126,11 +126,15 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                   }
                   return data != null ? Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    child: (data.pending.isNotEmpty && data.pending.isNotEmpty) ?Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextAvenir('Permintaan Tambah Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                        SizedBox(height: 15),
+                        data.waiting.isNotEmpty && data.pending.isNotEmpty ? Column(
+                          children: [
+                            TextAvenir('Permintaan Tambah Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                            SizedBox(height: 15),
+                          ],
+                        ):SizedBox(),
                         Column(
                           children: loadWaitingCouple(data != null ? data.waiting : []),
                         ),
@@ -138,7 +142,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                           children: loadPendingCouple(data != null ? data.pending : []),
                         ),
                       ],
-                    ):SizedBox(),
+                    ),
                   ):SizedBox();
                 }
               ),
@@ -219,6 +223,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      margin: EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           Container(
@@ -237,7 +242,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
               ),
             ),
           ),
-          SizedBox(width: 5),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,6 +263,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
     return Container(
       decoration: ConstantStyle.box_fill_grey,
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      margin: EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [
           Container(
@@ -276,7 +282,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
               ),
             ),
           ),
-          SizedBox(width: 5),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,6 +326,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
       child: Container(
         decoration: ConstantStyle.box_fill_blue_nd,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        margin: EdgeInsets.symmetric(vertical: 5),
         child: Row(
           children: [
             Container(

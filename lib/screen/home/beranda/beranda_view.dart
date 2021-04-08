@@ -6,14 +6,18 @@ import 'package:kua/model/home/data_home.dart';
 import 'package:kua/model/home/item_edukasi.dart';
 import 'package:kua/model/home/item_info.dart';
 import 'package:kua/model/home/own.dart';
+import 'package:kua/screen/shimmer/beranda_shimmer.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
+import 'package:kua/util/local_data.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/home/item_info_profile.dart';
 import 'package:kua/widgets/home/item_quiz.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BerandaVIew extends StatefulWidget {
   @override
@@ -32,6 +36,8 @@ class _BerandaVIewState extends State<BerandaVIew> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bloc.checkVerify();
       bloc.home(context);
+      bloc.inboxNotif();
+      bloc.checkNotif();
     });
 
     bloc.messageError.listen((event) {
@@ -40,21 +46,59 @@ class _BerandaVIewState extends State<BerandaVIew> {
       }
     });
 
+    OneSignal.shared.setNotificationReceivedHandler((notification) {
+      if (notification != null) {
+        LocalData.haveNotif(true);
+        bloc.setIndicatorNotif(true);
+      }
+    });
+
+    // OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
+    //   // will be called whenever a notification is received
+    //   if (notification != null) {
+    //     final data = notification.payload.additionalData;
+    //     bloc.setIndicatorNotif(true);
+    //     var type = data['notif'];
+    //     if(type == 'notif'){
+    //       bloc.setIndicatorNotif(true);
+    //     }
+    //   }
+    // });
+
+  }
+
+  sendTestMessage() async{
+    var hasPlayerId = await LocalData.getPlayerId();
+    Map data = Map();
+    data.putIfAbsent('type', () => 'notif');
+    data.putIfAbsent('message', () => 'ini pesan nya');
+    if(hasPlayerId != null){
+      await OneSignal.shared.postNotification(OSCreateNotification(
+          playerIds: [hasPlayerId],
+          content: "Notif dari HP",
+          heading: "ini pesan",
+          // additionalData: data
+        // buttons: [
+        //   OSActionButton(text: "test1", id: "id1"),
+        //   OSActionButton(text: "test2", id: "id2")
+        // ]
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: StreamBuilder(
-        stream: bloc.dataHome,
-        builder: (context, snapshot) {
-          DataHome data;
-          if(snapshot.data != null){
-            data = snapshot.data;
-          }
-          return data != null ? Container(
-            child: SingleChildScrollView(
+      body: Container(
+        child: StreamBuilder(
+          stream: bloc.dataHome,
+          builder: (context, snapshot) {
+            DataHome data;
+            if(snapshot.data != null){
+              data = snapshot.data;
+            }
+            return data != null ? SingleChildScrollView(
               child: Column(
                 children: [
                   Container(
@@ -67,33 +111,32 @@ class _BerandaVIewState extends State<BerandaVIew> {
                       children: [
                         SizedBox(height: size.height * 0.05),
                         titleNotif(),
-                        // SizedBox(height: 15),
                         infoData(data)
                       ],
                     ),
                   ),
                   SizedBox(height: is5Inc() ? 15:30),
                   StreamBuilder(
-                    stream: bloc.verifyOK,
-                    builder: (context, snapshot) {
-                      bool verify = bloc.verifikasi;
-                      if(snapshot.data != null){
-                        verify = snapshot.data;
+                      stream: bloc.verifyOK,
+                      builder: (context, snapshot) {
+                        bool verify = bloc.verifikasi;
+                        if(snapshot.data != null){
+                          verify = snapshot.data;
+                        }
+                        return verify ? Container(
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          child: infoBarcode(data.own),
+                        ):SizedBox();
                       }
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: verify ? infoBarcode(data.own) : SizedBox(),
-                      );
-                    }
                   ),
-                  data.info.length > 0 ? Container(
+                  (data != null && data.info != null) ? Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
+                    child: data.info.isNotEmpty ? Column(
                       children: [
                         SizedBox(height: 10),
                         infoValidation(data.info),
                       ],
-                    ),
+                    ):SizedBox(),
                   ):SizedBox(),
                   SizedBox(height: is5Inc() ? 15:30),
                   Container(
@@ -123,9 +166,9 @@ class _BerandaVIewState extends State<BerandaVIew> {
                   SizedBox(height: is5Inc() ? size.height * 0.15:0)
                 ],
               ),
-            ),
-          ):SizedBox();
-        }
+            ):BerandaShimmer();
+          }
+        ),
       ),
     );
   }
@@ -134,6 +177,14 @@ class _BerandaVIewState extends State<BerandaVIew> {
     List<Widget> dataWidget = [];
     for(ItemEdukasi item in data){
       dataWidget.add(itemList(item));
+    }
+    return dataWidget;
+  }
+
+  loadArtikelShimmer(){
+    List<Widget> dataWidget = [];
+    for(int i=0; i<3; i++){
+      dataWidget.add(shimmerArtikel());
     }
     return dataWidget;
   }
@@ -159,14 +210,68 @@ class _BerandaVIewState extends State<BerandaVIew> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           InkWell(
-                            onTap: ()=> Navigator.pushNamed(context, '/chat_screen'),
-                            child: Image.asset(ImageConstant.icChat, height: is5Inc() ? 17:20, width: is5Inc() ? 17:20,),
+                            onTap: ()=> Navigator.pushNamed(context, '/chat_screen').then((value){
+                              bloc.inboxNotif();
+                              // bloc.checkChat();
+                            }),
+                            child: StreamBuilder(
+                              stream: bloc.haveChat,
+                              builder: (context, snapshot) {
+                                bool haveChat = false;
+                                if(snapshot.data != null){
+                                  haveChat = snapshot.data;
+                                }
+                                return Stack(
+                                  children: [
+                                    Padding(
+                                      child: Image.asset(ImageConstant.icChat, height: is5Inc() ? 17:20, width: is5Inc() ? 17:20),
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    haveChat ? Positioned(
+                                      right: 2,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        height: is5Inc() ? 10:10,
+                                        width: is5Inc() ? 10:10,
+                                      ),
+                                    ):SizedBox()
+                                  ],
+                                );
+                              }
+                            ),
                             // child: Icon(Icons.chat_bubble, color: Colors.white, size: 20)
                           ),
                           SizedBox(width: 15),
                           InkWell(
-                              onTap: ()=> Navigator.pushNamed(context, '/list_notif'),
-                              child: Icon(Icons.notifications, color: Colors.grey.shade400, size: is5Inc() ? 20:22)
+                              onTap: ()=> Navigator.pushNamed(context, '/list_notif').then((value) => bloc.checkNotif()),
+                              child: StreamBuilder(
+                                stream: bloc.haveNotif,
+                                builder: (context, snapshot) {
+                                  bool haveNotif = false;
+                                  if(snapshot.data != null){
+                                    haveNotif = snapshot.data;
+                                  }
+                                  return Stack(
+                                    children: [
+                                      Icon(Icons.notifications, color: Colors.grey.shade400, size: is5Inc() ? 20:22),
+                                      haveNotif ? Positioned(
+                                        right: 1,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          height: is5Inc() ? 10:10,
+                                          width: is5Inc() ? 10:10,
+                                        ),
+                                      ):SizedBox()
+                                    ],
+                                  );
+                                }
+                              )
                           ),
                         ],
                       ))
@@ -186,16 +291,16 @@ class _BerandaVIewState extends State<BerandaVIew> {
       child: Row(
         children: [
           Expanded(
-            flex: 2,
-            child: ItemQuiz(result: data.result)
+              flex: 2,
+              child: ItemQuiz(result: data.result)
           ),
           SizedBox(width: 10),
           Expanded(
-            flex: 2,
-            child: ItemInfoProfile(
-              dataOwn: data.own,
-              dataCouple: data.couple,
-            )
+              flex: 2,
+              child: ItemInfoProfile(
+                dataOwn: data.own,
+                dataCouple: data.couple,
+              )
           )
         ],
       ),
@@ -238,17 +343,23 @@ class _BerandaVIewState extends State<BerandaVIew> {
   }
 
   infoBarcode(Own data){
-    final size = MediaQuery.of(context).size;
     return InkWell(
       onTap: ()=>dialogBarcode(data),
       child: Container(
-        decoration: ConstantStyle.box_fill_blu,
+        decoration: ConstantStyle.boxShadowButon(
+          color: Utils.colorFromHex(ColorCode.bluePrimary),
+          radius: 25,
+          blurRadius: 9,
+          spreadRadius: 0.5,
+          colorShadow: Colors.grey.withOpacity(0.4),
+          offset:  Offset(1,3)
+        ),
         margin: EdgeInsets.symmetric(horizontal: is5Inc() ? 0:0),
         child: Row(
           children: [
             Expanded(child: Container(
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: Utils.colorFromHex(ColorCode.lightBlueDark),
                 borderRadius: BorderRadius.all(Radius.circular(25)),
               ),
               padding: EdgeInsets.symmetric(vertical: 15),
@@ -260,7 +371,7 @@ class _BerandaVIewState extends State<BerandaVIew> {
             SizedBox(width: 20),
             Container(
               margin: EdgeInsets.only(right: 25),
-              child: Center(child: Icon(Icons.qr_code_outlined, size: 30, color: Colors.grey,))
+              child: Center(child: Icon(Icons.qr_code_outlined, size: 30, color: Utils.colorFromHex(ColorCode.lightBlueDark)))
             )
           ],
         ),
@@ -374,6 +485,25 @@ class _BerandaVIewState extends State<BerandaVIew> {
         ),
       ),
     );
+  }
+
+  shimmerArtikel(){
+    final size = MediaQuery.of(context).size;
+    return Shimmer.fromColors(
+        baseColor: Colors.grey[400],
+        highlightColor: Colors.white,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white,
+
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          width: size.width * 0.35,
+          height:  size.height * 0.20,
+          // decoration: ConstantStyle.box_fill_blu,
+          // margin: EdgeInsets.symmetric(horizontal: is5Inc() ? 0:0),
+        ));
   }
 
   is5Inc(){

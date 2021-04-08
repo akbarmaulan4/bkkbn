@@ -13,7 +13,8 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class DetailRiwayat extends StatefulWidget {
   int id;
-  DetailRiwayat({this.id});
+  String title;
+  DetailRiwayat({this.id, this.title});
 
   @override
   _DetailRiwayatState createState() => _DetailRiwayatState();
@@ -89,7 +90,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextAvenir('Pencegahan Stunting', size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                        TextAvenir(widget.title, size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                         SizedBox(height: 10),
                         RichText(
                           text: TextSpan(
@@ -156,7 +157,13 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                               SizedBox(height: 10),
                               TextAvenir(data != null ? data.header.label:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,),
                               SizedBox(height: 3),
-                              TextAvenirBook(data != null ? data.header.deskripsi:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,)
+                              Text(data != null ? data.header.deskripsi:'',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Avenir-book',
+                                      color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                              )
+                              // TextAvenirBook(data != null ? data.header.deskripsi:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
                             ],
                           ),
                         ),

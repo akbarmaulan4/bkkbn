@@ -52,7 +52,7 @@ class _RiwayatState extends State<Riwayat> {
             if(snapshot.data != null){
               data = snapshot.data;
             }
-            return ListView.separated(
+            return data.isNotEmpty ? ListView.separated(
               itemCount: data.length,
               separatorBuilder: (contex, index){
                 return Container(
@@ -65,6 +65,21 @@ class _RiwayatState extends State<Riwayat> {
               itemBuilder: (contex, index){
                 return itemList(data[index]);
               }
+            ):Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAvenir('Belum ada data', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                  SizedBox(height: 5),
+                  Wrap(
+                    children: [
+                      Text('Belum terdapat data kuesioner.Silahkan ikuti kuesioner',
+                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'))
+                    ],
+                  )
+                ],
+              ),
             );
           }
         ),
@@ -75,7 +90,7 @@ class _RiwayatState extends State<Riwayat> {
   itemList(RiwayatItem data){
     var size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: ()=>Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id':data.id}),
+      onTap: ()=>Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id':data.id, 'title':data.kuis_title}),
       child: Container(
         // decoration: ConstantStyle.box_border_grey,
         padding: EdgeInsets.symmetric(horizontal: 35, vertical: 5),

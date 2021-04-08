@@ -50,8 +50,9 @@ dependencies:
   imei_plugin: 1.1.6
   flutter_image_compress: ^1.0.0
   pdf_compressor: ^0.0.1
-  exif: ^2.0.0
+#  exif: ^2.0.0
   device_info: 0.4.2+4
+  shimmer: ^1.1.2
 #  avatar_glow: ^1.1.0
 #  font_awesome_flutter: ^9.0.0
 #  connectivity:

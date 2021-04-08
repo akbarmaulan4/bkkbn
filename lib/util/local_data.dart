@@ -67,4 +67,42 @@ class LocalData{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.remove(TextConstant.playerId);
   }
+
+  static void haveNotif(bool val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(TextConstant.notif, val);
+  }
+
+  static Future<bool> getNotif() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = prefs.getBool(TextConstant.notif);
+    if (data != null) {
+      return data;
+    }
+    return null;
+  }
+
+  static Future<bool> removeNotif() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.remove(TextConstant.notif);
+  }
+
+  static void haveChat(bool val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(TextConstant.chat, val);
+  }
+
+  static Future<bool> getChat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var data = prefs.getBool(TextConstant.chat);
+    if (data != null) {
+      return data;
+    }
+    return null;
+  }
+
+  static Future<bool> removeChat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.remove(TextConstant.chat);
+  }
 }

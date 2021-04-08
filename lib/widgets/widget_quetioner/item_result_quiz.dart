@@ -37,7 +37,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var color =  Utils.colorFromHex(ColorCode.blueSecondary);
+    var color =  Utils.colorFromHex(ColorCode.greyElsimil);
     if(widget.detail.rating_color != null && widget.detail.rating_color != ''){
       color =  Utils.colorFromHex(widget.detail.rating_color);
     }
@@ -64,7 +64,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                     shape: BoxShape.circle,
                   ),
                   padding: EdgeInsets.only(top: size.width < 430 ? 0:4),
-                  child: Center(child: TextAvenir(widget.detail.rating, size: size.width < 430 ? 17:20, color: Colors.white,)),
+                  child: Center(child: TextAvenir('', size: size.width < 430 ? 17:20, color: Colors.white,)),//widget.detail.rating
                 ),
                 SizedBox(width: 15),
                 Expanded(child: Container(

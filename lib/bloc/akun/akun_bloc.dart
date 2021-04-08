@@ -167,7 +167,7 @@ class AkunBloc{
             _messageError.sink.add(result['message']);
           }
         }else{
-          _messageError.sink.add(result['message']);
+          _messageError.sink.add(error['message']);
         }
         pendingSpouse();
       });
@@ -184,9 +184,12 @@ class AkunBloc{
             var data = AllWaiting.fromJson(json['data']);
             if(data != null){
               _waitingCouple.sink.add(data);
-              if(data.pending.isEmpty && totalPasangan < 1){
+              if(data.waiting.isEmpty && totalPasangan < 1){
                 _showInfoCouple.sink.add(true);
               }
+              // if(data.waiting.isEmpty && totalPasangan < 1){
+              //   _showInfoCouple.sink.add(false);
+              // }
             }else{
               _messageError.sink.add('Terjadi kesalahan dalam menampilkan data');
             }
@@ -194,7 +197,7 @@ class AkunBloc{
             _messageError.sink.add(result['message']);
           }
         }else{
-          _messageError.sink.add(result['message']);
+          _messageError.sink.add(error['message']);
         }
       });
     }
@@ -223,7 +226,7 @@ class AkunBloc{
             _messageError.sink.add(result['message']);
           }
         }else{
-          _messageError.sink.add(result['message']);
+          _messageError.sink.add(error['message']);
         }
       });
     }
@@ -336,6 +339,9 @@ class AkunBloc{
         if(result != null){
           if(result['code'] == 200 && !result['error']){
             var json = result as Map<String, dynamic>;
+            edtOldPass.text = '';
+            edtNewPass.text = '';
+            edtRePass.text = '';
             _messageError.sink.add('Kata sandi berhasil dirubah!');
           }else{
             _messageError.sink.add(result['message']);

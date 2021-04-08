@@ -39,8 +39,11 @@ class _RadioQuizState extends State<RadioQuiz> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Row (
-        children: loadRadio(),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row (
+          children: loadRadio(),
+        ),
       ),
     );
   }

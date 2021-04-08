@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kua/bloc/berita/edukasi_bloc.dart';
 import 'package:kua/model/edukasi/edukasi_item.dart';
@@ -8,6 +9,7 @@ import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class EdukasiView extends StatefulWidget {
   @override
@@ -46,6 +48,7 @@ class _EdukasiViewState extends State<EdukasiView> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: TextAvenir('Edukasi', color: Utils.colorFromHex(ColorCode.bluePrimary),),
@@ -61,30 +64,47 @@ class _EdukasiViewState extends State<EdukasiView> {
             preferredSize: Size.fromHeight(4.0)),
       ),
       body: PullRefreshWidget(
-        child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: CustomScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                sliver: SliverToBoxAdapter(
-                  child: TextAvenir('Kategori Edukasi', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                ),
+        child: StreamBuilder(
+          stream: bloc.categoryEdukasi,
+          builder: (context, snapshot) {
+            List<EdukasiItem> data = [];
+            if(snapshot.data != null){
+              data = snapshot.data;
+            }
+            return Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: data.isNotEmpty ? TextAvenir('Kategori Edukasi', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)) :
+                    Shimmer.fromColors(child: Container(
+                      width: size.width * 0.24,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        color: Utils.colorFromHex('#dfdfdf'),
+                      ),
+                    ),
+                        baseColor: Utils.colorFromHex('#dfdfdf'),
+                        highlightColor: Utils.colorFromHex('#eeeeee')),
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: CustomScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        slivers: [
+                          data.isNotEmpty ? itemCategory(data):itemCategoryShimmer(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              StreamBuilder(
-                  stream: bloc.categoryEdukasi,
-                  builder: (context, snapshot) {
-                    List<EdukasiItem> data = [];
-                    if(snapshot.data != null){
-                      data = snapshot.data;
-                    }
-                    return itemCategory(data);
-                  }
-              ),
-            ],
-          ),
+            );
+          }
         ),
         onRefresh: (){
           bloc.newsCategory(context);
@@ -145,6 +165,83 @@ class _EdukasiViewState extends State<EdukasiView> {
           },
           childCount: data.length,
         ),
+      ),
+    );
+  }
+
+  itemCategoryShimmer(){
+    var size = MediaQuery.of(context).size;
+    final double itemWidth = size.width / 2.7;
+    final double itemHeight = size.height / (is5Inc() ? 12:15);
+    return SliverPadding(
+      key: scaffoldKey,
+      padding: EdgeInsets.all(10.0),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.0,
+            mainAxisSpacing: 15.0,
+            childAspectRatio: (itemWidth / itemHeight)),
+        delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+            return shimmerCategory();
+          },
+          childCount: 5,
+        ),
+      ),
+    );
+  }
+
+  shimmerCategory(){
+    final size = MediaQuery.of(context).size;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Utils.colorFromHex('#f2f2f2'),
+      ),
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Shimmer.fromColors(
+            baseColor: Utils.colorFromHex('#dfdfdf'),
+            highlightColor:Utils.colorFromHex('#eeeeee'),
+            child: Container(
+              width: is5Inc() ? 40:50,
+              height: is5Inc() ? 40:50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Utils.colorFromHex('#f2f2f2'),
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Shimmer.fromColors(child: Container(
+                height: size.height * 0.017,
+                width: size.width * 0.19,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  color: Utils.colorFromHex('#dfdfdf'),
+                ),
+              ),
+              baseColor: Utils.colorFromHex('#dfdfdf'),
+              highlightColor: Utils.colorFromHex('#eeeeee')),
+              SizedBox(height: 5),
+              Shimmer.fromColors(child: Container(
+                height: size.height * 0.01,
+                width: size.width * 0.19,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  color: Utils.colorFromHex('#dfdfdf'),
+                ),
+              ),
+              baseColor: Utils.colorFromHex('#dfdfdf'),
+              highlightColor: Utils.colorFromHex('#eeeeee')),
+            ],
+          )
+        ],
       ),
     );
   }

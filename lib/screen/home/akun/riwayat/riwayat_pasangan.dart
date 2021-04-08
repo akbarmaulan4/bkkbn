@@ -64,7 +64,7 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
             if(snapshot.data != null){
               data = snapshot.data;
             }
-            return ListView.separated(
+            return data.isNotEmpty ? ListView.separated(
                 itemBuilder: (context, index){
                   PasanganItem item = data[index];
                   return Column(
@@ -131,7 +131,13 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                             SizedBox(height: 10),
                             TextAvenir(item != null ? item.label:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 12,),
                             SizedBox(height: 3),
-                            TextAvenirBook(item != null ? item.deskripsi:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 11,)
+                            Text(item != null ? item.deskripsi:'',
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Avenir-book',
+                                    color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                            )
+                            // TextAvenirBook(item != null ? item.deskripsi:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 11,)
                           ],
                         ),
                       ),
@@ -145,7 +151,22 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                     color: Utils.colorFromHex(ColorCode.lightBlueDark),
                   );
                 },
-                itemCount: data.length);
+                itemCount: data.length):Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAvenir('Belum ada data', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                  SizedBox(height: 5),
+                  Wrap(
+                    children: [
+                      Text('Belum terdapat data hasil kuesioner dari pasangan anda',
+                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'))
+                    ],
+                  )
+                ],
+              ),
+            );
           }
         ),
       ),

@@ -150,7 +150,13 @@ class _ResultQuizState extends State<ResultQuiz>{
                             SizedBox(height: 10),
                             TextAvenir(widget.data.header.label, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,),
                             SizedBox(height: 3),
-                            TextAvenirBook(widget.data.header.deskripsi, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,)
+                            Text(widget.data.header.deskripsi,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Avenir-book',
+                                    color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                            )
+                            // TextAvenirBook(widget.data.header.deskripsi, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
                           ],
                         ),
                       ),

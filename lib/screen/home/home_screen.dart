@@ -7,6 +7,7 @@ import 'package:kua/screen/home/edukasi/edukasi_view.dart';
 import 'package:kua/screen/home/kuesioner/list_quiz_view.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
+import 'package:kua/util/local_data.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,13 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
           OSiOSSettings.autoPrompt: false,
           OSiOSSettings.inAppLaunchUrl: false
         });
-    OneSignal.shared
-        .setInFocusDisplayType(OSNotificationDisplayType.notification);
-    setupPlayerId();
+    OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
+    // setupPlayerId();
   }
 
   void setupPlayerId() async {
-    // var hasPlayerId = await ECHelper.havePlayerID();
+    // var hasPlayerId = await LocalData.getPlayerId();
     // if (!hasPlayerId) {
     //   var status = await OneSignal.shared.getPermissionSubscriptionState();
     //   var playerId = status.subscriptionStatus.userId;
@@ -58,15 +58,15 @@ class _HomeScreenState extends State<HomeScreen> {
     //   }
     // }
 
-//    await OneSignal.shared.postNotification(OSCreateNotification(
-//        playerIds: [playerId],
-//        content: "this is a test from OneSignal's Flutter SDK",
-//        heading: "Test Notification",
-//        buttons: [
-//          OSActionButton(text: "test1", id: "id1"),
-//          OSActionButton(text: "test2", id: "id2")
-//        ]
-//    ));
+   // await OneSignal.shared.postNotification(OSCreateNotification(
+   //     // playerIds: [playerId],
+   //     content: "this is a test from OneSignal's Flutter SDK",
+   //     heading: "Test Notification",
+   //     buttons: [
+   //       OSActionButton(text: "test1", id: "id1"),
+   //       OSActionButton(text: "test2", id: "id2")
+   //     ]
+   // ));
 
 //    var myCustomUniqueUserId = "something from my backend server";
 //    OneSignal.shared.setExternalUserId(myCustomUniqueUserId);

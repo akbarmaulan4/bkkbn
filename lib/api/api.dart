@@ -26,6 +26,7 @@ class API{
     Utils.log("URL ${BASE_URL + module}");
     Utils.log("POST Header ${json.encode(headers)}");
     Utils.log("POST VALUE ${json.encode(post)}");
+    String ada = json.encode(post);
 
     var mapError = new Map();
     try{
@@ -540,6 +541,16 @@ class API{
     header['Content-Type'] = 'application/json';
     post['id'] = id;
     basePost('/resultcouple', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static inboxNotif(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/infonotif', post, header, true, (result, error){
       callback(result, error);
     });
   }

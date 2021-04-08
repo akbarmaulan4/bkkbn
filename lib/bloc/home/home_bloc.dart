@@ -15,6 +15,8 @@ class HomeBloc{
   final _messageError = PublishSubject<String>();
   final _dataHome = PublishSubject<DataHome>();
   final _version = PublishSubject<String>();
+  final _haveNotif = PublishSubject<bool>();
+  final _haveChat = PublishSubject<bool>();
 
   Stream<int> get viewScreen => _viewScreen.stream;
   Stream<bool> get verifyOK => _verifyOK.stream;
@@ -22,6 +24,36 @@ class HomeBloc{
   Stream<String> get messageError => _messageError.stream;
   Stream<DataHome> get dataHome => _dataHome.stream;
   Stream<String> get version => _version.stream;
+  Stream<bool> get haveNotif => _haveNotif.stream;
+  Stream<bool> get haveChat => _haveChat.stream;
+
+  checkChat() async {
+    var haveChat = await LocalData.getChat();
+    if(haveChat != null){
+      _haveChat.sink.add(haveChat);
+    }else{
+      _haveChat.sink.add(false);
+    }
+
+  }
+
+  checkNotif() async {
+    var haveNotif = await LocalData.getNotif();
+    if(haveNotif != null){
+      _haveNotif.sink.add(haveNotif);
+    }else{
+      _haveNotif.sink.add(false);
+    }
+
+  }
+
+  setIndicatorChat(bool val){
+    _haveChat.sink.add(val);
+  }
+
+  setIndicatorNotif(bool val){
+    _haveNotif.sink.add(val);
+  }
 
   changeScreen(int view){
     _viewScreen.sink.add(view);
@@ -50,10 +82,10 @@ class HomeBloc{
   }
 
   home(BuildContext context) async{
-    Utils.progressDialog(context);
+    // Utils.progressDialog(context);
     var user = await LocalData.getUser();
     API.home(user.id.toString(), (result, error) {
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
@@ -104,6 +136,26 @@ class HomeBloc{
         _messageError.sink.add(error['message']);
       }
     });
+  }
+
+  inboxNotif() async {
+    var user = await LocalData.getUser();
+    if(user != null){
+      API.inboxNotif(user.id.toString(), (result, error) {
+        if(result != null){
+          if(result['code'] == 200 && !result['error']){
+            var data = result['data']['status'];
+            if(data == 1){
+              setIndicatorChat(true);
+              LocalData.haveChat(true);
+            }else{
+              setIndicatorChat(false);
+            }
+          }
+        }
+      });
+    }
+
   }
 
 }

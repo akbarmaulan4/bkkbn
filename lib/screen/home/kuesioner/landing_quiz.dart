@@ -113,7 +113,7 @@ class _LandingQuizState extends State<LandingQuiz> {
             if(widget.result_id < 1){
               Navigator.pushNamed(context, '/generate_quiz', arguments: {'id': widget.id});
             }else{
-              Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id': widget.result_id});
+              Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id': widget.result_id, 'title':bloc.dataIntro.title});
             }
           }else{
             Utils.infoDialog(context, 'Peringatan', 'Silahkan aktivasi akun kamu melalui email yang telah kami kirim', () { });
@@ -132,7 +132,7 @@ class _LandingQuizState extends State<LandingQuiz> {
           ),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 13),
           margin: EdgeInsets.symmetric(horizontal: size.width * 0.20, vertical: 20),
-          child: Center(child: TextAvenir(widget.result_id == 0 ? 'Mulai Keusioner':'Lihat Hasil Kuesioner', color: Colors.white,)),
+          child: Center(child: TextAvenir(widget.result_id == 0 ? 'Mulai Kuesioner':'Lihat Hasil Kuesioner', color: Colors.white,)),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

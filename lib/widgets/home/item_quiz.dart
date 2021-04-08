@@ -113,6 +113,15 @@ class _ItemQuizState extends State<ItemQuiz> {
                     decoration: BoxDecoration(
                       color: (data != null && data.rating_color != '') ? Utils.colorFromHex(data.rating_color):Utils.colorFromHex(ColorCode.darkGreyElsimil),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            // color: Utils.colorFromHex(ColorCode.lightBlueDark),
+                            spreadRadius: 2,
+                            blurRadius: 7,
+                            offset: Offset(1,3), // changes position of shadow
+                          ),
+                        ]
                     ),
                     padding: EdgeInsets.all(is5Inc() ? 2:5),
                     // margin: EdgeInsets.symmetric(horizontal: 15),
@@ -132,26 +141,6 @@ class _ItemQuizState extends State<ItemQuiz> {
                 ],
               ),
             ),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: (data != null && data.rating_color != '') ? Utils.colorFromHex(data.rating_color):Utils.colorFromHex(ColorCode.darkGreyElsimil),
-            //     borderRadius: BorderRadius.all(Radius.circular(10)),
-            //   ), //ConstantStyle.box_fill_green,
-            //   margin: EdgeInsets.symmetric(horizontal: 15),
-            //   padding: EdgeInsets.all(is5Inc() ? 2:5),
-            //   height: is5Inc() ? size.height * 0.18 : size.height * 0.18,
-            //   width: double.maxFinite,
-            //   child: Center(
-            //     child: Column(
-            //       children: [
-            //         SizedBox(height:  is5Inc() ? 5:10),
-            //         TextAvenir((data != null && data.rating_color != '') ? data.rating : '?', size: is5Inc() ? 50:75, color: Colors.white),
-            //         TextAvenir((data != null && data.rating_color != '') ? '${data.member_kuis_nilai}/${data.kuis_max_nilai}':'-', color: Colors.white, size: is5Inc() ? 12:14),
-            //         TextAvenir((data != null && data.rating_color != '') ? data.label:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:14)
-            //       ],
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),

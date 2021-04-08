@@ -139,13 +139,14 @@ class _EditQuizState extends State<EditQuiz> {
 
   loadGroupQuestion(List<GroupQuestion> data){
     List<Widget> dataWidget = [];
-    var sdda = data.where((element) => element.deskripsi == 'widget');
+    int nomor = 0;
+    String strNomor = '';
     for(int i=0; i<data.length; i++){
-      String nomor = '${i}';
-      if(sdda.isNotEmpty){
-        nomor = '${i}';
-      }else if(i < 10){
-        nomor = '0${i}';
+      if(data[i].jenis != 'widget'){
+        nomor++;
+        if(nomor < 10){
+          strNomor = '0${nomor}';
+        }
       }
       dataWidget.add(Container(
         child: Column(
@@ -165,7 +166,7 @@ class _EditQuizState extends State<EditQuiz> {
                         color: Utils.colorFromHex(ColorCode.blueSecondary),
                         shape: BoxShape.circle,
                       ),
-                      child: Center(child: TextAvenir(nomor, color: Colors.white,)),
+                      child: Center(child: TextAvenir(strNomor, color: Colors.white,)),
                     ),
                     (i+1) != data.length ? Container(
                       height: getHeightBox(data[i].pertanyaan),

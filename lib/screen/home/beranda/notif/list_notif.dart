@@ -3,7 +3,7 @@ import 'package:kua/bloc/notif/notif_bloc.dart';
 import 'package:kua/model/notif/item_notif.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/util/constant_style.dart';
+import 'package:kua/util/local_data.dart';
 import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
@@ -22,6 +22,7 @@ class _ListNotifState extends State<ListNotif> {
     // TODO: implement initState
     super.initState();
     bloc.listNotif();
+    removeNotifIndicator();
 
     bloc.messageError.listen((event) {
       if(event != null){
@@ -40,11 +41,15 @@ class _ListNotifState extends State<ListNotif> {
     });
   }
 
+  removeNotifIndicator() async {
+    await LocalData.removeNotif();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextAvenir('Notifkasi', color: Utils.colorFromHex(ColorCode.bluePrimary)),
+        title: TextAvenir('Notifikasi', color: Utils.colorFromHex(ColorCode.bluePrimary)),
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.white,

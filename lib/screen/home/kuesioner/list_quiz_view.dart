@@ -9,6 +9,7 @@ import 'package:kua/util/image_constant.dart';
 import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/listQuiz/slider_quiz.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ListQuizView extends StatefulWidget {
   @override
@@ -57,53 +58,53 @@ class _QuizViewState extends State<ListQuizView> {
       body: PullRefreshWidget(
         child: Container(
           color: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
-                ),
-                padding: EdgeInsets.only(right: 25),
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                height: 45,
-                child: TextField(
-                  controller: bloc.edtFind,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Cari',
-                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                      fillColor: Colors.grey,
-                      prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
-                      contentPadding: EdgeInsets.only(bottom: 7)
+          child: StreamBuilder(
+            stream: bloc.dataListKuesioner,
+            builder: (context, snapshot) {
+              List<DataKuesioner> data = [];
+              if(snapshot.data != null){
+                data = snapshot.data;
+              }
+              return Column(
+                children: [
+                  data.isNotEmpty ? Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
+                    ),
+                    padding: EdgeInsets.only(right: 25),
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    height: 45,
+                    child: TextField(
+                      controller: bloc.edtFind,
+                      textAlignVertical: TextAlignVertical.center,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Cari',
+                          hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                          fillColor: Colors.grey,
+                          prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
+                          contentPadding: EdgeInsets.only(bottom: 7)
+                      ),
+                      onChanged: (val){
+                        bloc.findQuiz(val);
+                      },
+                    ),
+                  ):shimmerSearch(),
+                  Expanded(
+                    child: Container(
+                      child: ListView.builder(
+                          itemCount: data.isNotEmpty ? data.length:3,
+                          itemBuilder: (context, index){
+                            return data.isNotEmpty ? itemQuiz(data[index], data.length == index+1):shimmerItemQuiz();
+                          }
+                      ),
+                    ),
                   ),
-                  onChanged: (val){
-                    bloc.findQuiz(val);
-                  },
-                ),
-              ),
-              Expanded(
-                child: StreamBuilder(
-                    stream: bloc.dataListKuesioner,
-                    builder: (context, snapshot) {
-                      List<DataKuesioner> data = [];
-                      if(snapshot.data != null){
-                        data = snapshot.data;
-                      }
-                      return Container(
-                        child: ListView.builder(
-                            itemCount: data.length,
-                            itemBuilder: (context, index){
-                              return itemQuiz(data[index], data.length == index+1);
-                            }
-                        ),
-                      );
-                    }
-                ),
-              ),
-            ],
+                ],
+              );
+            }
           ),
         ),
         onRefresh: (){
@@ -205,6 +206,118 @@ class _QuizViewState extends State<ListQuizView> {
           SizedBox(height: lastItem ? size.height * 0.10:0,)
         ],
       ),
+    );
+  }
+
+  shimmerSearch(){
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          SizedBox(height: 20,),
+          Shimmer.fromColors(
+              baseColor: Utils.colorFromHex('#f2f2f2'),
+              highlightColor: Utils.colorFromHex('#eeeeee'),
+              child: Container(
+                height: 46,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Utils.colorFromHex('#f2f2f2')
+                ),
+              )),
+          SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+
+  shimmerItemQuiz(){
+    final size = MediaQuery.of(context).size;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          decoration: ConstantStyle.boxButton(
+              radius: 5,
+              color: Utils.colorFromHex('#f2f2f2'),
+          ),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+          child: Row(
+            children: [
+              Shimmer.fromColors(
+                  baseColor:  Utils.colorFromHex('#dfdfdf'),
+                  highlightColor: Utils.colorFromHex('#eeeeee'),
+                  child: Container(
+                    width: size.height * 0.11,
+                    height: size.height * 0.11,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color:  Utils.colorFromHex('#dfdfdf'),
+                    ),
+                    // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  )),
+              SizedBox(width: 10),
+              Expanded(child:  Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Shimmer.fromColors(
+                      baseColor: Utils.colorFromHex('#dfdfdf'),
+                      highlightColor: Utils.colorFromHex('#eeeeee'),
+                      child: Container(
+                        width: size.width * 0.4,
+                        height: size.height * 0.01,
+                        decoration: BoxDecoration(
+                          // borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color:Utils.colorFromHex('#dfdfdf'),
+                        ),
+                        // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      )),
+                  SizedBox(height: is5Inc() ? 10:15),
+                  Shimmer.fromColors(
+                      baseColor: Utils.colorFromHex('#dfdfdf'),
+                      highlightColor: Utils.colorFromHex('#eeeeee'),
+                      child: Container(
+                        width: size.width * 0.2,
+                        height: size.height * 0.005,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Utils.colorFromHex('#dfdfdf'),
+                        ),
+                        // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      )),
+                  SizedBox(height: 3),
+                  Shimmer.fromColors(
+                      baseColor: Utils.colorFromHex('#dfdfdf'),
+                      highlightColor: Utils.colorFromHex('#eeeeee'),
+                      child: Container(
+                        width: size.width * 0.5,
+                        height: size.height * 0.005,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Utils.colorFromHex('#dfdfdf'),
+                        ),
+                        // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      )),
+                  SizedBox(height: is5Inc() ? 8:10),
+                  Shimmer.fromColors(
+                      baseColor: Utils.colorFromHex('#dfdfdf'),
+                      highlightColor: Utils.colorFromHex('#eeeeee'),
+                      child: Container(
+                        width: size.width * 0.3,
+                        height: size.height * 0.03,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Utils.colorFromHex('#dfdfdf'),
+                        ),
+                        // margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      )),
+                ],
+              )),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

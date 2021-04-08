@@ -251,7 +251,7 @@ class MyApp extends StatelessWidget {
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
-                  return DetailRiwayat(id: arguments['id']);
+                  return DetailRiwayat(id: arguments['id'], title: arguments['title'],);
                 },
                 settings: RouteSettings());
           case '/edit_quiz':
