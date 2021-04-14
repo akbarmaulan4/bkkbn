@@ -2,6 +2,7 @@ part 'header_submit.g.dart';
 class HeaderSubmit{
   HeaderSubmit(){}
   int kuis_id;
+  int result_id;
   String kuis_code;
   String tanggal_kuis;
   String label;

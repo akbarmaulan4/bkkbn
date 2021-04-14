@@ -108,8 +108,8 @@ class _ListNotifState extends State<ListNotif> {
                             return Container(
                               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                               child: Row(
-                                // crossAxisAlignment: CrossAxisAlignment.baseline,
-                                // textBaseline: TextBaseline.alphabetic,
+                                crossAxisAlignment: CrossAxisAlignment.baseline,
+                                textBaseline: TextBaseline.alphabetic,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 40),
@@ -128,7 +128,13 @@ class _ListNotifState extends State<ListNotif> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          TextAvenirBook('${notif.title}, ${notif.content}', color: Utils.colorFromHex(ColorCode.bluePrimary), size: 14),
+                                          // TextAvenirBook('${notif.title}, ${notif.content}', color: Utils.colorFromHex(ColorCode.bluePrimary), size: 14),
+                                          Text('${notif.title}, ${notif.content}',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Avenir-book',
+                                                  color: Utils.colorFromHex(ColorCode.bluePrimary))
+                                          ),
                                           SizedBox(height: 15),
                                           TextAvenirBook(notif.waktu, color: Colors.grey, size: 12,),
                                         ],

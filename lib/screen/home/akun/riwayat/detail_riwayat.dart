@@ -234,7 +234,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                         ):SizedBox(),
                         SizedBox(height: 35),
                         InkWell(
-                          onTap: ()=> Navigator.pushNamed(context, '/edit_quiz', arguments: {'id': data.header.kuis_id}),
+                          onTap: ()=> Navigator.pushNamed(context, '/edit_quiz', arguments: {'id': data.header.kuis_id, 'title':widget.title}),
                           child: Container(
                             decoration: ConstantStyle.boxShadowButon(
                               color: Utils.colorFromHex(ColorCode.blueSecondary),

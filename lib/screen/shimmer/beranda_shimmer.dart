@@ -39,7 +39,7 @@ class _BerandaShimmerState extends State<BerandaShimmer> {
               shimmerBarcode(),
               SizedBox(height: is5Inc() ? 15:30),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 15),
                 child: Shimmer.fromColors(child: Container(
                   height: size.height * 0.03,
                   width: size.width * 0.19,
@@ -53,7 +53,7 @@ class _BerandaShimmerState extends State<BerandaShimmer> {
               ),
               SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 10),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -227,7 +227,7 @@ class _BerandaShimmerState extends State<BerandaShimmer> {
   shimmerBarcode(){
     final size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 40),
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: [
           SizedBox(height: 20,),

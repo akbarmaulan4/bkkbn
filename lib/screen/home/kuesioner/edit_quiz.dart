@@ -14,7 +14,8 @@ import 'package:kua/widgets/widget_quetioner/upload_file_quiz.dart';
 
 class EditQuiz extends StatefulWidget {
   int id;
-  EditQuiz(this.id);
+  String title;
+  EditQuiz(this.id, this.title);
   @override
   _EditQuizState createState() => _EditQuizState();
 }
@@ -34,7 +35,12 @@ class _EditQuizState extends State<EditQuiz> {
 
     bloc.resultSubmit.listen((event) {
       if(event != null){
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/result_quiz',
+                (Route<dynamic> route) => false,
+            arguments: {'data': event, 'isEdit': true, 'title': widget.title}
+        );
       }
     });
   }

@@ -14,7 +14,8 @@ import 'package:kua/widgets/widget_quetioner/upload_file_quiz.dart';
 
 class GenerateQuiz extends StatefulWidget {
   int id;
-  GenerateQuiz(this.id);
+  String title;
+  GenerateQuiz(this.id, this.title);
   @override
   _GenerateQuizState createState() => _GenerateQuizState();
 }
@@ -37,8 +38,7 @@ class _GenerateQuizState extends State<GenerateQuiz> {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/result_quiz',
             (Route<dynamic> route) => false,
-            arguments: {'data': event}
-            // arguments: {"data", event}
+            arguments: {'data': event, 'isEdit': false, 'title': widget.title}
         );
       }
     });
@@ -158,7 +158,16 @@ class _GenerateQuizState extends State<GenerateQuiz> {
       dataWidget.add(Container(
         child: Column(
           children: [
-            (data[i].deskripsi != null && data[i].deskripsi != '') ? TextAvenir(data[i].deskripsi, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox(),
+            // (data[i].deskripsi != null && data[i].deskripsi != '') ? TextAvenir(data[i].deskripsi, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox(),
+            (data[i].deskripsi != null && data[i].deskripsi != '') ?
+            Text(data[i].deskripsi,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Avenir',
+                  color: Utils.colorFromHex(ColorCode.bluePrimary)
+                )
+            ):
+            SizedBox(),
             SizedBox(height: (data[i].deskripsi != null && data[i].deskripsi != '') ? 15:0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,

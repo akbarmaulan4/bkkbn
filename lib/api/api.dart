@@ -122,10 +122,10 @@ class API{
     var playerId = await LocalData.getPlayerId();
     var imei = await ImeiPlugin.getImei();
     if(playerId != null){
-      post['player_id '] = playerId;
+      post['player_id'] = playerId;
     }
     if(playerId != null){
-      post['imei '] = imei;
+      post['imei'] = imei;
     }
     basePost('/login', post, header, true, (result, error){
       callback(result, error);
@@ -176,10 +176,10 @@ class API{
     var playerId = await LocalData.getPlayerId();
     var imei = await ImeiPlugin.getImei();
     if(playerId != null){
-      post['player_id '] = playerId;
+      post['player_id'] = playerId;
     }
     if(playerId != null){
-      post['imei '] = imei;
+      post['imei'] = imei;
     }
     basePost('/register', post, header, true, (result, error){
       callback(result, error);

@@ -115,7 +115,7 @@ class MyApp extends StatelessWidget {
             }
             return MaterialPageRoute(
                 builder: (context){
-                  return GenerateQuiz(arguments["id"]);
+                  return GenerateQuiz(arguments["id"], arguments["title"]);
                 },
                 settings: RouteSettings());
           case '/result_quiz':
@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
-                  return ResultQuiz(arguments['data']);
+                  return ResultQuiz(arguments['data'], arguments['isEdit'], arguments['title']);
                 },
                 settings: RouteSettings());
           case '/pdf':
@@ -261,7 +261,7 @@ class MyApp extends StatelessWidget {
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
-                  return EditQuiz(arguments['id']);
+                  return EditQuiz(arguments['id'], arguments["title"]);
                 },
                 settings: RouteSettings());
           case '/riwayat_pasangan':

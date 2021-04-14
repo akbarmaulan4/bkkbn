@@ -111,7 +111,7 @@ class _LandingQuizState extends State<LandingQuiz> {
         onTap: (){
           if(bloc.verifkasi){
             if(widget.result_id < 1){
-              Navigator.pushNamed(context, '/generate_quiz', arguments: {'id': widget.id});
+              Navigator.pushNamed(context, '/generate_quiz', arguments: {'id': widget.id, 'title':bloc.dataIntro.title});
             }else{
               Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id': widget.result_id, 'title':bloc.dataIntro.title});
             }

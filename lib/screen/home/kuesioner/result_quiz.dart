@@ -12,7 +12,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class ResultQuiz extends StatefulWidget {
   ResultSubmit data;
-  ResultQuiz(this.data);
+  bool isEdit;
+  String title;
+  ResultQuiz(this.data, this.isEdit, this.title);
 
   @override
   _ResultQuizState createState() => _ResultQuizState();
@@ -21,8 +23,7 @@ class ResultQuiz extends StatefulWidget {
 class _ResultQuizState extends State<ResultQuiz>{
 
   Future<bool> onWillPop() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu':0});
-    // Navigator.of(context).pop();
+    Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu': widget.isEdit ? 1:0});
     return Future.value(true);
   }
 
@@ -199,7 +200,7 @@ class _ResultQuizState extends State<ResultQuiz>{
                     children: [
                       SizedBox(height: 35),
                       InkWell(
-                        onTap: ()=> Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu': 0}),
+                        onTap: ()=> Navigator.pushNamed(context, '/edit_quiz', arguments: {'id': widget.data.header.kuis_id, 'title':widget.title}),//Navigator.of(context).pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: {'loadFirstMenu': widget.isEdit ? 1:0}),
                         child: Container(
                           decoration: ConstantStyle.box_fill_blue_nd,
                           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
