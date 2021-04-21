@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
@@ -52,6 +53,14 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
         }
       }
     });
+
+    // widget.bloc.showFinder.listen((event) {
+    //   if(event != null){
+    //     if(event){
+    //       // showFinder(type)
+    //     }
+    //   }
+    // });
 
   }
 
@@ -654,7 +663,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
     );
   }
 
-  getDataFinder(String type){
+  getStreamFinder(String type){
     switch(type){
       case 'provinsi':
         return widget.bloc.dataProvinsi;
@@ -667,7 +676,37 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
     }
   }
 
+  getDataFinder(String type){
+    switch(type){
+      case 'provinsi':
+        return widget.bloc.allDataProvinsi;
+      case 'kota':
+        return widget.bloc.allDataKabupaten;
+      case 'kecamatan':
+        return widget.bloc.allDataKecamatan;
+      case 'kelurahan':
+        return widget.bloc.allDataKelurahan;
+    }
+  }
+
   finding(String type, String param){
+    switch(type){
+      case 'provinsi':
+        widget.bloc.findProvinsi(param);
+        break;
+      case 'kota':
+        widget.bloc.findKabupaten(param);
+        break;
+      case 'kecamatan':
+        widget.bloc.findKecamatan(param);
+        break;
+      case 'kelurahan':
+        widget.bloc.findKelurahan(param);
+        break;
+    }
+  }
+
+  loadFindingFirst(String type, String param){
     switch(type){
       case 'provinsi':
         widget.bloc.findProvinsi(param);
@@ -703,7 +742,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
 
   void showFinder(String type) async {
     var size = MediaQuery.of(context).size;
+    loadFindingFirst(type, 'a');
     var dataSink = getDataFinder(type);
+    var stream = getStreamFinder(type);
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -743,9 +784,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         ),
                       ),
                       StreamBuilder(
-                        stream: dataSink,
+                        stream: stream,
                         builder: (context, snapshot) {
-                          List<dynamic> data = [];
+                          List<dynamic> data = dataSink;
                           if(snapshot.data != null){
                             data = snapshot.data;
                           }
@@ -763,9 +804,23 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(data[index].nama),
+                                          // Text(data[index].nama),
+                                          // ListTile(
+                                          //   title: Text(data[index].nama),
+                                          //   leading: Icon(CupertinoIcons.check_mark_circled_solid),
+                                          //   contentPadding: EdgeInsets.symmetric(horizontal: 5),
+                                          // ),
+                                          Row(
+                                            // crossAxisAlignment: CrossAxisAlignment.baseline,
+                                            // textBaseline: TextBaseline.ideographic,
+                                            children: [
+                                              Icon(CupertinoIcons.check_mark_circled_solid),
+                                              SizedBox(width: 10),
+                                              Text(data[index].nama),
+                                            ],
+                                          ),
                                           SizedBox(height: 5),
-                                          Container(height: 0.8, width: double.infinity, color: Colors.grey[200],)
+                                          Container(height: 0.5, width: double.infinity, color: Colors.grey[200],)
                                         ],
                                       )
                                   ),

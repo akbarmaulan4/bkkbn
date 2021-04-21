@@ -187,11 +187,13 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
                         Expanded(child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextAvenir(
-                              fileName,
-                              size: is5Inc() ? 13:14,
-                              color: Utils.colorFromHex(ColorCode.bluePrimary),
-                            ),
+                            // TextAvenir(
+                            //   fileName,
+                            //   size: is5Inc() ? 13:14,
+                            //   color: Utils.colorFromHex(ColorCode.bluePrimary),
+                            // ),
+
+                            Text(fileName, style: TextStyle(fontSize: is5Inc() ? 13:14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.bluePrimary))),
                             SizedBox(height: 8),
                             TextAvenirBook(
                               'File yang didukung: Word/PDF/jpeg/png',

@@ -235,7 +235,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
             child: ClipOval(
               child: CachedNetworkImage(
                 placeholder: (context, url) => Center(
-                  child: Image.asset(ImageConstant.logoElsimil),
+                  child: Image.asset(ImageConstant.placeHolderElsimil),
                 ),
                 imageUrl: data != null ? data.pic : '',
                 fit: BoxFit.cover,
@@ -275,7 +275,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
             child: ClipOval(
               child: CachedNetworkImage(
                 placeholder: (context, url) => Center(
-                  child: Image.asset(ImageConstant.logoElsimil),
+                  child: Image.asset(ImageConstant.placeHolderElsimil),
                 ),
                 imageUrl: data != null ? data.pic : '',
                 fit: BoxFit.cover,

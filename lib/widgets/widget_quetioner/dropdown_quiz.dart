@@ -30,11 +30,13 @@ class _DropDownQuizState extends State<DropDownQuiz> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 15),
-          TextAvenir(
-            widget.question,
-            size: 14,
-            color: Colors.grey,
-          ),
+          // TextAvenir(
+          //   widget.question,
+          //   size: 14,
+          //   color: Colors.grey,
+          // ),
+
+          Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
           SizedBox(height: 5),
           Container(
             padding: EdgeInsets.only(left: 10),

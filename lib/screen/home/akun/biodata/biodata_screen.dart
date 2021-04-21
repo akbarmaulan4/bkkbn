@@ -156,7 +156,7 @@ class _BiodataViewState extends State<BiodataView> {
                                         child: ClipOval(
                                           child: CachedNetworkImage(
                                             placeholder: (context, url) => Center(
-                                              child: Image.asset(ImageConstant.logoElsimil),
+                                              child: Image.asset(ImageConstant.placeHolderElsimil),
                                             ),
                                             imageUrl: urlImg, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
                                             fit: BoxFit.cover,

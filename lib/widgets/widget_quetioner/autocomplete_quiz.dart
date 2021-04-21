@@ -50,11 +50,12 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 15),
-          TextAvenir(
-            widget.question,
-            size: 14,
-            color: Colors.grey,
-          ),
+          // TextAvenir(
+          //   widget.question,
+          //   size: 14,
+          //   color: Colors.grey,
+          // ),
+          Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
           SizedBox(height: 5),
           InkWell(
             onTap: (){

@@ -42,6 +42,7 @@ class AuthBloc{
   final _downloadKab = PublishSubject<bool>();
   final _downloadKec = PublishSubject<bool>();
   final _downloadKel = PublishSubject<bool>();
+  // final _showFinder = PublishSubject<String>();
 
   final _dataProvinsi = PublishSubject<List<DataProvinsi>>();
   final _dataKotaKab = PublishSubject<List<DataKabupaten>>();
@@ -75,6 +76,7 @@ class AuthBloc{
   Stream<bool> get downloadKab => _downloadKab.stream;
   Stream<bool> get downloadKec => _downloadKec.stream;
   Stream<bool> get downloadKel => _downloadKel.stream;
+  // Stream<String> get showFinder => _showFinder.stream;
 
   Stream<List<DataProvinsi>> get dataProvinsi => _dataProvinsi.stream;
   Stream<List<DataKabupaten>> get dataKotaKab => _dataKotaKab.stream;
@@ -375,11 +377,17 @@ class AuthBloc{
     });
   }
 
+  List<DataProvinsi> _allDataProvinsi = [];
+  List<DataProvinsi> get allDataProvinsi => _allDataProvinsi;
+
   findProvinsi(String val){
+    _allDataProvinsi.clear();
     var data = allProvinsi.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
     if(data != null){
+      _allDataProvinsi.addAll(data.toList());
       _dataProvinsi.sink.add(data.toList());
     }
+    // _showFinder.sink.add('provinsi');
     return data;
   }
 
@@ -416,11 +424,16 @@ class AuthBloc{
     });
   }
 
+  List<DataKabupaten> _allDataKabupaten = [];
+  List<DataKabupaten> get allDataKabupaten => _allDataKabupaten;
   findKabupaten(String val){
+    _allDataKabupaten.clear();
     var data = allKabupaten.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
     if(data != null){
+      _allDataKabupaten.addAll(data.toList());
       _dataKotaKab.sink.add(data.toList());
     }
+    // _showFinder.sink.add(true);
     return data;
   }
 
@@ -458,11 +471,16 @@ class AuthBloc{
     });
   }
 
+  List<DataKecamatan> _allDataKecamatan = [];
+  List<DataKecamatan> get allDataKecamatan => _allDataKecamatan;
   findKecamatan(String val){
+    _allDataKecamatan.clear();
     var data = allKecamatan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
     if(data != null){
+      _allDataKecamatan.addAll(data.toList());
       _dataKecamatan.sink.add(data.toList());
     }
+    // _showFinder.sink.add(true);
     return data;
   }
 
@@ -500,11 +518,16 @@ class AuthBloc{
     });
   }
 
+  List<DataKelurahan> _allDataKelurahan = [];
+  List<DataKelurahan> get allDataKelurahan => _allDataKelurahan;
   findKelurahan(String val){
+    _allDataKelurahan.clear();
     var data = allKelurahan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
     if(data != null){
+      _allDataKelurahan.addAll(data.toList());
       _dataKelurahan.sink.add(data.toList());
     }
+    // _showFinder.sink.add(true);
     return data;
   }
 

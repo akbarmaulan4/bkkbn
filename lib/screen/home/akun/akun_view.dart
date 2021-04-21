@@ -143,7 +143,10 @@ class _AkunScreenState extends State<AkunView> {
                       Utils.dialogMessage(
                         context: context,
                         title: 'Apakah anda ingin keluar aplikasi?',
-                        ok: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false)
+                        ok: (){
+                          LocalData.removeAllPreference();
+                          Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false);
+                        }
                       );
                     },
                     child: itemList('Keluar'),

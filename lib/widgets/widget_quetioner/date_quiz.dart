@@ -52,11 +52,12 @@ class _InputQuizState extends State<DateQuiz> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 15),
-          TextAvenir(
-            widget.question,
-            size: 14,
-            color: Colors.grey,
-          ),
+          // TextAvenir(
+          //   widget.question,
+          //   size: 14,
+          //   color: Colors.grey,
+          // ),
+          Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
           SizedBox(height: 5),
           InkWell(
             onTap: (){
@@ -90,7 +91,7 @@ class _InputQuizState extends State<DateQuiz> {
         context: context,
         initialDate:  dateTime,
         firstDate: new DateTime(1900),
-        lastDate: new DateTime(2100)
+        lastDate: dateTime //new DateTime(2100)
     );
     if (picked != null){
       final dateFormat = DateFormat("yyyy-MM-dd");

@@ -109,8 +109,8 @@ class _GatewayScreenState extends State<GatewayScreen> {
                                   radius: 5,
                                   color: Colors.white,
                                   colorShadow: Utils.colorFromHex(ColorCode.lightBlueDark),
-                                  spreadRadius: 1.5,
-                                  blurRadius: 4,
+                                  spreadRadius: 0.5,
+                                  blurRadius: 1,
                                   offset: Offset(0,0)
                               ),
                               child: TextAvenir(
