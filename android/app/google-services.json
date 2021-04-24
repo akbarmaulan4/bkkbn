@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "384249606192",
+    "firebase_url": "https://elsimil-default-rtdb.firebaseio.com",
+    "project_id": "elsimil",
+    "storage_bucket": "elsimil.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384249606192:android:5c76bb72130cba947a3df5",
+        "android_client_info": {
+          "package_name": "com.elsimil.kua"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384249606192-o41lvb5auogn6t76n8skiu2o64rgmrj9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elsimil.kua",
+            "certificate_hash": "0795885b56d4c00b6b5e5fc5d632cb58547a5408"
+          }
+        },
+        {
+          "client_id": "384249606192-uht489vkorf2o2093r3bisdsvp1io8et.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPZtoD4D8O6C2nu3VmYmeg0GNo9TObj6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384249606192-uht489vkorf2o2093r3bisdsvp1io8et.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

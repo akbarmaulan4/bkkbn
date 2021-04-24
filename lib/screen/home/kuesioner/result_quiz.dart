@@ -1,4 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:kua/model/quiz/submit/result/detail_submit.dart';
 import 'package:kua/model/quiz/submit/result/result_submit.dart';
 import 'package:kua/util/Utils.dart';
@@ -8,6 +14,8 @@ import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/widget_quetioner/item_result_quiz.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ResultQuiz extends StatefulWidget {
@@ -246,14 +254,23 @@ class _ResultQuizState extends State<ResultQuiz>{
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  TextAvenir('Kuesioner ID', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                  SizedBox(height: 3),
+                  TextAvenir(data, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                  SizedBox(height: 10),
                   Container(
                     width: 200.0,
                     height: 200.0,
                     child: QrImage(
-                      data: data,
+                      data: data.toString(),
                       version: QrVersions.auto,
                       size: 200,
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                      onTap: ()=>captureQrcode(data),
+                      child: TextAvenir('Simpan QR Code', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
                   ),
                 ],
               ),
@@ -261,5 +278,43 @@ class _ResultQuizState extends State<ResultQuiz>{
           );
         }
     );
+  }
+
+  GlobalKey globalKey = new GlobalKey();
+  captureQrcode(String param) async {
+    try {
+      var status = await Permission.storage.status;
+      if (!status.isGranted) {
+        await Permission.storage.request();
+      }
+
+      Directory extDir = await DownloadsPathProvider.downloadsDirectory;
+      String tempPath = extDir.path;
+      var filePath = tempPath + '/${param}.png';
+
+      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      var image = await boundary.toImage();
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      // final tempDir = await getTemporaryDirectory();
+      // var tempDir = await getApplicationDocumentsDirectory();
+      // final file = await new File('${tempDir.path}/image.png').create();
+      final file = await new File(filePath).create();
+      await file.writeAsBytes(pngBytes);
+
+      if(file.existsSync()){
+        Navigator.of(context).pop();
+        Utils.showConfirmDialog(context, 'Informasi', "QR Code berhasil disimpan, apakah anda ingin melihatnya sekarang?", () {
+          OpenFile.open(file.path);
+        });
+      }
+
+      // final channel = const MethodChannel('channel:me.alfian.share/share');
+      // channel.invokeMethod('shareFile', 'image.png');
+
+    } catch(e) {
+      print(e.toString());
+    }
   }
 }

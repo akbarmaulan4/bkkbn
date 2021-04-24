@@ -145,7 +145,7 @@ class _EdukasiViewState extends State<EdukasiView> {
                       height: is5Inc() ? 20:32,
                       child: CachedNetworkImage(
                         placeholder: (context, url) => Center(
-                          child: Image.asset(ImageConstant.logoElsimil),
+                          child: Image.asset(ImageConstant.placeHolderElsimil),
                         ),
                         imageUrl: item != null ? item.image:'',
                         fit: BoxFit.cover,

@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:kua/util/constant_style.dart';
+import 'package:kua/util/debouncher.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/box_border.dart';
+import 'package:kua/widgets/font/avenir_text.dart';
 
 class RegisterFoto extends StatefulWidget {
   AuthBloc bloc;
@@ -25,6 +23,7 @@ class RegisterFoto extends StatefulWidget {
 class _RegisterFotoState extends State<RegisterFoto> {
   File _image;
   final picker = ImagePicker();
+  var debouncher = new Debouncer(milliseconds: 500);
 
   _imgFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
@@ -127,7 +126,14 @@ class _RegisterFotoState extends State<RegisterFoto> {
                     hintText: 'Masukan 16 digit No KTP anda',
                     hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                     contentPadding: EdgeInsets.only(bottom:16)
-                ) //ConstantStyle.decorTextField,
+                ),
+                onChanged: (val){
+                  if(val.length > 15){
+                    debouncher.run(() {
+                      widget.bloc.checkNIK();
+                    });
+                  }
+                },//ConstantStyle.decorTextField,
               )
           ),
           SizedBox(height: 25),

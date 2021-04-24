@@ -53,6 +53,14 @@ dependencies:
 #  exif: ^2.0.0
   device_info: 0.4.2+4
   shimmer: ^1.1.2
+  permission_handler:
+  downloads_path_provider: ^0.1.0
+  google_sign_in: ^5.0.2
+  firebase_auth:
+#  firebase_core: ^0.2.5
+#  firebase_crashlytics:
+#  cloud_firestore:
+#  firebase_auth:
 #  avatar_glow: ^1.1.0
 #  font_awesome_flutter: ^9.0.0
 #  connectivity:
@@ -89,10 +97,8 @@ flutter:
   assets:
      - assets/images/bkkbn.png
      - assets/images/bkkbn_white.png
-#     - assets/images/foto_icon.png
      - assets/images/noimages.png
      - assets/images/bg_login.png
-     - assets/images/family_placeholder.png
      - assets/images/bg_elsimil.jpg
      - assets/images/logo.png
      - assets/images/logo_elsimil_putih.png

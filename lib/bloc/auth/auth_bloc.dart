@@ -744,4 +744,47 @@ class AuthBloc{
       }
     });
   }
+
+  checkNIK(){
+    API.checkNik(edtKtp.text, (result, error) {
+      if(result != null){
+        if(result['code'] == 200){
+          var data = result['data'];
+          if(data != null){
+            _edtNamaLengkap.text = data['nama'];
+            _edtTglLahir.text = data['tgl_lahir'];
+            _edtProvinsi.text = data['provinsi'];
+            _edtKotaKab.text = data['kabupaten'];
+            _edtKecamatan.text = data['kecamatan'];
+            _edtDesa.text = data['kelurahan'];
+            _edtRT.text = data['rt_kode'];
+            _edtRW.text = data['rw_kode'];
+
+            _provinsi = DataProvinsi();
+            _provinsi.provinsi_kode = data['provinsi_kode'];
+            _provinsi.nama = data['provinsi'];
+
+            //kabupaten
+            _kabupaten = DataKabupaten();
+            _kabupaten.kabupaten_kode = data['kabupaten_kode'];
+            _kabupaten.nama = data['kabupaten'];
+
+            //kecamatan
+            _kecamatan = DataKecamatan();
+            _kecamatan.kecamatan_kode = data['kecamatan_kode'];
+            _kecamatan.nama = data['kecamatan'];
+
+            //kelurahan
+            _kelurahan = DataKelurahan();
+            _kelurahan.kelurahan_kode = data['kelurahan_kode'];
+            _kelurahan.nama = data['kelurahan'];
+          }
+        }else{
+          _messageError.sink.add(error['message']);
+        }
+      }else{
+        _messageError.sink.add(error['message']);
+      }
+    });
+  }
 }

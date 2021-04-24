@@ -581,6 +581,16 @@ class API{
     });
   }
 
+  static checkNik(String nik, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['nik'] = nik;
+    basePost('/checknik', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
   static resendVerificaion(String url, List<Additional> params, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
