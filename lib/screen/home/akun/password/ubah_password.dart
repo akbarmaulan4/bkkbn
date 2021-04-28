@@ -50,6 +50,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -67,155 +68,158 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
               ),
               preferredSize: Size.fromHeight(4.0))
       ),
-      body: Container(
-        color: Utils.colorFromHex(ColorCode.softGreyElsimil),
-        height: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextAvenir(
-                'Kata Sandi Lama',
-                size: 14,
-                color: Utils.colorFromHex(ColorCode.bluePrimary),
-              ),
-              SizedBox(height: 5),
-              StreamBuilder(
-                  stream: bloc.typingOldPass,
-                  builder: (context, snapshot) {
-                    var type = false;
-                    if(snapshot.data != null){
-                      type = snapshot.data;
-                    }
-                    return BoxBorderDefault(
-                        child: StreamBuilder(
-                            stream: bloc.showOldPass,
-                            builder: (context, snapshot) {
-                              var showPass = false;
-                              if(snapshot.data != null){
-                                showPass = snapshot.data;
+      body: MediaQuery(
+        data: scaleFactor,
+        child: Container(
+          color: Utils.colorFromHex(ColorCode.softGreyElsimil),
+          height: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextAvenir(
+                  'Kata Sandi Lama',
+                  size: 14,
+                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                ),
+                SizedBox(height: 5),
+                StreamBuilder(
+                    stream: bloc.typingOldPass,
+                    builder: (context, snapshot) {
+                      var type = false;
+                      if(snapshot.data != null){
+                        type = snapshot.data;
+                      }
+                      return BoxBorderDefault(
+                          child: StreamBuilder(
+                              stream: bloc.showOldPass,
+                              builder: (context, snapshot) {
+                                var showPass = false;
+                                if(snapshot.data != null){
+                                  showPass = snapshot.data;
+                                }
+                                return TextField(
+                                  controller: bloc.edtOldPass,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  obscureText: showPass ? false : true,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Kata sandi',
+                                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      suffixIcon: type ? InkWell(
+                                          onTap: ()=>bloc.changeOldPass(!showPass),
+                                          child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
+                                  ),
+                                  onChanged: (val){
+                                    if(val.length > 0){
+                                      bloc.isTypingOldPass(true);
+                                    }else{
+                                      bloc.isTypingOldPass(false);
+                                    }
+                                  },
+                                );
                               }
-                              return TextField(
-                                controller: bloc.edtOldPass,
-                                textAlignVertical: TextAlignVertical.center,
-                                obscureText: showPass ? false : true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Kata sandi',
-                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                    suffixIcon: type ? InkWell(
-                                        onTap: ()=>bloc.changeOldPass(!showPass),
-                                        child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
-                                ),
-                                onChanged: (val){
-                                  if(val.length > 0){
-                                    bloc.isTypingOldPass(true);
-                                  }else{
-                                    bloc.isTypingOldPass(false);
-                                  }
-                                },
-                              );
-                            }
-                        )
-                    );
-                  }
-              ),
-              SizedBox(height: 15),
-              TextAvenir(
-                'Kata Sandi Baru',
-                size: 14,
-                color: Utils.colorFromHex(ColorCode.bluePrimary),
-              ),
-              SizedBox(height: 5),
-              StreamBuilder(
-                  stream: bloc.typingNewPass,
-                  builder: (context, snapshot) {
-                    var type = false;
-                    if(snapshot.data != null){
-                      type = snapshot.data;
+                          )
+                      );
                     }
-                    return BoxBorderDefault(
-                        child: StreamBuilder(
-                            stream: bloc.showNewPass,
-                            builder: (context, snapshot) {
-                              var showPass = false;
-                              if(snapshot.data != null){
-                                showPass = snapshot.data;
+                ),
+                SizedBox(height: 15),
+                TextAvenir(
+                  'Kata Sandi Baru',
+                  size: 14,
+                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                ),
+                SizedBox(height: 5),
+                StreamBuilder(
+                    stream: bloc.typingNewPass,
+                    builder: (context, snapshot) {
+                      var type = false;
+                      if(snapshot.data != null){
+                        type = snapshot.data;
+                      }
+                      return BoxBorderDefault(
+                          child: StreamBuilder(
+                              stream: bloc.showNewPass,
+                              builder: (context, snapshot) {
+                                var showPass = false;
+                                if(snapshot.data != null){
+                                  showPass = snapshot.data;
+                                }
+                                return TextField(
+                                  controller: bloc.edtNewPass,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  obscureText: showPass ? false : true,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Kata sandi baru',
+                                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      suffixIcon: type ? InkWell(
+                                          onTap: ()=>bloc.changeNewPass(!showPass),
+                                          child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
+                                  ),
+                                  onChanged: (val){
+                                    if(val.length > 0){
+                                      bloc.isTypingNewPass(true);
+                                    }else{
+                                      bloc.isTypingNewPass(false);
+                                    }
+                                  },
+                                );
                               }
-                              return TextField(
-                                controller: bloc.edtNewPass,
-                                textAlignVertical: TextAlignVertical.center,
-                                obscureText: showPass ? false : true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Kata sandi baru',
-                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                    suffixIcon: type ? InkWell(
-                                        onTap: ()=>bloc.changeNewPass(!showPass),
-                                        child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
-                                ),
-                                onChanged: (val){
-                                  if(val.length > 0){
-                                    bloc.isTypingNewPass(true);
-                                  }else{
-                                    bloc.isTypingNewPass(false);
-                                  }
-                                },
-                              );
-                            }
-                        )
-                    );
-                  }
-              ),
-              SizedBox(height: 15),
-              TextAvenir(
-                'Ulangi Kata Sandi Baru',
-                size: 14,
-                color: Utils.colorFromHex(ColorCode.bluePrimary),
-              ),
-              SizedBox(height: 5),
-              StreamBuilder(
-                  stream: bloc.typingRePass,
-                  builder: (context, snapshot) {
-                    var type = false;
-                    if(snapshot.data != null){
-                      type = snapshot.data;
+                          )
+                      );
                     }
-                    return BoxBorderDefault(
-                        child: StreamBuilder(
-                            stream: bloc.showRePass,
-                            builder: (context, snapshot) {
-                              var showPass = false;
-                              if(snapshot.data != null){
-                                showPass = snapshot.data;
+                ),
+                SizedBox(height: 15),
+                TextAvenir(
+                  'Ulangi Kata Sandi Baru',
+                  size: 14,
+                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                ),
+                SizedBox(height: 5),
+                StreamBuilder(
+                    stream: bloc.typingRePass,
+                    builder: (context, snapshot) {
+                      var type = false;
+                      if(snapshot.data != null){
+                        type = snapshot.data;
+                      }
+                      return BoxBorderDefault(
+                          child: StreamBuilder(
+                              stream: bloc.showRePass,
+                              builder: (context, snapshot) {
+                                var showPass = false;
+                                if(snapshot.data != null){
+                                  showPass = snapshot.data;
+                                }
+                                return TextField(
+                                  controller: bloc.edtRePass,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  obscureText: showPass ? false : true,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Ulangi kata sandi baru',
+                                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      suffixIcon: type ? InkWell(
+                                          onTap: ()=>bloc.changeRePass(!showPass),
+                                          child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
+                                  ),
+                                  onChanged: (val){
+                                    if(val.length > 0){
+                                      bloc.isTypingRePass(true);
+                                    }else{
+                                      bloc.isTypingRePass(false);
+                                    }
+                                  },
+                                );
                               }
-                              return TextField(
-                                controller: bloc.edtRePass,
-                                textAlignVertical: TextAlignVertical.center,
-                                obscureText: showPass ? false : true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Ulangi kata sandi baru',
-                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                    suffixIcon: type ? InkWell(
-                                        onTap: ()=>bloc.changeRePass(!showPass),
-                                        child: Icon(Icons.remove_red_eye, size: 20, color: Colors.grey)):SizedBox()
-                                ),
-                                onChanged: (val){
-                                  if(val.length > 0){
-                                    bloc.isTypingRePass(true);
-                                  }else{
-                                    bloc.isTypingRePass(false);
-                                  }
-                                },
-                              );
-                            }
-                        )
-                    );
-                  }
-              ),
-            ],
+                          )
+                      );
+                    }
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -100,125 +100,129 @@ class _RegisterFotoState extends State<RegisterFoto> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextAvenir(
-            'No KTP',
-            size: 14,
-            color: Utils.colorFromHex(ColorCode.bluePrimary),
-          ),
-          SizedBox(height: 5),
-          BoxBorderDefault(
-              child: TextField(
-                controller: widget.bloc.edtKtp,
-                textAlignVertical: TextAlignVertical.center,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(16),
-                  new BlacklistingTextInputFormatter(
-                      new RegExp('[\\-|\\,|\\.]')),
-                ],
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Masukan 16 digit No KTP anda',
-                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                    contentPadding: EdgeInsets.only(bottom:16)
-                ),
-                onChanged: (val){
-                  if(val.length > 15){
-                    debouncher.run(() {
-                      widget.bloc.checkNIK();
-                    });
-                  }
-                },//ConstantStyle.decorTextField,
-              )
-          ),
-          SizedBox(height: 25),
-          DottedBorder(
-            color: Utils.colorFromHex(ColorCode.lightBlueDark),
-            strokeWidth: 1,
-            child: Container(
-              child: InkWell(
-                onTap: (){
-                  showPicker();
-                },
-                child: _image != null ? Container(
-                  child: Image.file(
-                    _image,
-                    width: size.width * 0.88,
-                    height: size.height * 0.25,
-                    fit: BoxFit.cover,
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
+    return MediaQuery(
+      data: scaleFactor,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextAvenir(
+              'No KTP',
+              size: 14,
+              color: Utils.colorFromHex(ColorCode.bluePrimary),
+            ),
+            SizedBox(height: 5),
+            BoxBorderDefault(
+                child: TextField(
+                  controller: widget.bloc.edtKtp,
+                  textAlignVertical: TextAlignVertical.center,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(16),
+                    new BlacklistingTextInputFormatter(
+                        new RegExp('[\\-|\\,|\\.]')),
+                  ],
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Masukan 16 digit No KTP anda',
+                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                      contentPadding: EdgeInsets.only(bottom:16)
                   ),
-                ) : StreamBuilder(
-                  stream: widget.bloc.fileDoc,
-                  builder: (context, snapshot) {
-                    File exist;
-                    String fileName = 'Foto KTP';
-                    if(snapshot.data != null){
-                      exist = snapshot.data;
-                      fileName = exist.path.split('/').last;
+                  onChanged: (val){
+                    if(val.length > 15){
+                      debouncher.run(() {
+                        widget.bloc.checkNIK();
+                      });
                     }
-                    return Row(
-                      children: [
-                        Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
-                        SizedBox(width: 10),
-                        Expanded(child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextAvenir(
-                              fileName,
-                              size: 14,
-                              color: Utils.colorFromHex(ColorCode.bluePrimary),
-                            ),
-                            SizedBox(height: 8),
-                            TextAvenir(
-                              'File yang didukung: Word/PDF/jpeg/png',
-                              size: 12,
-                              color: Colors.grey[400],
-                            ),
-                          ],
-                        ))
-                      ],
-                    );
-                  }
-                ),
-              ),
+                  },//ConstantStyle.decorTextField,
+                )
             ),
-          ),
-          SizedBox(height: _image != null ? is5Inc() ? size.height * 0.23 : size.height * 0.33 : is5Inc() ? size.height * 0.37:size.height * 0.49),
-          InkWell(
-            onTap: (){
-              widget.bloc.validasiFotoKtp();
-              // widget.bloc.changeViewRegist(2);
-            },
-            child: Container(
-              alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Utils.colorFromHex(ColorCode.blueSecondary),
-                boxShadow: [
-                  BoxShadow(
-                    color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
-                    spreadRadius: 2,
-                    blurRadius: 7,
-                    offset: Offset(0,0),
+            SizedBox(height: 25),
+            DottedBorder(
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
+              strokeWidth: 1,
+              child: Container(
+                child: InkWell(
+                  onTap: (){
+                    showPicker();
+                  },
+                  child: _image != null ? Container(
+                    child: Image.file(
+                      _image,
+                      width: size.width * 0.88,
+                      height: size.height * 0.25,
+                      fit: BoxFit.cover,
+                    ),
+                  ) : StreamBuilder(
+                    stream: widget.bloc.fileDoc,
+                    builder: (context, snapshot) {
+                      File exist;
+                      String fileName = 'Foto KTP';
+                      if(snapshot.data != null){
+                        exist = snapshot.data;
+                        fileName = exist.path.split('/').last;
+                      }
+                      return Row(
+                        children: [
+                          Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
+                          SizedBox(width: 10),
+                          Expanded(child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextAvenir(
+                                fileName,
+                                size: 14,
+                                color: Utils.colorFromHex(ColorCode.bluePrimary),
+                              ),
+                              SizedBox(height: 8),
+                              TextAvenir(
+                                'File yang didukung: Word/PDF/jpeg/png',
+                                size: 12,
+                                color: Colors.grey[400],
+                              ),
+                            ],
+                          ))
+                        ],
+                      );
+                    }
                   ),
-                ],
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              child: Center(
-                child: TextAvenir(
-                  'Lanjutkan',
-                  size: 20,
-                  color: Colors.white,
                 ),
               ),
             ),
-          )
-        ],
+            SizedBox(height: _image != null ? is5Inc() ? size.height * 0.23 : size.height * 0.33 : is5Inc() ? size.height * 0.37:size.height * 0.49),
+            InkWell(
+              onTap: (){
+                widget.bloc.validasiFotoKtp();
+                // widget.bloc.changeViewRegist(2);
+              },
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Utils.colorFromHex(ColorCode.blueSecondary),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                      spreadRadius: 2,
+                      blurRadius: 7,
+                      offset: Offset(0,0),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: Center(
+                  child: TextAvenir(
+                    'Lanjutkan',
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

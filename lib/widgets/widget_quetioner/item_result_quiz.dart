@@ -77,7 +77,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                     ],
                   ),
                 )),
-                AnimatedBuilder(
+                widget.detail.file.isNotEmpty ? AnimatedBuilder(
                   animation: _arrowAnimationController,
                   builder: (context, child) => Transform.rotate(
                     angle: _arrowAnimation.value,
@@ -95,7 +95,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                       ),
                     ),
                   ),
-                )
+                ):SizedBox()
                 // Icon(Icons.keyboard_arrow_down_rounded, size: 30, color: Colors.grey,)
               ],
             ),
@@ -142,7 +142,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
             borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           padding: EdgeInsets.symmetric(vertical: size.width < 430 ? 5: 8, horizontal: size.width < 430 ?15:20),
-          margin: EdgeInsets.symmetric(horizontal: size.width < 430 ? 35:50),
+          margin: EdgeInsets.symmetric(horizontal: size.width < 430 ? 35:50, vertical: 7),
           child: Row(
             children: [
               Image.asset(ImageConstant.icPdf2, height: 30,),

@@ -78,14 +78,10 @@ class _DetailBantuanState extends State<DetailBantuan> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextAvenir(data.title != null ? data.title : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                          SizedBox(height: 10),
+                          // TextAvenir(data.title != null ? data.title : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                          // SizedBox(height: 10),
                           Html(
                             data: data.content != null ? data.content : '',
-                            defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
-                          )
-                        ],
-                      ),
                     );
                   }
               )

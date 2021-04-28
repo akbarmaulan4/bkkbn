@@ -165,7 +165,8 @@ class _GenerateQuizState extends State<GenerateQuiz> {
                   fontSize: 16,
                   fontFamily: 'Avenir',
                   color: Utils.colorFromHex(ColorCode.bluePrimary)
-                )
+                ),
+              textScaleFactor: 1.0,
             ):
             SizedBox(),
             SizedBox(height: (data[i].deskripsi != null && data[i].deskripsi != '') ? 15:0),

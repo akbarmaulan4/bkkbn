@@ -41,6 +41,7 @@ class _OTPScreenState extends State<OTPPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -61,185 +62,188 @@ class _OTPScreenState extends State<OTPPasswordScreen> {
             ),
             preferredSize: Size.fromHeight(4.0)),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        color: Colors.white,
-        height: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 25),
-              Center(
-                child: Column(
-                  children: [
-                    Image.asset(ImageConstant.icMailOpen, width: 100,),
-                    TextAvenir(
-                      'Silahkan check email anda',
-                      size: 23,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 3),
-                  ],
+      body: MediaQuery(
+        data: scaleFactor,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          color: Colors.white,
+          height: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 25),
+                Center(
+                  child: Column(
+                    children: [
+                      Image.asset(ImageConstant.icMailOpen, width: 100,),
+                      TextAvenir(
+                        'Silahkan check email anda',
+                        size: 23,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 3),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 15),
-              TextAvenirBook(
-                'Kami telah mengirimkan kode verifikasi ke Email anda.\nMohon check Inbox atau Spambox',
-                size: 16,
-                height: 1.5,
-                color: Colors.grey,
-              ),
-              SizedBox(height: 25),
-              // Row(
-              //   children: [
-              //     TextAvenir(
-              //       'Kode Verifikasi',
-              //       size: 14,
-              //       color: Utils.colorFromHex(ColorCode.bluePrimary),
-              //     ),
-              //     Expanded(child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.end,
-              //       children: [
-              //         Container(
-              //           width: 25,
-              //           height: 25,
-              //           decoration: BoxDecoration(
-              //             shape: BoxShape.circle,
-              //             border: Border.all(color: Colors.grey[300]),
-              //           ),
-              //           child: Icon(Icons.done, size: 14),
-              //         ),
-              //       ],
-              //     ))
-              //   ],
-              // ),
-              // SizedBox(height: 5),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       flex: 4,
-              //       child: containerBox(
-              //           TextField(
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(fontWeight: FontWeight.bold),
-              //             keyboardType: TextInputType.number,
-              //             textInputAction: TextInputAction.next,
-              //             decoration: InputDecoration(
-              //               border: InputBorder.none,
-              //             ),
-              //             onChanged: (val){
-              //               if(val.length > 0){
-              //                 val = val.substring(0);
-              //                 FocusScope.of(context).requestFocus(_focus1);
-              //               }
-              //             },
-              //           )
-              //       )
-              //     ),
-              //     SizedBox(width: 10),
-              //     Expanded(
-              //       flex: 4,
-              //       child: containerBox(
-              //           TextField(
-              //             focusNode: _focus1,
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(fontWeight: FontWeight.bold),
-              //             keyboardType: TextInputType.number,
-              //             textInputAction: TextInputAction.next,
-              //             decoration: InputDecoration(
-              //               border: InputBorder.none,
-              //             ),
-              //             onChanged: (val){
-              //               if(val.length > 0){
-              //                 val = val.substring(0);
-              //                 FocusScope.of(context).requestFocus(_focus2);
-              //               }
-              //             },
-              //           )
-              //       )
-              //     ),
-              //     SizedBox(width: 10),
-              //     Expanded(
-              //       flex: 4,
-              //       child: containerBox(
-              //           TextField(
-              //             focusNode: _focus2,
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(fontWeight: FontWeight.bold),
-              //             keyboardType: TextInputType.number,
-              //             textInputAction: TextInputAction.next,
-              //             decoration: InputDecoration(
-              //               border: InputBorder.none
-              //             ),
-              //             onChanged: (val){
-              //               if(val.length > 0){
-              //                 val = val.substring(0);
-              //                 FocusScope.of(context).requestFocus(_focus3);
-              //               }
-              //             },
-              //           )
-              //       )
-              //     ),
-              //     SizedBox(width: 10),
-              //     Expanded(
-              //       flex: 4,
-              //       child: containerBox(
-              //           TextField(
-              //             focusNode: _focus3,
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(fontWeight: FontWeight.bold),
-              //             keyboardType: TextInputType.number,
-              //             textInputAction: TextInputAction.done,
-              //             decoration: InputDecoration(
-              //               border: InputBorder.none,
-              //             ),
-              //             onChanged: (val){
-              //               if(val.length > 0){
-              //                 val = val.substring(0);
-              //                 FocusScope.of(context).requestFocus(FocusNode());
-              //               }
-              //             }
-              //           ),
-              //       )
-              //     )
-              //   ],
-              // ),
-              // SizedBox(height: 20),
-              // TextAvenir(
-              //   'Kata Sandi Baru',
-              //   size: 14,
-              //   color: Utils.colorFromHex(ColorCode.bluePrimary),
-              // ),
-              // SizedBox(height: 5),
-              // BoxBorderDefault(
-              //     child: TextField(
-              //       controller: bloc.edtForgotPassword,
-              //       textAlignVertical: TextAlignVertical.center,
-              //       decoration: InputDecoration(
-              //         border: InputBorder.none,
-              //         // hintText: 'NIK(KTP/SIM)'
-              //       ),
-              //     )
-              // ),
-              // SizedBox(height: 20),
-              // TextAvenir(
-              //   'Ulangi Kata Sandi Baru',
-              //   size: 14,
-              //   color: Utils.colorFromHex(ColorCode.bluePrimary),
-              // ),
-              // SizedBox(height: 5),
-              // BoxBorderDefault(
-              //     child: TextField(
-              //       controller: bloc.edtForgotPassword,
-              //       textAlignVertical: TextAlignVertical.center,
-              //       decoration: InputDecoration(
-              //         border: InputBorder.none,
-              //         // hintText: 'NIK(KTP/SIM)'
-              //       ),
-              //     )
-              // ),
-            ],
+                SizedBox(height: 15),
+                TextAvenirBook(
+                  'Kami telah mengirimkan kode verifikasi ke Email anda.\nMohon check Inbox atau Spambox',
+                  size: 16,
+                  height: 1.5,
+                  color: Colors.grey,
+                ),
+                SizedBox(height: 25),
+                // Row(
+                //   children: [
+                //     TextAvenir(
+                //       'Kode Verifikasi',
+                //       size: 14,
+                //       color: Utils.colorFromHex(ColorCode.bluePrimary),
+                //     ),
+                //     Expanded(child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.end,
+                //       children: [
+                //         Container(
+                //           width: 25,
+                //           height: 25,
+                //           decoration: BoxDecoration(
+                //             shape: BoxShape.circle,
+                //             border: Border.all(color: Colors.grey[300]),
+                //           ),
+                //           child: Icon(Icons.done, size: 14),
+                //         ),
+                //       ],
+                //     ))
+                //   ],
+                // ),
+                // SizedBox(height: 5),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       flex: 4,
+                //       child: containerBox(
+                //           TextField(
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(fontWeight: FontWeight.bold),
+                //             keyboardType: TextInputType.number,
+                //             textInputAction: TextInputAction.next,
+                //             decoration: InputDecoration(
+                //               border: InputBorder.none,
+                //             ),
+                //             onChanged: (val){
+                //               if(val.length > 0){
+                //                 val = val.substring(0);
+                //                 FocusScope.of(context).requestFocus(_focus1);
+                //               }
+                //             },
+                //           )
+                //       )
+                //     ),
+                //     SizedBox(width: 10),
+                //     Expanded(
+                //       flex: 4,
+                //       child: containerBox(
+                //           TextField(
+                //             focusNode: _focus1,
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(fontWeight: FontWeight.bold),
+                //             keyboardType: TextInputType.number,
+                //             textInputAction: TextInputAction.next,
+                //             decoration: InputDecoration(
+                //               border: InputBorder.none,
+                //             ),
+                //             onChanged: (val){
+                //               if(val.length > 0){
+                //                 val = val.substring(0);
+                //                 FocusScope.of(context).requestFocus(_focus2);
+                //               }
+                //             },
+                //           )
+                //       )
+                //     ),
+                //     SizedBox(width: 10),
+                //     Expanded(
+                //       flex: 4,
+                //       child: containerBox(
+                //           TextField(
+                //             focusNode: _focus2,
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(fontWeight: FontWeight.bold),
+                //             keyboardType: TextInputType.number,
+                //             textInputAction: TextInputAction.next,
+                //             decoration: InputDecoration(
+                //               border: InputBorder.none
+                //             ),
+                //             onChanged: (val){
+                //               if(val.length > 0){
+                //                 val = val.substring(0);
+                //                 FocusScope.of(context).requestFocus(_focus3);
+                //               }
+                //             },
+                //           )
+                //       )
+                //     ),
+                //     SizedBox(width: 10),
+                //     Expanded(
+                //       flex: 4,
+                //       child: containerBox(
+                //           TextField(
+                //             focusNode: _focus3,
+                //             textAlign: TextAlign.center,
+                //             style: TextStyle(fontWeight: FontWeight.bold),
+                //             keyboardType: TextInputType.number,
+                //             textInputAction: TextInputAction.done,
+                //             decoration: InputDecoration(
+                //               border: InputBorder.none,
+                //             ),
+                //             onChanged: (val){
+                //               if(val.length > 0){
+                //                 val = val.substring(0);
+                //                 FocusScope.of(context).requestFocus(FocusNode());
+                //               }
+                //             }
+                //           ),
+                //       )
+                //     )
+                //   ],
+                // ),
+                // SizedBox(height: 20),
+                // TextAvenir(
+                //   'Kata Sandi Baru',
+                //   size: 14,
+                //   color: Utils.colorFromHex(ColorCode.bluePrimary),
+                // ),
+                // SizedBox(height: 5),
+                // BoxBorderDefault(
+                //     child: TextField(
+                //       controller: bloc.edtForgotPassword,
+                //       textAlignVertical: TextAlignVertical.center,
+                //       decoration: InputDecoration(
+                //         border: InputBorder.none,
+                //         // hintText: 'NIK(KTP/SIM)'
+                //       ),
+                //     )
+                // ),
+                // SizedBox(height: 20),
+                // TextAvenir(
+                //   'Ulangi Kata Sandi Baru',
+                //   size: 14,
+                //   color: Utils.colorFromHex(ColorCode.bluePrimary),
+                // ),
+                // SizedBox(height: 5),
+                // BoxBorderDefault(
+                //     child: TextField(
+                //       controller: bloc.edtForgotPassword,
+                //       textAlignVertical: TextAlignVertical.center,
+                //       decoration: InputDecoration(
+                //         border: InputBorder.none,
+                //         // hintText: 'NIK(KTP/SIM)'
+                //       ),
+                //     )
+                // ),
+              ],
+            ),
           ),
         ),
       ),

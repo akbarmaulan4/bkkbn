@@ -98,6 +98,7 @@ class _AkunScreenState extends State<AkunView> {
                       TextAvenirBook(user  != null ? '${user['umur']},${user['kota']}':'', size: is5Inc() ? 12:14, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
                       SizedBox(height: 3),
                       RichText(
+                        textScaleFactor: 1.0,
                         text: TextSpan(
                           text: 'PROFILE ID : ',
                           style: TextStyle(height: 1.5, fontSize: is5Inc() ?10:12, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),

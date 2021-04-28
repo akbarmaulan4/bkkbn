@@ -3,7 +3,7 @@ import 'package:kua/bloc/quiz/quiz_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/debouncher.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_book.dart';
+import 'package:kua/widgets/font/avenir_book.dart';
 
 import '../font/avenir_text.dart';
 import '../box_border.dart';
@@ -45,46 +45,51 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 15),
-          // TextAvenir(
-          //   widget.question,
-          //   size: 14,
-          //   color: Colors.grey,
-          // ),
-          Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
-          SizedBox(height: 5),
-          InkWell(
-            onTap: (){
-              showFinder(widget.question, widget.url, widget.param);
-            },
-            child: BoxBorderDefault(
-                child: TextField(
-                  controller: edt,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(bottom:16),
-                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                      hintText: widget.question
-                  ),
-                  enabled: false,
-                  onChanged: (val){
-                    setAnswer(val);
-                  },
-                )
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
+    return MediaQuery(
+      data: scaleFactor,
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            // TextAvenir(
+            //   widget.question,
+            //   size: 14,
+            //   color: Colors.grey,
+            // ),
+            Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+            SizedBox(height: 5),
+            InkWell(
+              onTap: (){
+                showFinder(widget.question, widget.url, widget.param);
+              },
+              child: BoxBorderDefault(
+                  child: TextField(
+                    controller: edt,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(bottom:16),
+                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                        hintText: widget.question
+                    ),
+                    enabled: false,
+                    onChanged: (val){
+                      setAnswer(val);
+                    },
+                  )
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   void showFinder(String type, String url, String param) async {
     var size = MediaQuery.of(context).size;
+    bloc.finding(url, param, 'a');
     showModalBottomSheet<void>(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -145,9 +150,12 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                       StreamBuilder(
                           stream: bloc.dataFinding,
                           builder: (context, snapshot) {
-                            List<dynamic> data = [];
+                            List<dynamic> data = bloc.dataSearch;
                             if(snapshot.data != null){
                               data = snapshot.data;
+                            }
+                            if(data.isNotEmpty){
+                              bloc.showInfoMaxLeght(false);
                             }
                             return Expanded(
                               child: ListView.builder(

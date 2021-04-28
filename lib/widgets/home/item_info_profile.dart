@@ -69,7 +69,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenir(widget.dataOwn != null ? widget.dataOwn.name:'', size: is5Inc() ? 11 : 13, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
+                      TextAvenir(widget.dataOwn != null ? widget.dataOwn.name:'', size: is5Inc() ? 10 : 12, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
                       TextAvenirBook(widget.dataOwn != null ? '${widget.dataOwn.kota}, ${widget.dataOwn.tgl_lahir}' : '', size: is5Inc() ? 9 : 11, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
                     ],
                   ),
@@ -127,7 +127,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextAvenir(data.name, size: is5Inc() ? 11:13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                                  TextAvenir(data.name, size: is5Inc() ? 10:12, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                                   TextAvenirBook('${data.kota}, ${data.tgl_lahir}', size: is5Inc() ? 9:11, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                                 ],
                               ),

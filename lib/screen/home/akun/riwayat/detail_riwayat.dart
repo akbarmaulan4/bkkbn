@@ -101,6 +101,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                         TextAvenir(widget.title, size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                         SizedBox(height: 10),
                         RichText(
+                          textScaleFactor: 1.0,
                           text: TextSpan(
                             text: 'Berdasarkan jawaban kuesioner yang diberikan pada tanggal ',
                             style: TextStyle(height: 1.5, fontSize: is5Inc() ? 13:14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
@@ -169,7 +170,8 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'Avenir-book',
-                                      color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                                      color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                                textScaleFactor: 1.0,
                               )
                               // TextAvenirBook(data != null ? data.header.deskripsi:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
                             ],
@@ -180,7 +182,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                           child: InkWell(
                             onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':data.header.url, 'code':data.header.kuis_code}),
                             child: Container(
-                              width: is5Inc() ? 200:170,
+                              width: is5Inc() ? 200:180,
                               decoration: BoxDecoration(
                                 color: data.header.url != '' ? Utils.colorFromHex(ColorCode.bluePrimary):Utils.colorFromHex(ColorCode.greyElsimil),
                                 borderRadius: BorderRadius.all(Radius.circular(10)),

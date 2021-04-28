@@ -135,7 +135,8 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Avenir-book',
-                                    color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                                    color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                              textScaleFactor: 1.0,
                             )
                             // TextAvenirBook(item != null ? item.deskripsi:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 11,)
                           ],
@@ -161,7 +162,8 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                   Wrap(
                     children: [
                       Text('Belum terdapat data hasil kuesioner dari pasangan anda',
-                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'))
+                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'),
+                        textScaleFactor: 1.0,)
                     ],
                   )
                 ],

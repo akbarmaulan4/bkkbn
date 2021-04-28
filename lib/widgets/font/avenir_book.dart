@@ -18,6 +18,7 @@ class TextAvenirBook extends Text{
       textAlign: textAlign,
       maxLines: lines,//isCentered ? TextAlign.center : TextAlign.left,
       overflow: TextOverflow.ellipsis,//isCentered ? TextAlign.center : TextAlign.left,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontFamily: 'Avenir-Book',
         fontWeight: weight,

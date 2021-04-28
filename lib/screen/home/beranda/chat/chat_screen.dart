@@ -55,6 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return SafeArea(
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
@@ -74,101 +75,104 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               preferredSize: Size.fromHeight(4.0)),
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: StreamBuilder(
-                  stream: bloc.allChat,
-                  builder: (context, snapshot) {
-                    List<ChatItem> data = [];
-                    if(snapshot.data != null){
-                      data = snapshot.data;
+        body: MediaQuery(
+          data: scaleFactor,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: StreamBuilder(
+                    stream: bloc.allChat,
+                    builder: (context, snapshot) {
+                      List<ChatItem> data = [];
+                      if(snapshot.data != null){
+                        data = snapshot.data;
+                      }
+                      return data.isNotEmpty ? Container(
+                        // child: SingleChildScrollView(
+                        //   child: Column(
+                        //     children: loadChat(data),
+                        //   ),
+                        // ),
+                        child: ListView.builder(
+                            controller: controller,
+                            itemCount: data.length,
+                            shrinkWrap: true,
+                            // physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (contex, index){
+                              // var alignCross = index.isOdd ? MainAxisAlignment.end : MainAxisAlignment.start;
+                              ChatItem item = data[index];
+                              return Column(
+                                children: getChat(item),
+                              );
+                            }
+                        ),
+                      ):SizedBox();
                     }
-                    return data.isNotEmpty ? Container(
-                      // child: SingleChildScrollView(
-                      //   child: Column(
-                      //     children: loadChat(data),
-                      //   ),
-                      // ),
-                      child: ListView.builder(
-                          controller: controller,
-                          itemCount: data.length,
-                          shrinkWrap: true,
-                          // physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (contex, index){
-                            // var alignCross = index.isOdd ? MainAxisAlignment.end : MainAxisAlignment.start;
-                            ChatItem item = data[index];
-                            return Column(
-                              children: getChat(item),
-                            );
-                          }
-                      ),
-                    ):SizedBox();
-                  }
+                ),
               ),
-            ),
-            Container(
-              color: Colors.grey.shade200,
-              height: 65,
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Colors.white
-                      ),
-                      child: BoxBorderDefault(
-                          child: TextField(
-                            controller: bloc.edtMessage,
-                            textAlignVertical: TextAlignVertical.center,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.send,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Tulis pesan kamu disini',
-                                hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                contentPadding: EdgeInsets.only(bottom:16)
-                            ),
-                            focusNode: _focus,
-                          )
+              Container(
+                color: Colors.grey.shade200,
+                height: 65,
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            color: Colors.white
+                        ),
+                        child: BoxBorderDefault(
+                            child: TextField(
+                              controller: bloc.edtMessage,
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.send,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Tulis pesan kamu disini',
+                                  hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                  contentPadding: EdgeInsets.only(bottom:16)
+                              ),
+                              focusNode: _focus,
+                            )
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  StreamBuilder(
-                    stream: bloc.finishCat,
-                    builder: (context, snapshot) {
-                      var load = false;
-                      if(snapshot.data != null){
-                        load = snapshot.data;
-                      }
-                      return InkWell(
-                        onTap: (){
-                          if(bloc.edtMessage.text != '' && load){
-                            bloc.postMessage(bloc.edtMessage.text);
-                          }
-                        },
-                        child: Container(
-                          decoration: ConstantStyle.button_fill_blu,
-                          padding: EdgeInsets.symmetric(horizontal: 20),
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          child: Center(
-                            child: !load ? Container(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator()
-                            ): TextAvenir('Kirim', color: Colors.white,),
+                    SizedBox(width: 15),
+                    StreamBuilder(
+                      stream: bloc.finishCat,
+                      builder: (context, snapshot) {
+                        var load = false;
+                        if(snapshot.data != null){
+                          load = snapshot.data;
+                        }
+                        return InkWell(
+                          onTap: (){
+                            if(bloc.edtMessage.text != '' && load){
+                              bloc.postMessage(bloc.edtMessage.text);
+                            }
+                          },
+                          child: Container(
+                            decoration: ConstantStyle.button_fill_blu,
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            margin: EdgeInsets.symmetric(vertical: 5),
+                            child: Center(
+                              child: !load ? Container(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator()
+                              ): TextAvenir('Kirim', color: Colors.white,),
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                  )
-                ],
+                        );
+                      }
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

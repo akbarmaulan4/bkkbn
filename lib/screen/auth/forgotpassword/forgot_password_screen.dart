@@ -3,8 +3,9 @@ import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/box_border.dart';
+
+import '../../../widgets/font/avenir_text.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -36,6 +37,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -56,46 +58,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             preferredSize: Size.fromHeight(4.0)),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 25),
-            TextAvenir(
-              'Silahkan isi email yang didaftarkan.',
-              size: 16,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 3),
-            TextAvenir(
-              'Link untuk memperbaharui kata sandi akan dikirim',
-              size: 16,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 3),
-            TextAvenir(
-              'ke alamat email tersebut.',
-              size: 16,
-              color: Colors.grey,
-            ),
-            SizedBox(height: 20),
-            TextAvenir(
-              'Alamat email',
-              size: 14,
-              color: Utils.colorFromHex(ColorCode.bluePrimary),
-            ),
-            SizedBox(height: 5),
-            BoxBorderDefault(
-                child: TextField(
-                  controller: bloc.edtForgotPassword,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: ConstantStyle.decorTextField,
-                )
-            ),
-          ],
+      body: MediaQuery(
+        data: scaleFactor,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 25),
+              TextAvenir(
+                'Silahkan isi email yang didaftarkan.',
+                size: 16,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 3),
+              TextAvenir(
+                'Link untuk memperbaharui kata sandi akan dikirim',
+                size: 16,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 3),
+              TextAvenir(
+                'ke alamat email tersebut.',
+                size: 16,
+                color: Colors.grey,
+              ),
+              SizedBox(height: 20),
+              TextAvenir(
+                'Alamat email',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              BoxBorderDefault(
+                  child: TextField(
+                    controller: bloc.edtForgotPassword,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: ConstantStyle.decorTextField,
+                  )
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Container(
@@ -126,4 +131,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
+
+
 }

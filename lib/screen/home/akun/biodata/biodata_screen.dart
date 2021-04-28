@@ -94,6 +94,7 @@ class _BiodataViewState extends State<BiodataView> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -105,266 +106,228 @@ class _BiodataViewState extends State<BiodataView> {
             child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
         ),
       ),
-      body: Container(
-        color: Utils.colorFromHex(ColorCode.softGreyElsimil),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Stack(
-                        children: [
-                          StreamBuilder(
-                              stream: bloc.imageKtp,
-                              builder: (context, snapshot) {
-                                File img = bloc.imgFotoKtp;
-                                if(snapshot.data != null){
-                                  img = snapshot.data;
-                                }
-                                return img != null ? Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.file(
-                                      _image,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ) : StreamBuilder(
-                                    stream: bloc.picBiodata,
-                                    builder: (context, snapshot) {
-                                      String urlImg = '';
-                                      if(snapshot.data != null){
-                                        urlImg = snapshot.data;
-                                      }
-                                      return Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
-                                        ),
-                                        child: ClipOval(
-                                          child: CachedNetworkImage(
-                                            placeholder: (context, url) => Center(
-                                              child: Image.asset(ImageConstant.placeHolderElsimil),
-                                            ),
-                                            imageUrl: urlImg, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                );
-                              }
-                          ),
-                          Positioned(
-                              bottom: 0,
-                              right: 5,
-                              child: InkWell(
-                                onTap: ()=>showPicker(),
-                                child: Icon(Icons.camera_alt_rounded, color: Colors.grey,))
-                          )
-
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextAvenir(
-                      'Nama Lengkap',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    BoxBorderDefault(
-                        child: TextField(
-                          controller: bloc.edtNamaLengkap,
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Nama lengkap sesuai KTP',
-                            hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                            contentPadding: EdgeInsets.only(bottom:16)
-                          ),
-                        )
-                    ),
-                    SizedBox(height: 15),
-                    TextAvenir(
-                      'No Telepon',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    BoxBorderDefault(
-                        child: Row(
+      body: MediaQuery(
+        data: scaleFactor,
+        child: Container(
+          color: Utils.colorFromHex(ColorCode.softGreyElsimil),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Stack(
                           children: [
-                            Text('+62', style: TextStyle(fontSize: 16),),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: TextField(
-                                controller: bloc.edtNoTlp,
-                                textAlignVertical: TextAlignVertical.center,
-                                keyboardType: TextInputType.phone,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(12),
-                                  new BlacklistingTextInputFormatter(
-                                      new RegExp('[\\-|\\,|\\.]')),
-                                ],
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(bottom:15)
-                                ),
-                                onChanged: (val){
-                                  if(val[0] == '0'){
-                                    bloc.edtNoTlp.text = val.replaceFirst(new RegExp(r'^0+'), '');
+                            StreamBuilder(
+                                stream: bloc.imageKtp,
+                                builder: (context, snapshot) {
+                                  File img = bloc.imgFotoKtp;
+                                  if(snapshot.data != null){
+                                    img = snapshot.data;
                                   }
-                                },
-                              ),
+                                  return img != null ? Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.file(
+                                        _image,
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ) : StreamBuilder(
+                                      stream: bloc.picBiodata,
+                                      builder: (context, snapshot) {
+                                        String urlImg = '';
+                                        if(snapshot.data != null){
+                                          urlImg = snapshot.data;
+                                        }
+                                        return Container(
+                                          height: 100,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
+                                          ),
+                                          child: ClipOval(
+                                            child: CachedNetworkImage(
+                                              placeholder: (context, url) => Center(
+                                                child: Image.asset(ImageConstant.placeHolderElsimil),
+                                              ),
+                                              imageUrl: urlImg, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                  );
+                                }
                             ),
-                          ],
-                        )
-                    ),
-                    SizedBox(height: 15),
-                    TextAvenir(
-                      'Email',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    BoxBorderDefault(
-                        child: TextField(
-                          controller: bloc.edtEmail,
-                          textAlignVertical: TextAlignVertical.center,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: ConstantStyle.decorTextField,
-                        )
-                    ),
-                  ],
-                ),
-              ),
-              Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextAvenir(
-                      'No KTP',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    BoxBorderDefault(
-                        child: TextField(
-                          controller: bloc.edtKtp,
-                          textAlignVertical: TextAlignVertical.center,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(16),
-                            new BlacklistingTextInputFormatter(
-                                new RegExp('[\\-|\\,|\\.]')),
-                          ],
-                          decoration: ConstantStyle.decorTextField,
-                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                          enabled: false,
-                        )
-                    ),
+                            Positioned(
+                                bottom: 0,
+                                right: 5,
+                                child: InkWell(
+                                  onTap: ()=>showPicker(),
+                                  child: Icon(Icons.camera_alt_rounded, color: Colors.grey,))
+                            )
 
-
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      TextAvenir(
+                        'Nama Lengkap',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      BoxBorderDefault(
+                          child: TextField(
+                            controller: bloc.edtNamaLengkap,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Nama lengkap sesuai KTP',
+                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                              contentPadding: EdgeInsets.only(bottom:16)
+                            ),
+                          )
+                      ),
+                      SizedBox(height: 15),
+                      TextAvenir(
+                        'No Telepon',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      BoxBorderDefault(
+                          child: Row(
                             children: [
-                              TextAvenir(
-                                'Tempat Lahir',
-                                size: 14,
-                                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                              ),
-                              SizedBox(height: 5),
-                              BoxBorderDefault(
-                                  child: TextField(
-                                    controller: bloc.edtTmptLahir,
-                                    textAlignVertical: TextAlignVertical.center,
-                                    decoration: ConstantStyle.decorTextField,
-                                    style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                    enabled: false,
-                                  )
+                              Text('+62', style: TextStyle(fontSize: 16),textScaleFactor: 1.0,),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: TextField(
+                                  controller: bloc.edtNoTlp,
+                                  textAlignVertical: TextAlignVertical.center,
+                                  keyboardType: TextInputType.phone,
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(12),
+                                    new BlacklistingTextInputFormatter(
+                                        new RegExp('[\\-|\\,|\\.]')),
+                                  ],
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      contentPadding: EdgeInsets.only(bottom:15)
+                                  ),
+                                  onChanged: (val){
+                                    if(val[0] == '0'){
+                                      bloc.edtNoTlp.text = val.replaceFirst(new RegExp(r'^0+'), '');
+                                    }
+                                  },
+                                ),
                               ),
                             ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextAvenir(
-                                'Tanggal Lahir',
-                                size: 14,
-                                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                              ),
-                              SizedBox(height: 5),
-                              InkWell(
-                                onTap: (){
-                                  bloc.openDatePicker(context);
-                                },
-                                child: BoxBorderDefault(
+                          )
+                      ),
+                      SizedBox(height: 15),
+                      TextAvenir(
+                        'Email',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      BoxBorderDefault(
+                          child: TextField(
+                            controller: bloc.edtEmail,
+                            textAlignVertical: TextAlignVertical.center,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: ConstantStyle.decorTextField,
+                          )
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextAvenir(
+                        'No KTP',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      BoxBorderDefault(
+                          child: TextField(
+                            controller: bloc.edtKtp,
+                            textAlignVertical: TextAlignVertical.center,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(16),
+                              new BlacklistingTextInputFormatter(
+                                  new RegExp('[\\-|\\,|\\.]')),
+                            ],
+                            decoration: ConstantStyle.decorTextField,
+                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                            enabled: false,
+                          )
+                      ),
+
+
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Tempat Lahir',
+                                  size: 14,
+                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                BoxBorderDefault(
                                     child: TextField(
-                                      controller: bloc.edtTglLahir,
+                                      controller: bloc.edtTmptLahir,
                                       textAlignVertical: TextAlignVertical.center,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          enabled: false,
-                                          contentPadding: EdgeInsets.only(bottom:16)
-                                      ),
-                                      enabled: false,
+                                      decoration: ConstantStyle.decorTextField,
                                       style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      enabled: false,
                                     )
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextAvenir(
-                                'Jenis Kelamin',
-                                size: 14,
-                                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                              ),
-                              SizedBox(height: 5),
-                              StreamBuilder(
-                                stream: bloc.jenisKelamin,
-                                builder: (context, snapshot) {
-                                  String data = bloc.strGender;
-                                  if(snapshot.data != null){
-                                    data = snapshot.data;
-                                  }
-                                  return BoxBorderDefault(
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Tanggal Lahir',
+                                  size: 14,
+                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                InkWell(
+                                  onTap: (){
+                                    bloc.openDatePicker(context);
+                                  },
+                                  child: BoxBorderDefault(
                                       child: TextField(
-                                        controller: bloc.edtGender,
+                                        controller: bloc.edtTglLahir,
                                         textAlignVertical: TextAlignVertical.center,
                                         decoration: InputDecoration(
                                             border: InputBorder.none,
@@ -373,321 +336,362 @@ class _BiodataViewState extends State<BiodataView> {
                                         ),
                                         enabled: false,
                                         style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                      ),
-                                      // child: DropdownButtonHideUnderline(
-                                      //     child: DropdownButton(
-                                      //       hint: TextAvenir(
-                                      //         'Jenis Kelamin',
-                                      //         size: 12,
-                                      //       ),
-                                      //       value: data,
-                                      //       items: dataGender.map((value) {
-                                      //         return DropdownMenuItem(
-                                      //           child: Container(
-                                      //               margin: EdgeInsets.symmetric(horizontal: 10),
-                                      //               child: Text(value)),
-                                      //           value: value,
-                                      //         );
-                                      //       }).toList(),
-                                      //       onChanged: (value) {
-                                      //         // bloc.pilihJenisKelamin(value);
-                                      //       },
-                                      //     )
-                                      // )
-                                  );
-                                }
-                              ),
-                            ],
+                                      )
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Jenis Kelamin',
+                                  size: 14,
+                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                StreamBuilder(
+                                  stream: bloc.jenisKelamin,
+                                  builder: (context, snapshot) {
+                                    String data = bloc.strGender;
+                                    if(snapshot.data != null){
+                                      data = snapshot.data;
+                                    }
+                                    return BoxBorderDefault(
+                                        child: TextField(
+                                          controller: bloc.edtGender,
+                                          textAlignVertical: TextAlignVertical.center,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              enabled: false,
+                                              contentPadding: EdgeInsets.only(bottom:16)
+                                          ),
+                                          enabled: false,
+                                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                        ),
+                                        // child: DropdownButtonHideUnderline(
+                                        //     child: DropdownButton(
+                                        //       hint: TextAvenir(
+                                        //         'Jenis Kelamin',
+                                        //         size: 12,
+                                        //       ),
+                                        //       value: data,
+                                        //       items: dataGender.map((value) {
+                                        //         return DropdownMenuItem(
+                                        //           child: Container(
+                                        //               margin: EdgeInsets.symmetric(horizontal: 10),
+                                        //               child: Text(value)),
+                                        //           value: value,
+                                        //         );
+                                        //       }).toList(),
+                                        //       onChanged: (value) {
+                                        //         // bloc.pilihJenisKelamin(value);
+                                        //       },
+                                        //     )
+                                        // )
+                                    );
+                                  }
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          flex: 3,
-                          child: SizedBox(),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    TextAvenir(
-                      'Alamat Sesuai KTP',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    BoxBorderDefault(
-                        child: TextField(
-                          controller: bloc.edtAlamatKtp,
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: ConstantStyle.decorTextField,
-                          enabled: false,
-                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                        )
-                    ),
-                    SizedBox(height: 15),
-                    TextAvenir(
-                      'Provinsi',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    BoxBorderDefault(
-                      child: InkWell(
-                        // onTap: ()=>showFinder('provinsi'),
-                        child: TextField(
-                          controller: bloc.edtProvinsi,
-                          textAlignVertical: TextAlignVertical.center,
-                          decoration: ConstantStyle.decorTextField,
-                          enabled: false,
-                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 3,
+                            child: SizedBox(),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      TextAvenir(
+                        'Alamat Sesuai KTP',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      BoxBorderDefault(
+                          child: TextField(
+                            controller: bloc.edtAlamatKtp,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: ConstantStyle.decorTextField,
+                            enabled: false,
+                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                          )
+                      ),
+                      SizedBox(height: 15),
+                      TextAvenir(
+                        'Provinsi',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      BoxBorderDefault(
+                        child: InkWell(
+                          // onTap: ()=>showFinder('provinsi'),
+                          child: TextField(
+                            controller: bloc.edtProvinsi,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: ConstantStyle.decorTextField,
+                            enabled: false,
+                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 15),
-                    TextAvenir(
-                      'Kota',
-                      size: 14,
-                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                    ),
-                    SizedBox(height: 5),
-                    StreamBuilder(
-                        stream: bloc.downloadKab,
-                        builder: (context, snapshot) {
-                          var load = false;
-                          if(snapshot.data != null){
-                            load = snapshot.data;
-                          }
-                          return BoxBorderDefault(
-                              child: InkWell(
-                                // onTap: ()=>showFinder('kota'),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        controller: bloc.edtKotaKab,
-                                        textAlignVertical: TextAlignVertical.center,
-                                        decoration: ConstantStyle.decorTextField,
-                                        enabled: false,
-                                        style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                      SizedBox(height: 15),
+                      TextAvenir(
+                        'Kota',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      StreamBuilder(
+                          stream: bloc.downloadKab,
+                          builder: (context, snapshot) {
+                            var load = false;
+                            if(snapshot.data != null){
+                              load = snapshot.data;
+                            }
+                            return BoxBorderDefault(
+                                child: InkWell(
+                                  // onTap: ()=>showFinder('kota'),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          controller: bloc.edtKotaKab,
+                                          textAlignVertical: TextAlignVertical.center,
+                                          decoration: ConstantStyle.decorTextField,
+                                          enabled: false,
+                                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                        ),
                                       ),
-                                    ),
-                                    load ? Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator()
-                                    ):SizedBox(),
-                                    SizedBox(width: load ? 10 : 0)
-                                  ],
-                                ),
-                              )
-                          );
-                        }
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextAvenir(
-                                'Kecamatan',
-                                size: 14,
-                                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                              ),
-                              SizedBox(height: 5),
-                              StreamBuilder(
-                                  stream: bloc.downloadKec,
-                                  builder: (context, snapshot) {
-                                    var load = false;
-                                    if(snapshot.data != null){
-                                      load = snapshot.data;
-                                    }
-                                    return BoxBorderDefault(
-                                        child: InkWell(
-                                          // onTap: ()=>showFinder('kecamatan'),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: TextField(
-                                                  controller: bloc.edtKecamatan,
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  decoration: ConstantStyle.decorTextField,
-                                                  enabled: false,
-                                                  style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                                ),
-                                              ),
-                                              load ? Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  child: CircularProgressIndicator()
-                                              ):SizedBox(),
-                                              SizedBox(width: load ? 10 : 0)
-                                            ],
-                                          ),
-                                        )
-                                    );
-                                  }
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextAvenir(
-                                'Kel/Desa',
-                                size: 14,
-                                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                              ),
-                              SizedBox(height: 5),
-                              StreamBuilder(
-                                  stream: bloc.downloadKel,
-                                  builder: (context, snapshot) {
-                                    var load = false;
-                                    if(snapshot.data != null){
-                                      load = snapshot.data;
-                                    }
-                                    return BoxBorderDefault(
-                                        child: InkWell(
-                                          // onTap: ()=>showFinder('kelurahan'),
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: TextField(
-                                                  controller: bloc.edtDesa,
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  decoration: ConstantStyle.decorTextField,
-                                                  enabled: false,
-                                                  style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                                ),
-                                              ),
-                                              load ? Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  child: CircularProgressIndicator()
-                                              ):SizedBox(),
-                                              SizedBox(width: load ? 10 : 0)
-                                            ],
-                                          ),
-                                        )
-                                    );
-                                  }
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextAvenir(
-                                      'RT',
-                                      size: 14,
-                                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                                    ),
-                                    SizedBox(height: 5),
-                                    BoxBorderDefault(
-                                        child: TextField(
-                                          controller: bloc.edtRT,
-                                          textAlignVertical: TextAlignVertical.center,
-                                          keyboardType: TextInputType.number,
-                                          decoration: ConstantStyle.decorTextField,
-                                          inputFormatters: [
-                                            LengthLimitingTextInputFormatter(3),
-                                            new BlacklistingTextInputFormatter(
-                                                new RegExp('[\\-|\\,|\\.]')),
-                                          ],
-                                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                          enabled: false,
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                flex: 2,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextAvenir(
-                                      'RW',
-                                      size: 14,
-                                      color: Utils.colorFromHex(ColorCode.bluePrimary),
-                                    ),
-                                    SizedBox(height: 5),
-                                    BoxBorderDefault(
-                                        child: TextField(
-                                          controller: bloc.edtRW,
-                                          textAlignVertical: TextAlignVertical.center,
-                                          keyboardType: TextInputType.number,
-                                          decoration: ConstantStyle.decorTextField,
-                                          inputFormatters: [
-                                            LengthLimitingTextInputFormatter(3),
-                                            new BlacklistingTextInputFormatter(
-                                                new RegExp('[\\-|\\,|\\.]')),
-                                          ],
-                                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                          enabled: false,
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextAvenir(
-                                'Kode POS',
-                                size: 14,
-                                color: Utils.colorFromHex(ColorCode.bluePrimary),
-                              ),
-                              SizedBox(height: 5),
-                              BoxBorderDefault(
-                                  child: TextField(
-                                    controller: bloc.edtKodePos,
-                                    textAlignVertical: TextAlignVertical.center,
-                                    keyboardType: TextInputType.number,
-                                    decoration: ConstantStyle.decorTextField,
-                                    inputFormatters: [
-                                      LengthLimitingTextInputFormatter(5),
-                                      new BlacklistingTextInputFormatter(
-                                          new RegExp('[\\-|\\,|\\.]')),
+                                      load ? Container(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator()
+                                      ):SizedBox(),
+                                      SizedBox(width: load ? 10 : 0)
                                     ],
-                                    style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                    enabled: false,
-                                  )
-                              ),
-                            ],
+                                  ),
+                                )
+                            );
+                          }
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Kecamatan',
+                                  size: 14,
+                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                StreamBuilder(
+                                    stream: bloc.downloadKec,
+                                    builder: (context, snapshot) {
+                                      var load = false;
+                                      if(snapshot.data != null){
+                                        load = snapshot.data;
+                                      }
+                                      return BoxBorderDefault(
+                                          child: InkWell(
+                                            // onTap: ()=>showFinder('kecamatan'),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: TextField(
+                                                    controller: bloc.edtKecamatan,
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    decoration: ConstantStyle.decorTextField,
+                                                    enabled: false,
+                                                    style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                                  ),
+                                                ),
+                                                load ? Container(
+                                                    height: 20,
+                                                    width: 20,
+                                                    child: CircularProgressIndicator()
+                                                ):SizedBox(),
+                                                SizedBox(width: load ? 10 : 0)
+                                              ],
+                                            ),
+                                          )
+                                      );
+                                    }
+                                ),
+                              ],
+                            ),
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Kel/Desa',
+                                  size: 14,
+                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                StreamBuilder(
+                                    stream: bloc.downloadKel,
+                                    builder: (context, snapshot) {
+                                      var load = false;
+                                      if(snapshot.data != null){
+                                        load = snapshot.data;
+                                      }
+                                      return BoxBorderDefault(
+                                          child: InkWell(
+                                            // onTap: ()=>showFinder('kelurahan'),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: TextField(
+                                                    controller: bloc.edtDesa,
+                                                    textAlignVertical: TextAlignVertical.center,
+                                                    decoration: ConstantStyle.decorTextField,
+                                                    enabled: false,
+                                                    style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                                  ),
+                                                ),
+                                                load ? Container(
+                                                    height: 20,
+                                                    width: 20,
+                                                    child: CircularProgressIndicator()
+                                                ):SizedBox(),
+                                                SizedBox(width: load ? 10 : 0)
+                                              ],
+                                            ),
+                                          )
+                                      );
+                                    }
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextAvenir(
+                                        'RT',
+                                        size: 14,
+                                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                      ),
+                                      SizedBox(height: 5),
+                                      BoxBorderDefault(
+                                          child: TextField(
+                                            controller: bloc.edtRT,
+                                            textAlignVertical: TextAlignVertical.center,
+                                            keyboardType: TextInputType.number,
+                                            decoration: ConstantStyle.decorTextField,
+                                            inputFormatters: [
+                                              LengthLimitingTextInputFormatter(3),
+                                              new BlacklistingTextInputFormatter(
+                                                  new RegExp('[\\-|\\,|\\.]')),
+                                            ],
+                                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                            enabled: false,
+                                          )
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextAvenir(
+                                        'RW',
+                                        size: 14,
+                                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                      ),
+                                      SizedBox(height: 5),
+                                      BoxBorderDefault(
+                                          child: TextField(
+                                            controller: bloc.edtRW,
+                                            textAlignVertical: TextAlignVertical.center,
+                                            keyboardType: TextInputType.number,
+                                            decoration: ConstantStyle.decorTextField,
+                                            inputFormatters: [
+                                              LengthLimitingTextInputFormatter(3),
+                                              new BlacklistingTextInputFormatter(
+                                                  new RegExp('[\\-|\\,|\\.]')),
+                                            ],
+                                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                            enabled: false,
+                                          )
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Kode POS',
+                                  size: 14,
+                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                BoxBorderDefault(
+                                    child: TextField(
+                                      controller: bloc.edtKodePos,
+                                      textAlignVertical: TextAlignVertical.center,
+                                      keyboardType: TextInputType.number,
+                                      decoration: ConstantStyle.decorTextField,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(5),
+                                        new BlacklistingTextInputFormatter(
+                                            new RegExp('[\\-|\\,|\\.]')),
+                                      ],
+                                      style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      enabled: false,
+                                    )
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: size.height * 0.15)
-            ],
+                SizedBox(height: size.height * 0.15)
+              ],
+            ),
           ),
         ),
       ),

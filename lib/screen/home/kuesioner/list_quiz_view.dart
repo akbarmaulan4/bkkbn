@@ -6,10 +6,11 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/listQuiz/slider_quiz.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../widgets/font/avenir_text.dart';
 
 class ListQuizView extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _QuizViewState extends State<ListQuizView> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return Scaffold(
       appBar: AppBar(
         title: TextAvenir('Daftar Kuesioner', color: Utils.colorFromHex(ColorCode.bluePrimary)),
@@ -56,55 +57,58 @@ class _QuizViewState extends State<ListQuizView> {
             preferredSize: Size.fromHeight(4.0)),
       ),
       body: PullRefreshWidget(
-        child: Container(
-          color: Colors.white,
-          child: StreamBuilder(
-            stream: bloc.dataListKuesioner,
-            builder: (context, snapshot) {
-              List<DataKuesioner> data = [];
-              if(snapshot.data != null){
-                data = snapshot.data;
+        child: MediaQuery(
+          data: scaleFactor,
+          child: Container(
+            color: Colors.white,
+            child: StreamBuilder(
+              stream: bloc.dataListKuesioner,
+              builder: (context, snapshot) {
+                List<DataKuesioner> data = [];
+                if(snapshot.data != null){
+                  data = snapshot.data;
+                }
+                return Column(
+                  children: [
+                    data.isNotEmpty ? Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
+                      ),
+                      padding: EdgeInsets.only(right: 25),
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      height: 45,
+                      child: TextField(
+                        controller: bloc.edtFind,
+                        textAlignVertical: TextAlignVertical.center,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Cari',
+                            hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                            fillColor: Colors.grey,
+                            prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
+                            contentPadding: EdgeInsets.only(bottom: 7)
+                        ),
+                        onChanged: (val){
+                          bloc.findQuiz(val);
+                        },
+                      ),
+                    ):shimmerSearch(),
+                    Expanded(
+                      child: Container(
+                        child: ListView.builder(
+                            itemCount: data.isNotEmpty ? data.length:3,
+                            itemBuilder: (context, index){
+                              return data.isNotEmpty ? itemQuiz(data[index], data.length == index+1):shimmerItemQuiz();
+                            }
+                        ),
+                      ),
+                    ),
+                  ],
+                );
               }
-              return Column(
-                children: [
-                  data.isNotEmpty ? Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
-                    ),
-                    padding: EdgeInsets.only(right: 25),
-                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    height: 45,
-                    child: TextField(
-                      controller: bloc.edtFind,
-                      textAlignVertical: TextAlignVertical.center,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Cari',
-                          hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                          fillColor: Colors.grey,
-                          prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
-                          contentPadding: EdgeInsets.only(bottom: 7)
-                      ),
-                      onChanged: (val){
-                        bloc.findQuiz(val);
-                      },
-                    ),
-                  ):shimmerSearch(),
-                  Expanded(
-                    child: Container(
-                      child: ListView.builder(
-                          itemCount: data.isNotEmpty ? data.length:3,
-                          itemBuilder: (context, index){
-                            return data.isNotEmpty ? itemQuiz(data[index], data.length == index+1):shimmerItemQuiz();
-                          }
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
+            ),
           ),
         ),
         onRefresh: (){

@@ -75,7 +75,8 @@ class _RiwayatState extends State<Riwayat> {
                   Wrap(
                     children: [
                       Text('Belum terdapat data kuesioner.Silahkan ikuti kuesioner',
-                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'))
+                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'),
+                        textScaleFactor: 1.0,)
                     ],
                   )
                 ],

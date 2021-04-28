@@ -130,14 +130,14 @@ class _ItemQuizState extends State<ItemQuiz> {
                     child: Column(
                       children: [
                         SizedBox(height: is5Inc() ? size.height * 0.04 : size.height * 0.05),
-                        TextAvenir((data != null && data.rating_color != '') ? data.label:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:16),
-                        TextAvenir((data != null && data.rating_color != '') ? '${data.member_kuis_nilai}/${data.kuis_max_nilai}':'-', color: Colors.white, size: is5Inc() ? 12:14),
+                        TextAvenir((data != null && data.rating_color != '') ? data.label:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:14, textAlign: TextAlign.center),
+                        TextAvenir((data != null && data.rating_color != '') ? '${data.member_kuis_nilai}/${data.kuis_max_nilai}':'-', color: Colors.white, size: is5Inc() ? 11:13),
                       ],
                     ),
                   ),
                   SizedBox(height: 10),
                   // SizedBox(height: is5Inc() ? size.height * 0.14 : size.height * 0.148),
-                  TextAvenir(data != null ? data.kuis_title : '', size: is5Inc() ? 12:16,),
+                  TextAvenir(data != null ? data.kuis_title : '', size: is5Inc() ? 12:14,),
                 ],
               ),
             ),

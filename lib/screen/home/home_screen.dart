@@ -24,13 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // bloc.checkVersion(context);
+    bloc.checkVersion(context);
     initOneSignal();
     OneSignal.shared
         .setNotificationReceivedHandler((OSNotification notification) {
       // will be called whenever a notification is received
       if (notification != null) {
         final data = notification.payload.additionalData;
+      }
+    });
+
+    bloc.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
       }
     });
   }
@@ -135,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Icon(CupertinoIcons.home, color: position == 0 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Beranda', style: TextStyle(fontSize: 13, color: position == 0 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white))
+                    Text('Beranda', style: TextStyle(fontSize: 13, color: position == 0 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -147,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Icon(Icons.lightbulb_outline_rounded, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Kuesioner', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white),)
+                    Text('Kuesioner', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -159,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Icon(CupertinoIcons.book, color: position == 2 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Edukasi', style: TextStyle(fontSize: 13, color: position == 2 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white),)
+                    Text('Edukasi', style: TextStyle(fontSize: 13, color: position == 2 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -171,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     Icon(Icons.person_pin, color: position == 3 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Akun', style: TextStyle(fontSize: 13, color: position == 3 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white),)
+                    Text('Akun', style: TextStyle(fontSize: 13, color: position == 3 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
                   ],
                 ),
               )

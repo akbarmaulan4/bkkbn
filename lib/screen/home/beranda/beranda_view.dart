@@ -43,10 +43,10 @@ class _BerandaVIewState extends State<BerandaVIew> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // bloc.inboxNotif();
+      // bloc.checkNotif();
       bloc.checkVerify();
       bloc.home(context);
-      bloc.inboxNotif();
-      bloc.checkNotif();
     });
 
     bloc.messageError.listen((event) {
@@ -111,9 +111,10 @@ class _BerandaVIewState extends State<BerandaVIew> {
               child: Column(
                 children: [
                   Container(
-                    height: is5Inc() ? size.height * 0.45:size.height * 0.42,
+                    // height: is5Inc() ? size.height * 0.45:size.height * 0.42,
                     width: double.infinity,
                     color: Utils.colorFromHex(ColorCode.bluePrimary),
+                    padding: EdgeInsets.only(bottom: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,

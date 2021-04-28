@@ -57,7 +57,11 @@ dependencies:
   downloads_path_provider: ^0.1.0
   google_sign_in: ^5.0.2
   firebase_auth:
+#  package_info_plus:
+  package_info: ^2.0.0
+#  package_info: ^0.4.0+3
 #  firebase_core: ^0.2.5
+#  package_info:
 #  firebase_crashlytics:
 #  cloud_firestore:
 #  firebase_auth:

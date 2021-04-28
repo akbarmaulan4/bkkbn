@@ -5,6 +5,7 @@ import 'package:kua/model/home/additional.dart';
 import 'package:kua/model/home/data_home.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
+import 'package:package_info/package_info.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeBloc{
@@ -99,6 +100,8 @@ class HomeBloc{
       }else{
         _messageError.sink.add(error['message']);
       }
+      inboxNotif();
+      checkNotif();
     });
   }
 
@@ -121,14 +124,24 @@ class HomeBloc{
 
 
 
-  checkVersion(BuildContext context){
+  checkVersion(BuildContext context) async{
     // Utils.progressDialog(context);
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+
     API.checkVersion((result, error) {
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var data = result['data'];
-          _version.sink.add(result['message']);
+          var vertsionCode = data[1]['value'];
+          if(version != vertsionCode){
+            _messageError.sink.add(data[2]['value']);
+          }
+          // _version.sink.add(result['message']);
         }else{
           _messageError.sink.add(error['message']);
         }

@@ -95,6 +95,7 @@ class _ResultQuizState extends State<ResultQuiz>{
                       TextAvenir('Pencegahan Stunting', size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                       SizedBox(height: 10),
                       RichText(
+                        textScaleFactor: 1.0,
                         text: TextSpan(
                           text: 'Berdasarkan jawaban kuesioner yang diberikan pada tanggal ',
                           style: TextStyle(height: 1.5, fontSize: is5Inc() ? 13:14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
@@ -163,7 +164,8 @@ class _ResultQuizState extends State<ResultQuiz>{
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Avenir-book',
-                                    color: Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                                    color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                              textScaleFactor: 1.0,
                             )
                             // TextAvenirBook(widget.data.header.deskripsi, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
                           ],

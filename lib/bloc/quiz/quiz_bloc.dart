@@ -165,14 +165,18 @@ class QuizBloc {
     });
   }
 
+  List<ItemFinding> _dataSearch = [];
+  List<ItemFinding> get dataSearch => _dataSearch;
   finding(String url, String param, String value){
     _infoMaxLenght.sink.add(false);
+    _dataSearch.clear();
     API.finding(url, param, value, (result, error) {
       if(result != null){
         if(result['code'] == 200){
           var json = result as Map<String, dynamic>;
           var data = AllItemFinding.fromJson(json);
           if(data != null){
+            _dataSearch.addAll(data.data);
             _dataFinding.sink.add(data.data);
           }
         }else{

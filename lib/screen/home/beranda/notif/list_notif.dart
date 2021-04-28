@@ -133,7 +133,8 @@ class _ListNotifState extends State<ListNotif> {
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   fontFamily: 'Avenir-book',
-                                                  color: Utils.colorFromHex(ColorCode.bluePrimary))
+                                                  color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                                            textScaleFactor: 1.0,
                                           ),
                                           SizedBox(height: 15),
                                           TextAvenirBook(notif.waktu, color: Colors.grey, size: 12,),

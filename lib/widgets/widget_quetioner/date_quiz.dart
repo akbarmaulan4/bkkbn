@@ -47,39 +47,43 @@ class _InputQuizState extends State<DateQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 15),
-          // TextAvenir(
-          //   widget.question,
-          //   size: 14,
-          //   color: Colors.grey,
-          // ),
-          Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
-          SizedBox(height: 5),
-          InkWell(
-            onTap: (){
-              openDatePicker(context);
-            },
-            child: Container(
-              child: BoxBorderDefault(
-                  child: TextField(
-                    controller: edt,
-                    textAlignVertical: TextAlignVertical.center,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(bottom:16),
-                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                      hintText: widget.question
-                    ),
-                    enabled: false,
-                  )
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
+    return MediaQuery(
+      data: scaleFactor,
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 15),
+            // TextAvenir(
+            //   widget.question,
+            //   size: 14,
+            //   color: Colors.grey,
+            // ),
+            Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+            SizedBox(height: 5),
+            InkWell(
+              onTap: (){
+                openDatePicker(context);
+              },
+              child: Container(
+                child: BoxBorderDefault(
+                    child: TextField(
+                      controller: edt,
+                      textAlignVertical: TextAlignVertical.center,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.only(bottom:16),
+                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                        hintText: widget.question
+                      ),
+                      enabled: false,
+                    )
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -39,6 +39,7 @@ class _TambahPasanganState extends State<TambahPasangan> {
 
   @override
   Widget build(BuildContext context) {
+    final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -47,52 +48,55 @@ class _TambahPasanganState extends State<TambahPasangan> {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: Container(
-        color: Utils.colorFromHex(ColorCode.softGreyElsimil),
-        height: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextAvenir(
-              'No KTP pasangan',
-              size: 14,
-              color: Utils.colorFromHex(ColorCode.bluePrimary),
-            ),
-            SizedBox(height: 5),
-            BoxBorderDefault(
-                child: TextField(
-                  controller: bloc.edtNoKtp,
-                  textAlignVertical: TextAlignVertical.center,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(16),
-                    new BlacklistingTextInputFormatter(
-                        new RegExp('[\\-|\\,|\\.]')),
-                  ],
-                  decoration: ConstantStyle.decorTextField,
-                )
-            ),
-            SizedBox(height: 15),
-            TextAvenir(
-              'No ID profil pasangan',
-              size: 14,
-              color: Utils.colorFromHex(ColorCode.bluePrimary),
-            ),
-            SizedBox(height: 5),
-            BoxBorderDefault(
-                child: TextField(
-                  controller: bloc.edtIdProfile,
-                  textAlignVertical: TextAlignVertical.center,
-                  // inputFormatters: [
-                  //   LengthLimitingTextInputFormatter(16),
-                  //   new BlacklistingTextInputFormatter(
-                  //       new RegExp('[\\-|\\,|\\.]')),
-                  // ],
-                  decoration: ConstantStyle.decorTextField,
-                )
-            ),
-          ],
+      body: MediaQuery(
+        data: scaleFactor,
+        child: Container(
+          color: Utils.colorFromHex(ColorCode.softGreyElsimil),
+          height: double.infinity,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextAvenir(
+                'No KTP pasangan',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              BoxBorderDefault(
+                  child: TextField(
+                    controller: bloc.edtNoKtp,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(16),
+                      new BlacklistingTextInputFormatter(
+                          new RegExp('[\\-|\\,|\\.]')),
+                    ],
+                    decoration: ConstantStyle.decorTextField,
+                  )
+              ),
+              SizedBox(height: 15),
+              TextAvenir(
+                'No ID profil pasangan',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              BoxBorderDefault(
+                  child: TextField(
+                    controller: bloc.edtIdProfile,
+                    textAlignVertical: TextAlignVertical.center,
+                    // inputFormatters: [
+                    //   LengthLimitingTextInputFormatter(16),
+                    //   new BlacklistingTextInputFormatter(
+                    //       new RegExp('[\\-|\\,|\\.]')),
+                    // ],
+                    decoration: ConstantStyle.decorTextField,
+                  )
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: InkWell(

@@ -7,9 +7,10 @@ import 'package:kua/model/edukasi/edukasi_item.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'file:///F:/Kerjaan/Freelance/Hybrid/kua/kua_git/bkkbn/lib/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/pull_refresh_widget.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../widgets/font/avenir_text.dart';
 
 class EdukasiView extends StatefulWidget {
   @override
