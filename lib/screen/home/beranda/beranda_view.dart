@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -341,7 +341,7 @@ class _BerandaVIewState extends State<BerandaVIew> {
                   onTap: ()=>bloc.resendVerification(context, info.link, info.additional),
                   child: Html(
                     data: info.content != null ? info.content : '',
-                    defaultTextStyle: TextStyle(fontSize: is5Inc() ? 11: 13, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.yellowElsimil)),
+                    // defaultTextStyle: TextStyle(fontSize: is5Inc() ? 11: 13, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.yellowElsimil)),
                   ),
                 ))
               ],
@@ -431,6 +431,11 @@ class _BerandaVIewState extends State<BerandaVIew> {
     );
   }
 
+  Future<String> _getPath() {
+    return ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+  }
+
   GlobalKey globalKey = new GlobalKey();
   captureQrcode(String param) async {
     try {
@@ -439,8 +444,9 @@ class _BerandaVIewState extends State<BerandaVIew> {
         await Permission.storage.request();
       }
 
-      Directory extDir = await DownloadsPathProvider.downloadsDirectory;
-      String tempPath = extDir.path;
+      // Directory extDir = await DownloadsPathProvider.downloadsDirectory;
+      // String tempPath = extDir.path;
+      String tempPath = await _getPath();
       var filePath = tempPath + '/${param}.png';
 
       RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();

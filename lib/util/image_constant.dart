@@ -7,6 +7,7 @@ class ImageConstant{
   static const String noImages = 'assets/images/noimages.png';
   static const String bgLogin = 'assets/images/bg_login.png';
   static const String bgElsimil = 'assets/images/bg_elsimil.jpg';
+  static const String google = 'assets/images/google.jpg';
   static const String bgEllips = 'assets/images/ellipse.png';
   static const String logoElsimil = 'assets/images/logo.png';
   static const String placeHolderElsimil = 'assets/images/place_holder_elsimil.png';

@@ -26,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     bloc.checkVersion(context);
     initOneSignal();
-    OneSignal.shared
-        .setNotificationReceivedHandler((OSNotification notification) {
+    OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
       // will be called whenever a notification is received
       if (notification != null) {
         final data = notification.payload.additionalData;

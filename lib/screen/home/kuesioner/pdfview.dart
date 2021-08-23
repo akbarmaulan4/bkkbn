@@ -79,13 +79,13 @@ class _PdfviewState extends State<Pdfview> {
       File file = File("${dir.path}/" + widget.code + ".pdf");
       print(dir.path);
       File urlFile = await file.writeAsBytes(bytes);
-      setState(() {
-        isLoading = false;
-      });
+      // setState(() {
+      //   isLoading = false;
+      // });
       // Navigator.of(context).pop();
       return urlFile;
     } catch (e) {
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
       Utils.alertError(context, 'File tidak ditemukan', () { });
       throw Exception("Error opening url file");
     }
@@ -101,7 +101,7 @@ class _PdfviewState extends State<Pdfview> {
             onTap: ()=>Navigator.of(context).pop(),
             child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
         ),
-        title: TextAvenir('File ${widget.code}', color: Utils.colorFromHex(ColorCode.bluePrimary)),
+        title: TextAvenir('${widget.code}', color: Utils.colorFromHex(ColorCode.bluePrimary)),
         backgroundColor: Colors.white,
         elevation: 0.0,
         centerTitle: true,
@@ -168,7 +168,7 @@ class _PdfviewState extends State<Pdfview> {
             ),
           ],
         ),
-      )
+      ),
       // isLoading ? Center(child: CircularProgressIndicator()):
         // Stack(
         //   children: <Widget>[

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kua/model/quiz/submit/result/detail_submit.dart';
@@ -282,6 +282,11 @@ class _ResultQuizState extends State<ResultQuiz>{
     );
   }
 
+  Future<String> _getPath() {
+    return ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+  }
+
   GlobalKey globalKey = new GlobalKey();
   captureQrcode(String param) async {
     try {
@@ -290,8 +295,9 @@ class _ResultQuizState extends State<ResultQuiz>{
         await Permission.storage.request();
       }
 
-      Directory extDir = await DownloadsPathProvider.downloadsDirectory;
-      String tempPath = extDir.path;
+      // Directory extDir = await DownloadsPathProvider.downloadsDirectory;
+      // String tempPath = extDir.path;
+      String tempPath = await _getPath();
       var filePath = tempPath + '/${param}.png';
 
       RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();

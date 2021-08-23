@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
+import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/box_border.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
@@ -17,14 +19,27 @@ class RegisterData extends StatefulWidget {
 
 class _NewRegisterScreenState extends State<RegisterData> {
 
-  // InputQuiz quiz = InputQuiz(
-  //   question: 'Petanyaan contoh',
-  // );
+  //contoh
+  GoogleSignIn _googleSignIn = GoogleSignIn();
+  signInGoogle() async {
+    GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+    if(googleSignInAuthentication != null){
+      widget.bloc.edtEmail.text = googleSignInAccount.email;
+      widget.bloc.edtNamaLengkap.text = googleSignInAccount.displayName;
+      // Utils.alertError(context, 'Berhasil masuk dengan akun google ${googleSignInAccount.displayName}', () { });
+      // FirebaseUser user = await _auth.signInWithGoogle(
+      //     accessToken: googleSignInAuthentication.accessToken, idToken: googleSignInAuthentication.idToken);
+    }
+    return googleSignInAuthentication != null ? 'sukses':'';
+  }
+  Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _handleSignOut();
     widget.bloc.messageError.listen((event) {
       if(event != null){
         Utils.alertError(context, event, () { });
@@ -227,7 +242,7 @@ class _NewRegisterScreenState extends State<RegisterData> {
               }
             ),
             // quiz,
-            SizedBox(height: 25),
+            SizedBox(height: 40),
             InkWell(
               onTap: (){
                 // var dasdsa = quiz.takeAnswer();
@@ -267,7 +282,27 @@ class _NewRegisterScreenState extends State<RegisterData> {
                 ),
               ),
             ),
-            SizedBox(height: is5Inc() ? 40:0,)
+            SizedBox(height: 30),
+            InkWell(
+              onTap: ()=> signInGoogle(),
+              child: Container(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(ImageConstant.google),
+                    SizedBox(width: 10),
+                    TextAvenir(
+                      'Daftar dengan Google',
+                      size: 17,
+                      color: Utils.colorFromHex(ColorCode.colorGreyText)
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: is5Inc() ? 30:0,)
           ],
         ),
       ),

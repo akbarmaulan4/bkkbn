@@ -67,24 +67,39 @@ class _DetailBantuanState extends State<DetailBantuan> {
               // ),
               SizedBox(height: 10),
               StreamBuilder(
-                  stream: bloc.detailBantuan,
-                  builder: (context, snapshot) {
-                    DetailBantuanModel data = new DetailBantuanModel();
-                    if(snapshot.data != null){
-                      data = snapshot.data;
-                    }
-                    return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // TextAvenir(data.title != null ? data.title : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                          // SizedBox(height: 10),
-                          Html(
-                            data: data.content != null ? data.content : '',
-                    );
-                  }
-              )
+                stream: bloc.detailBantuan,
+                builder: (context, snapshot){
+                DetailBantuanModel data = new DetailBantuanModel();
+                if(snapshot.data != null){
+                  data = snapshot.data;
+                }
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    Html(data: data.content != null ? data.content : '')
+                    ],
+                  ),
+                );
+              })
+              // StreamBuilder(
+              //     stream: bloc.detailBantuan,
+              //     builder: (context, snapshot) {
+              //       DetailBantuanModel data = new DetailBantuanModel();
+              //       if(snapshot.data != null){
+              //         data = snapshot.data;
+              //       }
+              //       return Container(
+              //         padding: EdgeInsets.symmetric(horizontal: 10),
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             // TextAvenir(data.title != null ? data.title : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+              //             // SizedBox(height: 10),
+              //             Html(data: data.content != null ? data.content : '');
+              //     }
+              // )
             ],
           ),
         ),

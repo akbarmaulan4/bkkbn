@@ -396,6 +396,12 @@ class AuthBloc{
   changeProvinsi(DataProvinsi val){
     _provinsi = val;
     _edtProvinsi.text = val.nama;
+    _edtKotaKab.text ='';
+    _edtKecamatan.text ='';
+    _edtDesa.text ='';
+    _edtRT.text ='';
+    _edtRW.text ='';
+    _edtKodePos.text ='';
     getKabupaten(val.provinsi_kode);
   }
 
@@ -443,7 +449,7 @@ class AuthBloc{
   changeKabupaten(DataKabupaten val){
     _kabupaten = val;
     _edtKotaKab.text = val.nama;
-    getKecamatan(val.id.toString());
+    getKecamatan(val.kabupaten_kode.toString());
   }
 
   //=================== kecamatan ================
@@ -490,7 +496,7 @@ class AuthBloc{
   changeKecamatan(DataKecamatan val){
     _kecamatan = val;
     _edtKecamatan.text = val.nama;
-    getKelurahan(val.id.toString());
+    getKelurahan(val.kecamatan_kode.toString());
   }
 
   //=================== keurahan ================
@@ -734,7 +740,7 @@ class AuthBloc{
     API.forgotPassword(edtForgotPassword.text, (result, error) {
       Navigator.of(context).pop();
       if(result != null){
-        if(result['code'] == 200 && !result['error']){
+        if(result['code'] == 200){
           _forgotPass.sink.add(result['message']);
         }else{
           _messageError.sink.add(error['message']);
@@ -779,6 +785,22 @@ class AuthBloc{
             _kelurahan.kelurahan_kode = data['kelurahan_kode'];
             _kelurahan.nama = data['kelurahan'];
           }
+        }else{
+          _messageError.sink.add(error['message']);
+        }
+      }else{
+        _messageError.sink.add(error['message']);
+      }
+    });
+  }
+
+  getDeliveryOrder(BuildContext context, String doCode, String uniqueCode){
+    Utils.progressDialog(context);
+    API.getDeliveryOrder(doCode, uniqueCode, (result, error) {
+      Navigator.of(context).pop();
+      if(result != null){
+        if(result['code'] == 200 && !result['error']){
+
         }else{
           _messageError.sink.add(error['message']);
         }

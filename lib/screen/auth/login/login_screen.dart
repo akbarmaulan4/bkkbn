@@ -21,25 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   AuthBloc bloc = new AuthBloc();
 
-  //contoh
-  // GoogleSignIn _googleSignIn = GoogleSignIn();
-  // signInGoogle() async {
-  //   GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
-  //   GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
-  //   if(googleSignInAuthentication != null){
-  //     Utils.alertError(context, 'Berhasil masuk dengan akun google ${googleSignInAccount.displayName}', () { });
-  //     // FirebaseUser user = await _auth.signInWithGoogle(
-  //     //     accessToken: googleSignInAuthentication.accessToken, idToken: googleSignInAuthentication.idToken);
-  //   }
-  //   // return googleSignInAuthentication != null ? 'sukses':'';
-  // }
-  // Future<void> _handleSignOut() => _googleSignIn.disconnect();
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // _handleSignOut();
     setupPlayerId();
     bloc.messageError.listen((event) {
       if(event != null){
@@ -199,7 +184,6 @@ class _LoginScreenState extends State<LoginScreen> {
         color: Colors.white,
         child: InkWell(
           onTap: ()=> bloc.validasiLogin(context),
-          // onTap: ()=>signInGoogle(),
           child: Container(
             decoration: ConstantStyle.boxShadowButon(
                 color: Utils.colorFromHex(ColorCode.blueSecondary),

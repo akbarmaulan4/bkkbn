@@ -25,6 +25,7 @@ class QuizBloc {
   final _dataFinding = PublishSubject<List<ItemFinding>>();
   final _resultSubmit = PublishSubject<ResultSubmit>();
   final _infoMaxLenght = PublishSubject<bool>();
+  final _isSearch = PublishSubject<bool>();
 
   Stream<String> get messageError => _messageError.stream;
   Stream<List<DataKuesioner>> get dataListKuesioner => _dataListKuesioner.stream;
@@ -34,6 +35,7 @@ class QuizBloc {
   Stream<List<ItemFinding>> get dataFinding => _dataFinding.stream;
   Stream<ResultSubmit> get resultSubmit => _resultSubmit.stream;
   Stream<bool> get infoMaxLenght => _infoMaxLenght.stream;
+  Stream<bool> get isSearch => _isSearch.stream;
 
   TextEditingController edtFind = TextEditingController();
 
@@ -80,8 +82,10 @@ class QuizBloc {
 
   findQuiz(String title){
     if(title.length < 1){
+      _isSearch.sink.add(false);
       _dataListKuesioner.sink.add(allListQuiz);
     }else{
+      _isSearch.sink.add(true);
       var dataQuery = allListQuiz.where((element) => element.title.toLowerCase().contains(title.toLowerCase()));
       if(dataQuery != null){
         _dataListKuesioner.sink.add(dataQuery.toList());

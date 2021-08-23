@@ -91,7 +91,7 @@ class _LandingQuizState extends State<LandingQuiz> {
                               SizedBox(height: 10),
                               Html(
                                 data: data != null ? data.deskripsi : '',
-                                defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                                // defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                               ),
                               SizedBox(height: size.height * 0.12),
                             ],

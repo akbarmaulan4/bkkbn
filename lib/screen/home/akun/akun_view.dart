@@ -40,6 +40,17 @@ class _AkunScreenState extends State<AkunView> {
     }
   }
 
+  sizeScreen(){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 450){
+      return '5';
+    }else if(size.height < 650){
+      return '6';
+    }else{
+      return '7';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -141,18 +152,27 @@ class _AkunScreenState extends State<AkunView> {
                   SizedBox(height: 10),
                   InkWell(
                     onTap: (){
-                      Utils.dialogMessage(
+                      // Utils.showConfirmDialog(context, 'Informasi', 'Apakah anda ingin keluar?', () {
+                      //   LocalData.removeAllPreference();
+                      //   Navigator.of(context).pushNamedAndRemoveUntil(
+                      //       '/gateway', (Route<dynamic> route) => false
+                      //   );
+                      // });
+                      Utils.dialogSignout(
                         context: context,
-                        title: 'Apakah anda ingin keluar aplikasi?',
+                        title: 'Peringatan!\nApakah anda ingin keluar aplikasi?',
                         ok: (){
                           LocalData.removeAllPreference();
-                          Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/gateway', (Route<dynamic> route) => false
+                          );
                         }
                       );
+
                     },
                     child: itemList('Keluar'),
                   ),
-                  SizedBox(height: is5Inc() ? size.height * 0.15:0,)
+                  SizedBox(height: is5Inc() ? size.height * 0.35:15,)
                 ],
               ),
             ),
