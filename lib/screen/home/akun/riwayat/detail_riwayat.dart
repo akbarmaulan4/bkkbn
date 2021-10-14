@@ -10,6 +10,7 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
 import 'package:kua/util/image_constant.dart';
+import 'package:kua/widgets/font/TextAvenirBookNoEllips.dart';
 import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/model/quiz/submit/result/result_submit.dart';
@@ -236,7 +237,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                   ),
                                   TextAvenirBook((data != null && data.ulasan != null) ? data.ulasan.jabatan:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                                   SizedBox(height: 10),
-                                  TextAvenirBook((data != null && data.ulasan != null) ? data.ulasan.komentar:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                                  TextAvenirBookNoEllips((data != null && data.ulasan != null) ? data.ulasan.komentar:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                                 ],
                               ),
                             ),

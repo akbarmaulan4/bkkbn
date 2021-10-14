@@ -9,8 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 class API{
-  // static String BASE_URL = "http://bkkbn.backoffice.my.id/api/v1";
-  static String BASE_URL = "http://103.147.5.72/api/v1";
+  // static String BASE_URL = "http://bkkbn.backoffice.my.id/api/v1"; //sb
+  static String BASE_URL = "http://103.147.5.72/api/v1"; //prod
 //  EnvironmentConfig.environment == Environment.development
 //      ? "http://api-dev.kedai-sayur.com/kedaiemak-api/api/v1" //"""http://kei-dev.kedai-sayur.com:30517/kedaiemak-api/api/v1"
 //      : EnvironmentConfig.environment == Environment.sandbox

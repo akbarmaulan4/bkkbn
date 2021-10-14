@@ -130,8 +130,7 @@ class HomeBloc{
     String appName = packageInfo.appName;
     String packageName = packageInfo.packageName;
     String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-
+    String buildNumber = packageInfo.buildNumber;  
     API.checkVersion((result, error) {
       // Navigator.of(context).pop();
       if(result != null){

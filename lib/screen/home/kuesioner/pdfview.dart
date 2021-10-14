@@ -95,7 +95,6 @@ class _PdfviewState extends State<Pdfview> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor:Utils.colorFromHex(ColorCode.lightBlueDark),
       appBar: AppBar(
         leading: InkWell(
             onTap: ()=>Navigator.of(context).pop(),
@@ -127,6 +126,7 @@ class _PdfviewState extends State<Pdfview> {
                     return data != null ? Stack(
                       children: [
                         Container(
+                          color: Colors.white,
                           child: PDFView(
                             filePath: data.path,
                             autoSpacing: true,

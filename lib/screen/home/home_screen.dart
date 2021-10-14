@@ -48,10 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
           OSiOSSettings.inAppLaunchUrl: false
         });
     OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
-    // setupPlayerId();
+    setupPlayerId();
   }
 
   void setupPlayerId() async {
+    var status = await OneSignal.shared.getPermissionSubscriptionState();
+    var playerId = status.subscriptionStatus.userId;
+    if (playerId != null) {
+
+    }
     // var hasPlayerId = await LocalData.getPlayerId();
     // if (!hasPlayerId) {
     //   var status = await OneSignal.shared.getPermissionSubscriptionState();

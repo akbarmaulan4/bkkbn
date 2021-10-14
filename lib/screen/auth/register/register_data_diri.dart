@@ -761,9 +761,16 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter state) {
                 return Container(
-                  height: size.height * 0.50,
+                  height: size.height - size.height * 0.05,
                   child: Column(
                     children: [
+                      SizedBox(height: 20),
+                      Container(
+                        height: 5,
+                        width: 60,
+                        decoration: ConstantStyle.boxButton(radius: 15, color: Colors.grey.shade400),
+                      ),
+                      SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),

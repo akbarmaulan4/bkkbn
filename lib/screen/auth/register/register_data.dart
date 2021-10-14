@@ -6,6 +6,7 @@ import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
+import 'package:kua/util/debouncher.dart';
 import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/box_border.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
@@ -62,6 +63,9 @@ class _NewRegisterScreenState extends State<RegisterData> {
     }
   }
 
+
+  var debouncher = new Debouncer(milliseconds: 500);
+
   @override
   Widget build(BuildContext context) {
     final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
@@ -117,9 +121,18 @@ class _NewRegisterScreenState extends State<RegisterData> {
                           contentPadding: EdgeInsets.only(bottom:15)
                         ),
                         onChanged: (val){
-                          if(val[0] == '0'){
-                            widget.bloc.edtNoTlp.text = val.replaceFirst(new RegExp(r'^0+'), '');
-                          }
+                          debouncher.run(() {
+                            if(val[0] == '0'){
+                              widget.bloc.edtNoTlp.text = val.substring(1);
+                              var str = widget.bloc.edtNoTlp.text;
+                              // widget.bloc.edtNoTlp.text = val;
+                              widget.bloc.edtNoTlp.selection = TextSelection.fromPosition(TextPosition(offset: str.length));
+                            }
+                          });
+                          // if(val[0] == '0'){
+                          //   widget.bloc.edtNoTlp.text = val.replaceFirst(new RegExp(r'^0+'), '');
+                          //   FocusScope.of(context).requestFocus(FocusNode());
+                          // }
                         },
                       ),
                     ),
