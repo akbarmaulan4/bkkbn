@@ -32,6 +32,12 @@ class _LandingQuizState extends State<LandingQuiz> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bloc.checkVerify(context, widget.id);
     });
+
+    // bloc.messageError.listen((error) {
+    //   if(error != null){
+    //     Utils.alertError(context, error, () { });
+    //   }
+    // });
   }
 
   @override

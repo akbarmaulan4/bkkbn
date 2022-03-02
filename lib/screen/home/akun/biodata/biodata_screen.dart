@@ -44,11 +44,9 @@ class _BiodataViewState extends State<BiodataView> {
 
     bloc.allowDataDiri.listen((event) {
       if(event != null){
-        if(event){
-          Utils.infoDialog(context, 'Informasi', 'Perbaharuan Data Berhasil', () {
-            // Navigator.popAndPushNamed(context, '/login');
-          });
-        }
+        Utils.infoDialog(context, 'Informasi', event, () {
+          // Navigator.popAndPushNamed(context, '/login');
+        });
       }
     });
 

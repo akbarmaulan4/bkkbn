@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart';
@@ -29,10 +30,12 @@ class AuthBloc{
   final _imageKtp = PublishSubject<File>();
   final _fileDoc = PublishSubject<File>();
   final _messageError = PublishSubject<String>();
+  final _messageKTP = PublishSubject<String>();
   final _allowFotoKtpUser = PublishSubject<bool>();
-  final _allowDataDiri = PublishSubject<bool>();
+  final _allowDataDiri = PublishSubject<String>();
   final _loginSucces = PublishSubject<bool>();
-  final _emailHasTaken = PublishSubject<bool>();
+  final _emailHasTaken = PublishSubject<String>();
+  final _emailPass= PublishSubject<bool>();
   final _typingPass = PublishSubject<bool>();
   final _typingRePass = PublishSubject<bool>();
   final _showPassData = PublishSubject<bool>();
@@ -54,6 +57,7 @@ class AuthBloc{
 
 
   final _picBiodata = PublishSubject<String>();
+  final _emailFormat = PublishSubject<bool>();
 
   Stream<bool> get typing => _typing.stream;
   Stream<bool> get showPass => _showPass.stream;
@@ -63,10 +67,13 @@ class AuthBloc{
   Stream<File> get imageKtp => _imageKtp.stream;
   Stream<File> get fileDoc => _fileDoc.stream;
   Stream<String> get messageError => _messageError.stream;
+  Stream<String> get messageKTP => _messageKTP.stream;
   Stream<bool> get allowFotoKtpUser => _allowFotoKtpUser.stream;
-  Stream<bool> get allowDataDiri => _allowDataDiri.stream;
+  Stream<String> get allowDataDiri => _allowDataDiri.stream;
   Stream<bool> get loginSucces => _loginSucces.stream;
-  Stream<bool> get emailHasTaken => _emailHasTaken.stream;
+  Stream<String> get emailHasTaken => _emailHasTaken.stream;
+  Stream<bool> get emailPass => _emailPass.stream;
+  Stream<bool> get emailFormat => _emailFormat.stream;
   Stream<bool> get typingPass => _typingPass.stream;
   Stream<bool> get typingRePass => _typingRePass.stream;
   Stream<bool> get showPassData => _showPassData.stream;
@@ -251,6 +258,12 @@ class AuthBloc{
     }
   }
 
+  var listValidateEmail = [
+    'gmail.com',
+    'yahoo.com',
+    'yahoo.co.id'
+  ];
+
   validasiDataUser(){
     if(edtNamaLengkap.text == ''){
       _messageError.sink.add('Nama Lengkap harus diisi!');
@@ -338,12 +351,20 @@ class AuthBloc{
 
   emailChecking(){
     API.emailChecking(edtEmail.text, (result, error) {
-      if(result != null){
+      if(result   != null){
         if(result['code'] == 200){
           if(result['error'] == true){
-            _messageError.sink.add(result['message']);
+            _emailHasTaken.sink.add(result['message']);
           }else{
-            _emailHasTaken.sink.add(true);
+            // bool isValid = EmailValidator.validate(edtEmail.text);
+            // if(isValid){
+            //   var dataMail = edtEmail.text.split('@');
+            //   if(!listValidateEmail.contains(dataMail[1])){
+            //     _emailFormat.sink.add(true);
+            //     return;
+            //   }
+            // }
+            _emailPass.sink.add(true);
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -432,14 +453,20 @@ class AuthBloc{
 
   List<DataKabupaten> _allDataKabupaten = [];
   List<DataKabupaten> get allDataKabupaten => _allDataKabupaten;
-  findKabupaten(String val){
+  findKabupaten(String val) {
     _allDataKabupaten.clear();
-    var data = allKabupaten.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
-    if(data != null){
-      _allDataKabupaten.addAll(data.toList());
-      _dataKotaKab.sink.add(data.toList());
+    List<DataKabupaten> data = [];
+    if(val == 'a'){
+      data.addAll(allKabupaten);
+      _allDataKabupaten.addAll(data);
+      _dataKotaKab.sink.add(data);
+    }else{
+      data = allKabupaten.where((element) => element.nama.toLowerCase().contains(val.toLowerCase())).toList();
+      if (data != null) {
+        _allDataKabupaten.addAll(data);
+        _dataKotaKab.sink.add(data);
+      }
     }
-    // _showFinder.sink.add(true);
     return data;
   }
 
@@ -454,7 +481,7 @@ class AuthBloc{
 
   //=================== kecamatan ================
 
-  List<DataKecamatan> _allKecamatan = new List();
+  List<DataKecamatan> _allKecamatan = [];
   List<DataKecamatan> get allKecamatan => _allKecamatan;
 
   getKecamatan(String kabId){
@@ -481,12 +508,18 @@ class AuthBloc{
   List<DataKecamatan> get allDataKecamatan => _allDataKecamatan;
   findKecamatan(String val){
     _allDataKecamatan.clear();
-    var data = allKecamatan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
-    if(data != null){
-      _allDataKecamatan.addAll(data.toList());
-      _dataKecamatan.sink.add(data.toList());
+    List<DataKecamatan> data = [];
+    if(val == 'a'){
+      data.addAll(allKecamatan);
+      _allDataKecamatan.addAll(data);
+      _dataKecamatan.sink.add(data);
+    }else{
+      data = allKecamatan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase())).toList();
+      if(data != null){
+        _allDataKecamatan.addAll(data.toList());
+        _dataKecamatan.sink.add(data.toList());
+      }
     }
-    // _showFinder.sink.add(true);
     return data;
   }
 
@@ -528,12 +561,18 @@ class AuthBloc{
   List<DataKelurahan> get allDataKelurahan => _allDataKelurahan;
   findKelurahan(String val){
     _allDataKelurahan.clear();
-    var data = allKelurahan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
-    if(data != null){
-      _allDataKelurahan.addAll(data.toList());
-      _dataKelurahan.sink.add(data.toList());
+    List<DataKelurahan> data = [];
+    if(val == 'a'){
+      data.addAll(allKelurahan);
+      _allDataKelurahan.addAll(data);
+      _dataKelurahan.sink.add(data);
+    }else{
+      data = allKelurahan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase())).toList();
+      if(data != null){
+        _allDataKelurahan.addAll(data.toList());
+        _dataKelurahan.sink.add(data.toList());
+      }
     }
-    // _showFinder.sink.add(true);
     return data;
   }
 
@@ -589,7 +628,7 @@ class AuthBloc{
           Navigator.of(context).pop();
       if(result != null){
         if(result['code'] == 200 && !result['error']){
-          _allowDataDiri.sink.add(true);
+          _allowDataDiri.sink.add(result['message']);
         }else{
           _messageError.sink.add(result['message']);
         }
@@ -721,7 +760,7 @@ class AuthBloc{
                 user.kodepos = edtKodePos.text;
                 LocalData.saveUser(user);
               }
-              _allowDataDiri.sink.add(true);
+              _allowDataDiri.sink.add(result['message']);
             }else{
               _messageError.sink.add(result['message']);
             }
@@ -786,10 +825,16 @@ class AuthBloc{
             _kelurahan.nama = data['kelurahan'];
           }
         }else{
-          _messageError.sink.add(error['message']);
+          // _messageNIK.sink.add(error['message']);
+          // _messageKTP.sink.add(error['message']);
+          // _messageError.sink.add(error['message']);
         }
       }else{
-        _messageError.sink.add(error['message']);
+        // _messageNIK.sink.add(error['message']);
+        // if(error['code'] == 401){
+        //   _messageKTP.sink.add(error['message']);
+        // }
+        // _messageError.sink.add(error['message']);
       }
     });
   }

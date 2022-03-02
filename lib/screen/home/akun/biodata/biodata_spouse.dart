@@ -5,6 +5,7 @@ import 'package:kua/model/akun/biodata/all_waiting.dart';
 import 'package:kua/model/akun/biodata/couple_item.dart';
 import 'package:kua/model/akun/biodata/pending_item.dart';
 import 'package:kua/model/akun/biodata/waiting_item.dart';
+import 'package:kua/model/user/user.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
@@ -25,7 +26,14 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bloc.loadUser();
       loadData(context);
+    });
+
+    bloc.showInfoCouple.listen((data) {
+      if(data != null){
+        bloc.loadUser();
+      }
     });
 
     bloc.messageError.listen((event) {
@@ -69,19 +77,28 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
         automaticallyImplyLeading: false,
         actions: [
           StreamBuilder(
-            stream: bloc.canAddCouple,
-            builder: (context, snapshot) {
-              var canAdd = false;
+            stream: bloc.user,
+            builder: (context, snapshot){
+              UserModel user;
               if(snapshot.data != null){
-                canAdd = snapshot.data;
+                user = snapshot.data;
               }
-              return canAdd ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: InkWell(
-                      onTap: (){
-                        Navigator.pushNamed(context, '/tambah_pasangan').then((value) => loadData(context));
-                      },
-                      child: Icon(Icons.add, color: Utils.colorFromHex(ColorCode.bluePrimary)))
+              return user != null ? StreamBuilder(
+                  stream: bloc.canAddCouple,
+                  builder: (context, snapshot) {
+                    var canAdd = false;
+                    if(snapshot.data != null){
+                      canAdd = snapshot.data;
+                    }
+                    return user.gender == '1' ? canAdd ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: InkWell(
+                            onTap: (){
+                              Navigator.pushNamed(context, '/tambah_pasangan').then((value) => loadData(context));
+                            },
+                            child: Icon(Icons.add, color: Utils.colorFromHex(ColorCode.bluePrimary)))
+                    ):SizedBox():SizedBox();
+                  }
               ):SizedBox();
             }
           )
@@ -167,18 +184,56 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextAvenir('Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                            SizedBox(height: 5),
-                            Wrap(
-                              children: [
-                                Text('Belum terdapat data pasangan.Silahkan tambahkan atau Terima setelah mendapat permintaan "Tambah Pasangan" dari pasangan anda',
-                                    style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'))
-                              ],
-                            )
-                          ],
+                        child: StreamBuilder(
+                            stream: bloc.dataUser,
+                            builder: (context, snapshot) {
+                              Map profile;
+                              if(snapshot.data != null){
+                                profile = snapshot.data;
+                              }
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  profile != null ?  profile['gender'] == '1' ? TextAvenir(profile['gender'] == '1' ? 'Pasangan' : 'Informasi', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox():SizedBox(),
+                                  SizedBox(height: 5),
+                                  profile != null ?  profile['gender'] == '1' ? Wrap(
+                                    children: [
+                                      Text('Belum terdapat data pasangan.Silahkan tambahkan atau Terima setelah mendapat permintaan "Tambah Pasangan" dari pasangan anda',
+                                          style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book'))
+                                    ],
+                                  ):Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextAvenir('Hi ${profile  != null ? profile['nama'] : ''}', size: 14),
+                                      SizedBox(height: 15),
+                                      Text('Silahkan minta pasangan kamu untuk Klik menu', style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                                      SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          TextAvenir('Tambah Pasangan ', size: 14,),
+                                          Text('di Aplikasi ELSIMIL,', style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text('Lalu Tuliskan', style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                                      SizedBox(height: 10),
+                                      TextAvenir('No KTP    : ${profile  != null ? profile['no_ktp'] : ''}', size: 14),
+                                      SizedBox(height: 10),
+                                      TextAvenir('Profile ID  : ${profile  != null ? profile['profile_id'] : ''}', size: 14),
+                                      SizedBox(height: 15),
+                                      Wrap(
+                                        children: [
+                                          Text('Setelah itu kamu klik menu ', style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                                          TextAvenir('Akun > Biodata Pasangan ', size: 14,),
+                                          Text('lalu klik tombol ', style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                                          TextAvenir('Terima ', size: 14,),
+                                        ],
+                                      ),
+                                    ],
+                                  ):SizedBox()
+                                ],
+                              );
+                            }
                         ),
                       ),
                     ],

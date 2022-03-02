@@ -24,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.checkVersion(context);
     initOneSignal();
     OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
       // will be called whenever a notification is received

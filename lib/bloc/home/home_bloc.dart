@@ -140,7 +140,6 @@ class HomeBloc{
           if(version != vertsionCode){
             _messageError.sink.add(data[2]['value']);
           }
-          // _version.sink.add(result['message']);
         }else{
           _messageError.sink.add(error['message']);
         }

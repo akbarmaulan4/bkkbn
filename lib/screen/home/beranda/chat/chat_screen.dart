@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kua/bloc/chat/bloc_chat.dart';
 import 'package:kua/model/chat/chat_item.dart';
 import 'package:kua/model/chat/chat_message.dart';
+import 'package:kua/model/chat/type_chat_model.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
@@ -15,6 +16,8 @@ import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class ChatScreen extends StatefulWidget {
+  TypeChatModel data;
+  ChatScreen({this.data});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -30,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement initState
     super.initState();
     _focus.addListener(_onFocusChange);
-    bloc.getAllChat();
+    bloc.getAllChat(widget.data.type);
     removeIndicatorChat();
 
     bloc.finishCat.listen((event) {
@@ -60,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: TextAvenir('ELSIMIL Care', color: Utils.colorFromHex(ColorCode.bluePrimary)),
+          title: TextAvenir('ELSIMIL Care (${widget.data.name})', color: Utils.colorFromHex(ColorCode.bluePrimary)),
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -150,7 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         return InkWell(
                           onTap: (){
                             if(bloc.edtMessage.text != '' && load){
-                              bloc.postMessage(bloc.edtMessage.text);
+                              bloc.postMessage(bloc.edtMessage.text, widget.data.type);
                             }
                           },
                           child: Container(
@@ -221,17 +224,24 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         mainAxisAlignment:  MainAxisAlignment.end,
         children: [
-          msg.message.length > 50 ? Expanded(
+          msg.message.length > 35 ? Expanded(
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
-                  color: Utils.colorFromHex(ColorCode.softGreyElsimil)
+                  color: Utils.colorFromHex(ColorCode.bubleRight)
               ),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              margin: EdgeInsets.only(left: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                  Wrap(
+                    children: [
+                      // TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary))
+                      Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+
+                    ],
+                  ),
                   Align(
                     alignment: (Alignment.topRight),
                     child: TextAvenirBook(msg.jam, size: 9, color: Utils.colorFromHex(ColorCode.bluePrimary)),
@@ -242,12 +252,18 @@ class _ChatScreenState extends State<ChatScreen> {
           ):Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: Utils.colorFromHex(ColorCode.softGreyElsimil)
+                color: Utils.colorFromHex(ColorCode.bubleRight)
             ),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: EdgeInsets.only(left: 25),
             child: Row(
               children: [
-                TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                Wrap(
+                  children: [
+                    // TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary))
+                    Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                  ],
+                ),
                 SizedBox(width: 10),
                 Column(
                   children: [
@@ -317,6 +333,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   color: Utils.colorFromHex(ColorCode.blueSecondary)
               ),
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              margin: EdgeInsets.only(right: 25),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -325,7 +342,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenirBook(msg.message, size: 14, color: Colors.white),
+                      // TextAvenirBook(msg.message, size: 14, color: Colors.white),
+                      Wrap(
+                        children: [Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.colorWhite), fontFamily: 'Avenir-Book'))],
+                      ),
                       SizedBox(width: 10),
                       Align(
                         alignment: (Alignment.topRight),
@@ -342,6 +362,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: Utils.colorFromHex(ColorCode.blueSecondary)
             ),
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            margin: EdgeInsets.only(right: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -349,7 +370,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 SizedBox(height: 5),
                 Row(
                   children: [
-                    TextAvenirBook(msg.message, size: 14, color: Colors.white),
+                    Wrap(
+                      children: [
+                        Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.colorWhite), fontFamily: 'Avenir-Book')),
+                        // TextAvenirBook(msg.message, size: 14, color: Colors.white)
+                      ],
+                    ),
                     SizedBox(width: 10),
                     Column(
                       children: [

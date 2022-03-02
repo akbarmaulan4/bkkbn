@@ -47,11 +47,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
 
     widget.bloc.allowDataDiri.listen((event) {
       if(event != null){
-        if(event){
-          Utils.infoDialog(context, 'Informasi', 'Registrasi berhasil, silahkan aktivasi akun kamu melalui email yang kami kirim', () {
-            Navigator.popAndPushNamed(context, '/login');
-          });
-        }
+        Utils.infoDialog(context, 'Informasi', event, () {
+          Navigator.popAndPushNamed(context, '/login');
+        });
       }
     });
 
@@ -219,7 +217,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
             ),
             SizedBox(height: 15),
             TextAvenir(
-              'Alamat Sesuai KTP',
+              'Alamat Sesuai Domisili',
               size: 14,
               color: Utils.colorFromHex(ColorCode.bluePrimary),
             ),
@@ -230,7 +228,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Alamat Sesuai KTP',
+                      hintText: 'Alamat Sesuai Domisili',
                       hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                       contentPadding: EdgeInsets.only(bottom:16)
                   ),
@@ -746,6 +744,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   }
 
   void showFinder(String type) async {
+    FocusScope.of(context).requestFocus(new FocusNode());
     var size = MediaQuery.of(context).size;
     loadFindingFirst(type, 'a');
     var dataSink = getDataFinder(type);

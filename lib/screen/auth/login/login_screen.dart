@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: size.height * 0.07),
                 TextAvenir(
-                  'Email',
+                  'Email atau No. Telepon',
                   size: 14,
                   color: Utils.colorFromHex(ColorCode.bluePrimary),
                 ),
@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Email aktif anda',
+                          hintText: 'Email atau No Telepon anda',
                           hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                           contentPadding: EdgeInsets.only(bottom:16)
                       ),

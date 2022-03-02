@@ -142,7 +142,11 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
           ):
           InkWell(
             onTap: (){
-              Navigator.pushNamed(context, '/tambah_pasangan');
+              if(widget.dataOwn.gender == '1'){
+                Navigator.pushNamed(context, '/tambah_pasangan');
+              }else{
+                Navigator.pushNamed(context, '/biodata_pasangan');
+              }
             },
             child: Container(
               height: size.height * 0.085,
@@ -185,7 +189,115 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                 ],
               ),
             ),
-          )
+          ),
+          // widget.dataOwn.gender == '1' ? TextAvenir('Pasangan Kamu', size: is5Inc() ? 12:14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)):SizedBox(),
+          // SizedBox(height: widget.dataOwn.gender != '1' ? 5:0),
+          // widget.dataOwn.gender == '1' ? widget.dataCouple.isNotEmpty ? Container(
+          //   decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.only(
+          //         topLeft: Radius.circular(10),
+          //         bottomLeft: Radius.circular(10),
+          //       ),
+          //       color: Utils.colorFromHex(ColorCode.lightBlueDark)
+          //   ),
+          //   child: Container(
+          //     height: size.height * 0.08,
+          //     child: PageView.builder(
+          //         scrollDirection: Axis.horizontal,
+          //         itemCount: widget.dataCouple.length,
+          //         itemBuilder: (context, index){
+          //           Own data = widget.dataCouple[index];
+          //           return InkWell(
+          //             onTap: (){
+          //               Navigator.pushNamed(context, '/riwayat_pasangan', arguments: {'id': data.id.toString()});
+          //             },
+          //             child: Container(
+          //               padding: EdgeInsets.all(is5Inc() ? 5:10),
+          //               child: Row(
+          //                 crossAxisAlignment: CrossAxisAlignment.baseline,
+          //                 textBaseline: TextBaseline.ideographic,
+          //                 children: [
+          //                   Container(
+          //                     height: is5Inc() ? 35:45,
+          //                     width: is5Inc() ? 35:45,
+          //                     decoration: BoxDecoration(
+          //                       shape: BoxShape.circle,
+          //                     ),
+          //                     child: ClipOval(
+          //                       child: CachedNetworkImage(
+          //                         placeholder: (context, url) => Center(
+          //                           child: Image.asset(ImageConstant.logoElsimil),
+          //                         ),
+          //                         imageUrl: data.pic,
+          //                         fit: BoxFit.cover,
+          //                       ),
+          //                     ),
+          //                   ),
+          //                   SizedBox(width: 10),
+          //                   Expanded(
+          //                     child: Column(
+          //                       crossAxisAlignment: CrossAxisAlignment.start,
+          //                       mainAxisAlignment: MainAxisAlignment.center,
+          //                       children: [
+          //                         TextAvenir(data.name, size: is5Inc() ? 10:12, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+          //                         TextAvenirBook('${data.kota}, ${data.tgl_lahir}', size: is5Inc() ? 9:11, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+          //                       ],
+          //                     ),
+          //                   )
+          //                 ],
+          //               ),
+          //             ),
+          //           );
+          //         }
+          //     ),
+          //   ),
+          // ):
+          // InkWell(
+          //   onTap: (){
+          //     Navigator.pushNamed(context, '/tambah_pasangan');
+          //   },
+          //   child: Container(
+          //     height: size.height * 0.085,
+          //     decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.only(
+          //           topLeft: Radius.circular(10),
+          //           bottomLeft: Radius.circular(10),
+          //         ),
+          //         color: Utils.colorFromHex(ColorCode.lightBlueDark)
+          //     ),
+          //     padding: EdgeInsets.all(is5Inc() ? 5: 10),
+          //     child: Row(
+          //       crossAxisAlignment: CrossAxisAlignment.baseline,
+          //       textBaseline: TextBaseline.ideographic,
+          //       children: [
+          //         //blm ada pasangan
+          //         // Icon(Icons.supervised_user_circle, color: Colors.grey, size: 40,),
+          //         Container(
+          //           height: is5Inc() ? 35:50,
+          //           width: is5Inc() ? 35:50,
+          //           decoration: BoxDecoration(
+          //             shape: BoxShape.circle,
+          //           ),
+          //           child: ClipOval(
+          //             child: Image.asset(ImageConstant.icAccount),
+          //           ),
+          //         ),
+          //         SizedBox(width: 5),
+          //         Expanded(
+          //           child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: [
+          //               SizedBox(height: 10),
+          //               TextAvenir('Tambahkan Pasanganmu', size: is5Inc() ? 11:13, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+          //               // TextAvenir('Amanda Manopo', size: 13),
+          //               // TextAvenirBook('Medan, 23 Oktober 2000', size: 11),
+          //             ],
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ):SizedBox()
         ],
       ),
     );

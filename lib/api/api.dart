@@ -9,8 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 class API{
-  // static String BASE_URL = "http://bkkbn.backoffice.my.id/api/v1"; //sb
-  static String BASE_URL = "http://103.147.5.72/api/v1"; //prod
+  // static String BASE_URL = "https://pensive-banzai.8-215-32-90.plesk.page/api/v1"; //sb
+  static String BASE_URL = "https://elsimil.bkkbn.go.id/api/v1"; //prodb
 //  EnvironmentConfig.environment == Environment.development
 //      ? "http://api-dev.kedai-sayur.com/kedaiemak-api/api/v1" //"""http://kei-dev.kedai-sayur.com:30517/kedaiemak-api/api/v1"
 //      : EnvironmentConfig.environment == Environment.sandbox
@@ -29,13 +29,13 @@ class API{
     Utils.log("POST VALUE ${json.encode(post)}");
     String ada = json.encode(post);
 
-    var mapError = new Map();
+    var mapError = new   Map();
     try{
       final response = await http.post(Uri.parse(BASE_URL + module),
           // ignore: missing_return
           headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30), onTimeout: (){
         // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi terputus, silahkan coba lagi');
+        mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
         callback(null, mapError);
       });
       if(response != null){
@@ -84,7 +84,7 @@ class API{
           // ignore: missing_return
           headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30), onTimeout: (){
         // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi terputus, silahkan coba lagi');
+        mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
         callback(null, mapError);
       });
       if(response != null){
@@ -485,23 +485,25 @@ class API{
     });
   }
 
-  static listChat(String id, void callback(Map, Exception)) async {
+  static listChat(String id, String type, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
     post['id'] = id;
     post['page'] = '1';
+    post['type'] = type;
     basePost('/chatlist', post, header, true, (result, error){
       callback(result, error);
     });
   }
 
-  static postChat(String id, String mesage, void callback(Map, Exception)) async {
+  static postChat(String id, String mesage, String type, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
     post['id'] = id;
     post['message'] = mesage;
+    post['type'] = type;
     basePost('/chatsubmit', post, header, true, (result, error){
       callback(result, error);
     });
@@ -640,14 +642,14 @@ class API{
       void callback(dynamic, exception)) async {
     Utils.log("URL ${BASE_URL + module}");
 
-    // var connect = await isConnected();
-    // if(!connect){
-    //   callback(null, 'Tidak ada koneksi');
-    //   return;
-    // }
-
+    var mapError = new Map();
     try {
-      final response = await http.get(Uri.parse(BASE_URL + module), headers: headers);
+      // ignore: missing_return
+      final response = await http.get(Uri.parse(BASE_URL + module), headers: headers ).timeout(Duration(seconds: 30), onTimeout: (){
+        // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
+        mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
+        callback(null, mapError);
+      });
       int responseCode = response.statusCode;
       var mapJson = json.decode(response.body);
 
@@ -659,12 +661,14 @@ class API{
           responseCode == 403 ||
           mapJson['code'] == 401 ||
           mapJson['code'] == 403 || mapJson['code'] == 422) {
-        // callback(null, TokenException());
+        callback(null, mapJson);
       } else {
-        // callback(null, HTTPStatusFailedException(mapJson['message']));
+        mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+        callback(null, mapError);
       }
     } catch (e) {
-      // callback(null, HTTPStatusFailedException('Koneksi sedang tidak stabil'));
+      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      callback(null, mapError);
     }
   }
 
@@ -672,6 +676,14 @@ class API{
     var header = new Map<String, String>();
     header['Content-Type'] = 'application/json';
     baseGet('/user', header, (result, error) {
+      callback(result, error);
+    });
+  }
+
+  static getChatType(int id, void callback(Map, Exception)) {
+    var header = new Map<String, String>();
+    header['Content-Type'] = 'application/json';
+    baseGet('/chattype?id=${id}', header, (result, error) {
       callback(result, error);
     });
   }

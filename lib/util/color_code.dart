@@ -14,6 +14,7 @@ class ColorCode {
   static String bluePurplelsimil = '#BACAFF';
   static String yellow_light = '#fcefac';
   static String softGreyElsimil = '#FAFBFF';
+  static String bubleRight = '#e5e5e5';
 
   static String colorPrimary =  "#febd3f";
   static String colorWhite = "#FFFFFF";

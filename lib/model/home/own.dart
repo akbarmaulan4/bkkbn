@@ -4,6 +4,7 @@ class Own{
   int id;
   String name;
   String tgl_lahir;
+  String gender;
   String profile_id;
   String pic;
   String kota;

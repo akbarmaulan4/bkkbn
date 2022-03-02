@@ -28,6 +28,12 @@ class _QuizViewState extends State<ListQuizView> {
       bloc.quizList(context);
     });
 
+    // bloc.messageError.listen((error) {
+    //   if(error != null){
+    //     Utils.alertError(context, error, () { });
+    //   }
+    // });
+
   }
 
   is5Inc(){

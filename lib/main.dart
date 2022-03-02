@@ -15,6 +15,7 @@ import 'package:kua/screen/home/akun/riwayat/detail_riwayat.dart';
 import 'package:kua/screen/home/akun/riwayat/riwayat.dart';
 import 'package:kua/screen/home/akun/riwayat/riwayat_pasangan.dart';
 import 'package:kua/screen/home/beranda/chat/chat_screen.dart';
+import 'package:kua/screen/home/beranda/chat/landing_chat_screen.dart';
 import 'package:kua/screen/home/edukasi/detail_artikel.dart';
 import 'package:kua/screen/home/edukasi/list_artikel.dart';
 import 'package:kua/screen/home/home_screen.dart';
@@ -149,6 +150,16 @@ class MyApp extends StatelessWidget {
                   return ListNotif();
                 },
                 settings: RouteSettings());
+          case '/landing_chat':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return LandingScreen();
+                },
+                settings: RouteSettings());
           case '/chat_screen':
             return MaterialPageRoute(
                 builder: (context) {
@@ -156,7 +167,7 @@ class MyApp extends StatelessWidget {
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
-                  return ChatScreen();
+                  return ChatScreen(data: arguments['data']);
                 },
                 settings: RouteSettings());
           case '/list_artikel':

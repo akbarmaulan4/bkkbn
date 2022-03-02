@@ -64,6 +64,15 @@ class ConstantStyle {
     );
   }
 
+  static boxCircle({
+    Color color,
+  }){
+    return BoxDecoration(
+      shape: BoxShape.circle,
+      color: color
+    );
+  }
+
   static boxButton({
     double radius,
     Color color,

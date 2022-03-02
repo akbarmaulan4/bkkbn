@@ -398,6 +398,109 @@ class Utils{
     );
   }
 
+  static dialogInfo2({BuildContext context, String title, Function lanjut}){
+    var size = MediaQuery.of(context).size;
+    bool kecil = false;
+    if(size.height < 650){
+      kecil = true;
+    }else{
+      kecil = false;
+    }
+    FocusScope.of(context).requestFocus(FocusNode());
+    showDialog(
+        context: context,
+        builder: (contex){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))
+            ),
+            content: Container(
+              height: kecil ? size.height * 0.12:size.height * 0.09,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                  SizedBox(height: 8),
+                  Divider(),
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          width: kecil ? size.width * 0.23:size.width * 0.20,
+                          decoration: ConstantStyle.box_fill_blue_nd,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                          child: Center(
+                            child: TextAvenir('Periksa', color: Colors.white, size: kecil ? 13:14),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      InkWell(
+                        onTap: (){
+                          Navigator.of(context).pop();
+                          lanjut();
+                        },
+                        child: Container(
+                          width: kecil ? size.width * 0.23:size.width * 0.20,
+                          decoration: ConstantStyle.box_fill_blue_nd,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                          child: Center(
+                            child: TextAvenir('Lanjut', color: Colors.white, size: kecil ? 13:14),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                  // TextAvenir('Hapus Semua Notifkasi ?'),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+  static void showDialogEmail({
+    BuildContext context,
+    String title,
+    String message,
+    Function onNext,
+    Function onBackCheck
+  }){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: new Text(message),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("Periksa Kembali", style: TextStyle(color: colorFromHex(ColorCode.colorPrimary))),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                  onBackCheck();
+                },
+              ),
+              new FlatButton(
+                child: new Text("Lanjut",
+                    style: TextStyle(
+                        color: colorFromHex(ColorCode.colorPrimary))),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onNext();
+                },
+              )
+            ],
+          );
+        });
+  }
+
   static void showConfirmDialog(BuildContext context, String title, String message, void callback()) {
     showDialog(
         context: context,

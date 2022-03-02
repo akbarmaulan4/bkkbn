@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/constant_style.dart';
@@ -75,11 +76,13 @@ class _InputQuizState extends State<InputQuiz> {
                           child: TextField(
                             textAlignVertical: TextAlignVertical.center,
                             keyboardType: widget.tipe == 'angka' ? TextInputType.number : TextInputType.text,
-                            // inputFormatters: [
-                            //   LengthLimitingTextInputFormatter(16),
-                            //   new BlacklistingTextInputFormatter(
-                            //       new RegExp('[\\-|\\,|\\.]')),
-                            // ],
+                            inputFormatters: [
+                              // LengthLimitingTextInputFormatter(16),
+                              new BlacklistingTextInputFormatter(
+                                  widget.tipe == 'angka' ? RegExp('[\\,]') : RegExp('')
+                              ),
+                                  // new RegExp('[\\-|\\,|\\.]')),
+                            ],
                             // textAlign:  widget.tipe == 'angka' ? TextAlign.right:TextAlign.left,
                             decoration: InputDecoration(
                                 border: InputBorder.none,

@@ -10,6 +10,8 @@ import 'package:kua/util/debouncher.dart';
 import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/box_border.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class RegisterData extends StatefulWidget {
   AuthBloc bloc;
@@ -47,9 +49,26 @@ class _NewRegisterScreenState extends State<RegisterData> {
       }
     });
 
+    widget.bloc.emailPass.listen((event) {
+      if(event != null){
+        if(event){
+          widget.bloc.changeViewRegist(1);
+        }
+      }
+    });
+
     widget.bloc.emailHasTaken.listen((event) {
       if(event != null){
-        widget.bloc.changeViewRegist(1);
+        // Utils.dialogInfo(context: context, title: event, ok: () {
+        //   FocusScope.of(context).requestFocus(new FocusNode());
+        // });
+        FocusScope.of(context).requestFocus(new FocusNode());
+        Utils.showDialogEmail(
+          context: context,
+          title: "Peringatan",
+          message: event,
+          onNext: ()=>widget.bloc.changeViewRegist(1)
+        );
       }
     });
   }
@@ -273,18 +292,6 @@ class _NewRegisterScreenState extends State<RegisterData> {
                   colorShadow: Utils.colorFromHex(ColorCode.lightGreyElsimil),
                   offset: Offset(0, 0)
                 ),
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                //   color: Utils.colorFromHex(ColorCode.blueSecondary),
-                //   boxShadow: [
-                //     BoxShadow(
-                //       color: Utils.colorFromHex('#939CBC'),
-                //       spreadRadius: 2,
-                //       blurRadius: 7,
-                //       offset: Offset(0,0),
-                //     ),
-                //   ],
-                // ),
                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                 child: Center(
                   child: TextAvenir(

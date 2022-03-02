@@ -11,6 +11,8 @@ import 'package:kua/util/debouncher.dart';
 import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/box_border.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class RegisterFoto extends StatefulWidget {
   AuthBloc bloc;
@@ -86,6 +88,22 @@ class _RegisterFotoState extends State<RegisterFoto> {
         }
       }
     });
+
+    widget.bloc.messageKTP.listen((event) {
+      if(event != null){
+        Utils.dialogInfo(context: context, title: event, ok: ()=>Navigator.pushNamed(context, '/forgot_password'));
+        // showTopSnackBar(context, CustomSnackBar.error(message: event));
+      }
+    });
+
+    // widget.bloc.messageNIK.listen((event) {
+    //   if(event != null){
+    //     showTopSnackBar(context, CustomSnackBar.error(message: event));
+    //     // ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+    //     //     content: new Text(event)
+    //     // ));
+    //   }
+    // });
   }
 
   is5Inc(){

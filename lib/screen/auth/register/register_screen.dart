@@ -44,21 +44,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.white,
-        //   elevation: 0,
-        //   centerTitle: true,
-        //   leading: InkWell(
-        //     onTap: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false),
-        //     child: Icon(Icons.arrow_back_rounded, color: Colors.black87,)
-        //   ),
-        //   bottom: PreferredSize(
-        //       child: Container(
-        //         color: Utils.colorFromHex(ColorCode.lightBlueDark),
-        //         height: 1,
-        //       ),
-        //       preferredSize: Size.fromHeight(4.0))
-        // ),
         body: MediaQuery(
           data: scaleFactor,
           child: Container(
@@ -152,21 +137,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   loadScreenRegist(int val){
     switch(val){
       case 0:
-        return RegisterData(
-          bloc: bloc,
-        );
+        return RegisterData(bloc: bloc);
       case 1:
-        return RegisterFoto(
-          bloc: bloc,
-        );
+        return RegisterFoto(bloc: bloc);
       case 2:
-        return RegisterDataDiri(
-          bloc: bloc,
-        );
+        return RegisterDataDiri(bloc: bloc);
       default:
-        return RegisterData(
-          bloc: bloc,
-        );
+        return RegisterData(bloc: bloc);
     }
   }
 }

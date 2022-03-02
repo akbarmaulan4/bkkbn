@@ -12,6 +12,10 @@ class ImageConstant{
   static const String logoElsimil = 'assets/images/logo.png';
   static const String placeHolderElsimil = 'assets/images/place_holder_elsimil.png';
   static const String placeHolderAccount = 'assets/images/place_holder_account.png';
+  static const String nurse = 'assets/images/nurse.png';
+  static const String nurse2 = 'assets/images/nurse_2.png';
+  static const String petugas_kb = 'assets/images/icon_petugas_kb.png';
+  static const String midwife = 'assets/images/midwife.png';
 
 
   static const String icMailOpen = 'assets/icon/ic_mail_open.png';

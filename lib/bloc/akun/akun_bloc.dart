@@ -10,6 +10,7 @@ import 'package:kua/model/akun/biodata/all_waiting.dart';
 import 'package:kua/model/akun/biodata/couple_item.dart';
 import 'package:kua/model/riwayat/pasangan_item.dart';
 import 'package:kua/model/riwayat/riwayat_item.dart';
+import 'package:kua/model/user/user.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:rxdart/rxdart.dart';
@@ -33,6 +34,7 @@ class AkunBloc{
   final _typingOldPass = PublishSubject<bool>();
   final _typingNewPass = PublishSubject<bool>();
   final _typingRePass = PublishSubject<bool>();
+  final _user = BehaviorSubject<UserModel>();
 
   Stream<List<BantuanItem>> get dataBantuan => _dataBantuan.stream;
   Stream<String> get messageError => _messageError.stream;
@@ -52,6 +54,7 @@ class AkunBloc{
   Stream<bool> get typingOldPass => _typingOldPass.stream;
   Stream<bool> get typingNewPass => _typingNewPass.stream;
   Stream<bool> get typingRePass => _typingRePass.stream;
+  Stream<UserModel> get user => _user.stream;
 
   TextEditingController edtNoKtp = new TextEditingController();
   TextEditingController edtIdProfile = new TextEditingController();
@@ -126,7 +129,6 @@ class AkunBloc{
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
           var data = json['data'];
-          // _picBiodata.sink.add(data['pic']);
           Map dataModel = Map();
           dataModel.putIfAbsent('pic', () => data['pic']);
           dataModel.putIfAbsent('nama', () => data['name']);
@@ -134,6 +136,8 @@ class AkunBloc{
           dataModel.putIfAbsent('alamat', () => data['alamat']);
           dataModel.putIfAbsent('kota', () => data['nama_kabupaten']);
           dataModel.putIfAbsent('profile_id', () => data['profile_id']);
+          dataModel.putIfAbsent('no_ktp', () => data['no_ktp']);
+          dataModel.putIfAbsent('gender', () => data['gender']);
           _dataUser.sink.add(dataModel);
         }else{
           _messageError.sink.add(result['message']);
@@ -142,6 +146,14 @@ class AkunBloc{
         _messageError.sink.add(error['message']);
       }
     });
+  }
+
+  loadUser() async{
+    var user = await LocalData.getUser();
+    if(user != null){
+      getProfile(user.id.toString());
+      _user.sink.add(user);
+    }
   }
 
   int _totalPasangan = 0;
@@ -261,11 +273,12 @@ class AkunBloc{
           _canAddCouple.sink.add(false);
         }
       }else{
-        if(_totalPasangan < 1){
-          _canAddCouple.sink.add(true);
-        }else{
-          _canAddCouple.sink.add(false);
-        }
+        _canAddCouple.sink.add(false);
+        // if(_totalPasangan < 1){
+        //   _canAddCouple.sink.add(true);
+        // }else{
+        //   _canAddCouple.sink.add(false);
+        // }
       }
     }
   }
