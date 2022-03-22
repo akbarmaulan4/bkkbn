@@ -68,15 +68,15 @@ class _ChatScreenState extends State<ChatScreen> {
           elevation: 0.0,
           backgroundColor: Colors.white,
           leading: InkWell(
-              onTap: ()=>Navigator.of(context).pop(),
-              child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
+            onTap: ()=>Navigator.of(context).pop(),
+            child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
           ),
           bottom: PreferredSize(
-              child: Container(
-                color: Utils.colorFromHex(ColorCode.lightBlueDark),
-                height: 0.5,
-              ),
-              preferredSize: Size.fromHeight(4.0)),
+            child: Container(
+              color: Utils.colorFromHex(ColorCode.lightBlueDark),
+              height: 0.5,
+            ),
+            preferredSize: Size.fromHeight(4.0)),
         ),
         body: MediaQuery(
           data: scaleFactor,

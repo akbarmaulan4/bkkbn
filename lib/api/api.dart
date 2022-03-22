@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 class API{
   // static String BASE_URL = "https://pensive-banzai.8-215-32-90.plesk.page/api/v1"; //sb
   static String BASE_URL = "https://elsimil.bkkbn.go.id/api/v1"; //prodb
+  // static String BASE_URL = 'http://elsimil-test.axara.co.id/api/v1';
 //  EnvironmentConfig.environment == Environment.development
 //      ? "http://api-dev.kedai-sayur.com/kedaiemak-api/api/v1" //"""http://kei-dev.kedai-sayur.com:30517/kedaiemak-api/api/v1"
 //      : EnvironmentConfig.environment == Environment.sandbox
@@ -611,8 +612,10 @@ class API{
   static finding(String url, String param, String valueParam, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
+    var user = await LocalData.getUser();
     header['Content-Type'] = 'application/json';
     post[param] = valueParam;
+    post['user_id '] = user.id;
     basePost2(url, post, header, true, (result, error){
       callback(result, error);
     });
