@@ -6,6 +6,7 @@ DataHome _$fromJson(Map<String, dynamic> json) {
     ..result = (json['result'] as List)?.map((e) => e == null ? null : ItemResult.fromJson(e as Map<String, dynamic>))?.toList()
     ..info = (json['info'] as List)?.map((e) => e == null ? null : ItemInfo.fromJson(e as Map<String, dynamic>))?.toList()
     ..edukasi = (json['edukasi'] as List)?.map((e) => e == null ? null : ItemEdukasi.fromJson(e as Map<String, dynamic>))?.toList()
+    ..summarykuis = (json['summarykuis'] as List)?.map((e) => e == null ? null : ItemSummaryQuiz.fromJson(e as Map<String, dynamic>))?.toList()
   ;
 }
 
@@ -16,4 +17,5 @@ Map<String, dynamic> _$toJson(DataHome instance) =>
       'result': instance.result,
       'info': instance.info,
       'edukasi': instance.edukasi,
+      'summarykuis': instance.summarykuis,
     };

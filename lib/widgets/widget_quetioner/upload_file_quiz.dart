@@ -111,13 +111,16 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
         Directory tempDir = await getTemporaryDirectory();
         String tempPath = tempDir.path;
         File fileCompressed = new File('$tempPath/$fileName');
-        await PdfCompressor.compressPdfFile(
-            file.path, fileCompressed.path, CompressQuality.LOW);
+        if(fileName.split('.').last == 'pdf'){
+          await PdfCompressor.compressPdfFile(
+              file.path, fileCompressed.path, CompressQuality.LOW);
 
-        var sizeFile = Utils.formatFileSize(fileCompressed.lengthSync().toDouble());
-        final bytes = fileCompressed.readAsBytesSync();
+          var sizeFile = Utils.formatFileSize(fileCompressed.lengthSync().toDouble());
+          final bytes = fileCompressed.readAsBytesSync();
+        }
+
         // final bytes = file.readAsBytesSync();
-        String img = base64Encode(bytes);
+        String img = base64Encode(fileCompressed.readAsBytesSync());
         widget.changeFileName(fileName);
         widget.changeValue(img);
         changeDoc(file);

@@ -74,74 +74,104 @@ class _QuizViewState extends State<ListQuizView> {
                 if(snapshot.data != null){
                   data = snapshot.data;
                 }
-                return StreamBuilder(
-                  stream: bloc.isSearch,
-                  builder: (context, snapshot) {
-                    bool search = false;
-                    if(snapshot.data != null){
-                      search = snapshot.data;
-                    }
-                    return Column(
-                      children: [
-                        data.isNotEmpty || search ? Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
-                              border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
-                          ),
-                          padding: EdgeInsets.only(right: 25),
-                          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                          height: 45,
-                          child: TextField(
-                            controller: bloc.edtFind,
-                            textAlignVertical: TextAlignVertical.center,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Cari',
-                                hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                fillColor: Colors.grey,
-                                prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
-                                contentPadding: EdgeInsets.only(bottom: 7)
-                            ),
-                            onChanged: (val){
-                              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                                bloc.findQuiz(val);
-                              });
-                            },
-                          ),
-                        ): shimmerSearch(),
-                        Expanded(
-                          child: StreamBuilder(
-                            stream: bloc.isSearch,
-                            builder: (context, snapshot) {
-                              bool search = false;
-                              if(snapshot.data != null){
-                                search = snapshot.data;
-                              }
-                              return Container(
-                                child: search ? Container(
-                                  child: Column(
-                                    children: [
-                                      Icon(Icons.search, size: 40, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                                      SizedBox(height: 10),
-                                      TextAvenir('Pencarian tidak ditemukan',
-                                          size: is5Inc() ? 14:18,
-                                          color: Utils.colorFromHex(ColorCode.bluePrimary))
-                                    ],
-                                  ),
-                                ) : ListView.builder(
-                                    itemCount: data.isNotEmpty ? data.length:3,
-                                    itemBuilder: (context, index){
-                                      return data.isNotEmpty ? itemQuiz(data[index], data.length == index+1):shimmerItemQuiz();
-                                    }
-                                ),
-                              );
-                            }
-                          ),
+                return Column(
+                  children: [
+                    // data.isNotEmpty || search ? Container(
+                    //   decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.all(Radius.circular(5)),
+                    //       border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
+                    //   ),
+                    //   padding: EdgeInsets.only(right: 25),
+                    //   margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    //   height: 45,
+                    //   child: TextField(
+                    //     controller: bloc.edtFind,
+                    //     textAlignVertical: TextAlignVertical.center,
+                    //     keyboardType: TextInputType.emailAddress,
+                    //     decoration: InputDecoration(
+                    //         border: InputBorder.none,
+                    //         hintText: 'Cari',
+                    //         hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                    //         fillColor: Colors.grey,
+                    //         prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
+                    //         contentPadding: EdgeInsets.only(bottom: 7)
+                    //     ),
+                    //     onChanged: (val){
+                    //       WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    //         bloc.findQuiz(val);
+                    //       });
+                    //     },
+                    //   ),
+                    // ): shimmerSearch(),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          border: Border.all(color: Utils.colorFromHex(ColorCode.lightBlueDark))
+                      ),
+                      padding: EdgeInsets.only(right: 25),
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      height: 45,
+                      child: TextField(
+                        controller: bloc.edtFind,
+                        textAlignVertical: TextAlignVertical.center,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Cari',
+                            hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                            fillColor: Colors.grey,
+                            prefixIcon: Icon(Icons.search, size: 20, color: Utils.colorFromHex('#CCCCCC'),),
+                            contentPadding: EdgeInsets.only(bottom: 7)
                         ),
-                      ],
-                    );
-                  }
+                        onChanged: (val){
+                          WidgetsBinding.instance.addPostFrameCallback((_) async {
+                            bloc.typingSearch(true);
+                            bloc.findQuiz(val);
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: StreamBuilder(
+                          stream: bloc.isSearch,
+                          builder: (context, snapshot) {
+                            bool search = false;
+                            if(snapshot.data != null){
+                              search = snapshot.data;
+                            }
+                            return StreamBuilder(
+                              stream: bloc.isTypingSearch,
+                              builder: (context, snapshot) {
+                                bool typing = false;
+                                if(snapshot.data != null){
+                                  typing = snapshot.data;
+                                }
+                                return typing ? Container(
+                                  child: CircularProgressIndicator(),
+                                ) : Container(
+                                  child: search && data.length < 1 ? Container(
+                                    child: Column(
+                                      children: [
+                                        Icon(Icons.search, size: 40, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                                        SizedBox(height: 10),
+                                        TextAvenir('Pencarian tidak ditemukan',
+                                            size: is5Inc() ? 14:18,
+                                            color: Utils.colorFromHex(ColorCode.bluePrimary))
+                                      ],
+                                    ),
+                                  ) : ListView.builder(
+                                      itemCount: data.isNotEmpty ? data.length:3,
+                                      itemBuilder: (context, index){
+                                        return data.isNotEmpty ? itemQuiz(data[index], data.length == index+1):shimmerItemQuiz();
+                                      }
+                                  ),
+                                );
+                              }
+                            );
+                          }
+                      ),
+                    ),
+                  ],
                 );
               }
             ),

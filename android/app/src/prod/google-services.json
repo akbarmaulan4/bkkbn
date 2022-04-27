@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "540010492326",
+    "project_id": "elsimil-4a4b4",
+    "storage_bucket": "elsimil-4a4b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540010492326:android:f6d70f551533e84849df67",
+        "android_client_info": {
+          "package_name": "com.elsimil.kua"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540010492326-3ogl617nu0e10vdej5p659hd0osch6va.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTD4zOg1AZ-9AgpxXaARutj9oPTS8GTjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540010492326-3ogl617nu0e10vdej5p659hd0osch6va.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540010492326:android:6d02a49d359fe17849df67",
+        "android_client_info": {
+          "package_name": "com.elsimil.kua.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540010492326-3ogl617nu0e10vdej5p659hd0osch6va.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTD4zOg1AZ-9AgpxXaARutj9oPTS8GTjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "540010492326-3ogl617nu0e10vdej5p659hd0osch6va.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

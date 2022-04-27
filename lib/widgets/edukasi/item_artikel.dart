@@ -57,6 +57,7 @@ class _ItemArtikelWidgetState extends State<ItemArtikelWidget> {
                   ),
                 ),
               ),
+              errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
               fit: BoxFit.cover,
             ),
           ),

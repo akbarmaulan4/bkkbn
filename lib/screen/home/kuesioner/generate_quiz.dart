@@ -31,22 +31,22 @@ class _GenerateQuizState extends State<GenerateQuiz> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bloc.listPertanyaanQuiz(context, widget.id);
-    });
 
-    bloc.resultSubmit.listen((event) {
-      if(event != null){
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/result_quiz',
-            (Route<dynamic> route) => false,
-            arguments: {'data': event, 'isEdit': false, 'title': widget.title}
-        );
-      }
-    });
+      bloc.resultSubmit.listen((event) {
+        if(event != null){
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/result_quiz',
+                  (Route<dynamic> route) => false,
+              arguments: {'data': event, 'isEdit': false, 'title': widget.title}
+          );
+        }
+      });
 
-    bloc.messageError.listen((event) {
-      if(event != null){
-        Utils.alertError(context, event, () { });
-      }
+      bloc.messageError.listen((event) {
+        if(event != null){
+          Utils.alertError(context, event, () { });
+        }
+      });
     });
   }
 

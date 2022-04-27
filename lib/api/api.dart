@@ -7,17 +7,11 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:kua/main.dart';
 
 class API{
-  // static String BASE_URL = "https://pensive-banzai.8-215-32-90.plesk.page/api/v1"; //sb
-  static String BASE_URL = "https://elsimil.bkkbn.go.id/api/v1"; //prodb
-  // static String BASE_URL = 'http://elsimil-test.axara.co.id/api/v1';
-//  EnvironmentConfig.environment == Environment.development
-//      ? "http://api-dev.kedai-sayur.com/kedaiemak-api/api/v1" //"""http://kei-dev.kedai-sayur.com:30517/kedaiemak-api/api/v1"
-//      : EnvironmentConfig.environment == Environment.sandbox
-//      ? "http://api-sandbox.kedai-sayur.com/kedaiemak-api/api/v1"//"http://api-sandbox.kedai-sayur.com/kedaiemak-api/api/v1"
-//      : "http://api-ke.kedaisayur.com/kedaiemak-api/api/v1";
-
+  static String BASE_URL = EnvironmentConfig.environment == Environment.dev ?
+  'http://elsimil-test.axara.co.id/api/v1' : "https://elsimil.bkkbn.go.id/api/v1";
   static basePost(
       String module,
       Map<String, dynamic> post,
@@ -54,14 +48,14 @@ class API{
           callback(null, mapJson);
         }
       }else{
-        mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+        mapError.putIfAbsent('message', () => 'Gagal memuat data.');
         callback(null, mapError);
       }
     } on SocketException catch(e){
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     } catch (e){
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     }
   }
@@ -85,7 +79,7 @@ class API{
           // ignore: missing_return
           headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30), onTimeout: (){
         // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
+        mapError.putIfAbsent('message', () => 'Koneksi timout, Gagal memuat data.');
         callback(null, mapError);
       });
       if(response != null){
@@ -103,14 +97,14 @@ class API{
           callback(null, mapJson);
         }
       }else{
-        mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+        mapError.putIfAbsent('message', () => 'Gagal memuat data.');
         callback(null, mapError);
       }
     } on SocketException catch(e){
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     } catch (e){
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     }
   }
@@ -153,6 +147,8 @@ class API{
       String rt,
       String rw,
       String kodepos,
+      String tglNikah,
+      String statusNikah,
       void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
@@ -175,6 +171,8 @@ class API{
     post['rt'] = rt;
     post['rw'] = rw;
     post['kodepos'] = kodepos;
+    post['rencana_pernikahan'] = tglNikah;
+    post['status_pernikahan'] = statusNikah;
     var playerId = await LocalData.getPlayerId();
     var imei = await ImeiPlugin.getImei();
     if(playerId != null){
@@ -362,6 +360,16 @@ class API{
     header['Content-Type'] = 'application/json';
     post['id'] = id;
     basePost('/home', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static quizCategory(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/kuiscategory', post, header, true, (result, error){
       callback(result, error);
     });
   }
@@ -585,6 +593,71 @@ class API{
     });
   }
 
+  static deklarasiHamil(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/hamil/updatestatus', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static listJanin(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/hamil/listjanin', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static resultQuizHamil(String id, String janinID, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id; //113;
+    post['janin_id'] = janinID; //3;
+    basePost('/hamil/resultkuis', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static detailQuizHamil(String id, String janinID, String quizHamilId,  void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    post['janin_id'] = janinID;
+    post['kuis_hamil_id'] = quizHamilId;
+    basePost('/hamil/resultkuisdetail', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static resultDetailQuizHamil(String id, String janinId, String quizId, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    post['janin_id'] = janinId;
+    post['kuis_hamil_id'] = quizId;
+    basePost('/hamil/resultkuisdetail', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static updateStatusHamil(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/hamil/updatestatus', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
   static checkNik(String nik, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
@@ -650,7 +723,7 @@ class API{
       // ignore: missing_return
       final response = await http.get(Uri.parse(BASE_URL + module), headers: headers ).timeout(Duration(seconds: 30), onTimeout: (){
         // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
+        mapError.putIfAbsent('message', () => 'Koneksi timout, Gagal memuat data.');
         callback(null, mapError);
       });
       int responseCode = response.statusCode;
@@ -666,11 +739,11 @@ class API{
           mapJson['code'] == 403 || mapJson['code'] == 422) {
         callback(null, mapJson);
       } else {
-        mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+        mapError.putIfAbsent('message', () => 'Gagal memuat data.');
         callback(null, mapError);
       }
     } catch (e) {
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     }
   }
@@ -691,7 +764,13 @@ class API{
     });
   }
 
-
+  static getStatusHamil(int id, void callback(Map, Exception)) {
+    var header = new Map<String, String>();
+    header['Content-Type'] = 'application/json';
+    baseGet('/hamil/checkstatus/${id}', header, (result, error) {
+      callback(result, error);
+    });
+  }
 
   static Future<bool> isConnected() async {
     try {
@@ -785,14 +864,14 @@ class API{
           callback(null, mapJson);
         }
       }else{
-        mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+        mapError.putIfAbsent('message', () => 'Gagal memuat data.');
         callback(null, mapError);
       }
     } on SocketException catch(e){
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     } catch (e){
-      mapError.putIfAbsent('message', () => 'Koneksi sedang tidak stabil');
+      mapError.putIfAbsent('message', () => 'Gagal memuat data.');
       callback(null, mapError);
     }
   }

@@ -78,7 +78,13 @@ class _DetailBantuanState extends State<DetailBantuan> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                    Html(data: data.content != null ? data.content : '')
+                      Html(
+                        data: data.content != null ? data.content : '',
+                        onLinkTap: (url, _, __, ___) {
+                          print("Opening $url...");
+                          Navigator.pushNamed(context, '/web_screen', arguments: {'title':'Data Referensi', 'url':url});
+                        },
+                      )
                     ],
                   ),
                 );

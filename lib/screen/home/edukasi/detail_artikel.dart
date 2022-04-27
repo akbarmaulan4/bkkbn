@@ -66,6 +66,7 @@ class _DetailArtikelState extends State<DetailArtikel> {
                             child: Image.asset(ImageConstant.placeHolderElsimil),
                           ),
                           imageUrl: detail.image,
+                          errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
                           fit: BoxFit.cover,
                         ),
                       ),

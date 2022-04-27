@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kua/api/api.dart';
 import 'package:kua/model/home/additional.dart';
 import 'package:kua/model/home/data_home.dart';
+import 'package:kua/model/user/user.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:package_info/package_info.dart';
@@ -18,6 +19,8 @@ class HomeBloc{
   final _version = PublishSubject<String>();
   final _haveNotif = PublishSubject<bool>();
   final _haveChat = PublishSubject<bool>();
+  // final _userName = PublishSubject<String>();
+  final _dataUser = PublishSubject<UserModel>();
 
   Stream<int> get viewScreen => _viewScreen.stream;
   Stream<bool> get verifyOK => _verifyOK.stream;
@@ -27,6 +30,8 @@ class HomeBloc{
   Stream<String> get version => _version.stream;
   Stream<bool> get haveNotif => _haveNotif.stream;
   Stream<bool> get haveChat => _haveChat.stream;
+  // Stream<String> get userName => _userName.stream;
+  Stream<UserModel> get dataUser => _dataUser.stream;
 
   checkChat() async {
     var haveChat = await LocalData.getChat();
@@ -64,6 +69,7 @@ class HomeBloc{
   bool get verifikasi => _verifikasi;
   checkVerify() async{
     var user = await LocalData.getUser();
+    _dataUser.sink.add(user);
     API.checkVerifyAccount(user.id.toString(), (result, error) {
       if(result != null){
         if(result['code'] == 200 && !result['error']){
@@ -80,6 +86,10 @@ class HomeBloc{
         // _messageError.sink.add(error['message']);
       }
     });
+  }
+
+  closeVerify(){
+    _verifyOK.sink.add(false);
   }
 
   home(BuildContext context) async{
@@ -100,8 +110,30 @@ class HomeBloc{
       }else{
         _messageError.sink.add(error['message']);
       }
+      // quisCategory();
       inboxNotif();
       checkNotif();
+    });
+  }
+
+  quisCategory() async{
+    // Utils.progressDialog(context);
+    var user = await LocalData.getUser();
+    API.quizCategory(user.id.toString(), (result, error) {
+      // Navigator.of(context).pop();
+      if(result != null){
+        // if(result['code'] == 200 && !result['error']){
+        //   var json = result as Map<String, dynamic>;
+        //   var data = DataHome.fromJson(json['data']);
+        //   if(data != null){
+        //     _dataHome.sink.add(data);
+        //   }
+        // }else{
+        //   _messageError.sink.add(result['message']);
+        // }
+      }else{
+        _messageError.sink.add(error['message']);
+      }
     });
   }
 

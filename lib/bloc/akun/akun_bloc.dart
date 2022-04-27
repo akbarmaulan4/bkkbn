@@ -357,10 +357,11 @@ class AkunBloc{
             edtRePass.text = '';
             _messageError.sink.add('Kata sandi berhasil dirubah!');
           }else{
-            _messageError.sink.add(result['message']);
+            Utils.alertError(context, error['message'], () { });
           }
         }else{
-          _messageError.sink.add(result['message']);
+          Utils.alertError(context, error['message'], () { });
+          // _messageError.sink.add(result['message']);/
         }
       });
     }

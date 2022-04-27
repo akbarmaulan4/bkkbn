@@ -111,54 +111,52 @@ class Utils{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))
             ),
-            content: Container(
-              height: kecil ? size.height * 0.15:size.height * 0.12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
-                  // Text('Apakah anda yakin ingin keluar aplikasi?', style: TextStyle(color: Utils.colorFromHex(ColorCode.bluePrimary), fontSize: kecil ? 13:14),),
-                  SizedBox(height: 8),
-                  Divider(),
-                  SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+            content: Wrap(
+              children: [
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: (){
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          width: kecil ? size.width * 0.23:size.width * 0.20,
-                          decoration: ConstantStyle.box_fill_grey,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                          child: Center(
-                            child: TextAvenir('Tidak', color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
-                            // child: Text('Tidak', style: TextStyle(color: Utils.colorFromHex(ColorCode.bluePrimary), fontSize: kecil ? 13:14),),
+                      TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                      SizedBox(height: 8),
+                      Divider(),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              // width: kecil ? size.width * 0.25:size.width * 0.23,
+                              decoration: ConstantStyle.box_fill_grey,
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                              child: Center(
+                                child: TextAvenir('Tidak', color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      InkWell(
-                        onTap: (){
-                          Navigator.of(context).pop();
-                          ok();
-                        },
-                        child: Container(
-                          width: kecil ? size.width * 0.23:size.width * 0.20,
-                          decoration: ConstantStyle.box_fill_blue_nd,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 6),
-                          child: Center(
-                            child: TextAvenir('Ya', color: Colors.white, size: kecil ? 13:14,),
-                            // child: Text('Ya', style: TextStyle(color: Colors.white, fontSize: kecil ? 13:14),),
-                          ),
-                        ),
+                          SizedBox(width: 10),
+                          InkWell(
+                            onTap: (){
+                              Navigator.of(context).pop();
+                              ok();
+                            },
+                            child: Container(
+                              decoration: ConstantStyle.box_fill_blue_nd,
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 6),
+                              child: Center(
+                                child: TextAvenir('Ya', color: Colors.white, size: kecil ? 13:14,),
+                              ),
+                            ),
+                          )
+                        ],
                       )
                     ],
-                  )
-                  // TextAvenir('Hapus Semua Notifkasi ?'),
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           );
         }
@@ -559,5 +557,14 @@ class Utils{
     }
 
     return hrSize;
+  }
+
+  static is5Inc(BuildContext context){
+    var size = MediaQuery.of(context).size;
+    if(size.height < 650){
+      return true;
+    }else{
+      return false;
+    }
   }
 }

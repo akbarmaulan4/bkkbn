@@ -105,6 +105,9 @@ class _NewRegisterScreenState extends State<RegisterData> {
                 child: TextField(
                   controller: widget.bloc.edtNamaLengkap,
                   textAlignVertical: TextAlignVertical.center,
+                  inputFormatters: [
+                    WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),
+                    LengthLimitingTextInputFormatter(30)],
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Nama lengkap sesuai KTP',
@@ -133,7 +136,7 @@ class _NewRegisterScreenState extends State<RegisterData> {
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(12),
                           new BlacklistingTextInputFormatter(
-                              new RegExp('[\\-|\\,|\\.]')),
+                              new RegExp('[\\-|\\,|\\.|\\#|\\*]')),
                         ],
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -170,6 +173,9 @@ class _NewRegisterScreenState extends State<RegisterData> {
                   controller: widget.bloc.edtEmail,
                   textAlignVertical: TextAlignVertical.center,
                   keyboardType: TextInputType.emailAddress,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(50),
+                  ],
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Email aktif anda',

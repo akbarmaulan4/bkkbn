@@ -47,6 +47,10 @@ class _TambahPasanganState extends State<TambahPasangan> {
         centerTitle: true,
         elevation: 0,
         automaticallyImplyLeading: false,
+        leading: InkWell(
+            onTap: ()=>Navigator.of(context).pop(),
+            child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
+        ),
       ),
       body: MediaQuery(
         data: scaleFactor,

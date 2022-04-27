@@ -37,23 +37,27 @@ class _BiodataViewState extends State<BiodataView> {
     });
 
     bloc.messageError.listen((event) {
-      if(event != null){
-        Utils.alertError(context, event, () { });
+      if (event != null) {
+        Utils.alertError(context, event, () {});
       }
     });
 
     bloc.allowDataDiri.listen((event) {
-      if(event != null){
-        Utils.infoDialog(context, 'Informasi', event, () {
-          // Navigator.popAndPushNamed(context, '/login');
+      if (event != null) {
+        Utils.infoDialog(context, 'Informasi', 'Perbaharuan Data Berhasil',
+                () {
+              // Navigator.popAndPushNamed(context, '/login');
         });
       }
     });
-
   }
 
   _imgFromCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    final pickedFile = await picker.getImage(
+        source: ImageSource.camera,
+        imageQuality: 100,
+        maxWidth: 1024,
+        maxHeight: 768);
     // ImagePicker.pickImage()
     //     ?.then((file) => file.readAsBytes())
     //     ?.then((bytes) => FlutterImageCompress.compressWithList(bytes));
@@ -71,7 +75,11 @@ class _BiodataViewState extends State<BiodataView> {
   }
 
   _imgFromGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    final pickedFile = await picker.getImage(
+        source: ImageSource.gallery,
+        imageQuality: 100,
+        maxWidth: 1024,
+        maxHeight: 768);
     setState(() async {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
@@ -96,13 +104,17 @@ class _BiodataViewState extends State<BiodataView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: TextAvenir('Perbaharui Data', size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary),),
+        title: TextAvenir(
+          'Perbaharui Data',
+          size: 20,
+          color: Utils.colorFromHex(ColorCode.bluePrimary),
+        ),
         centerTitle: true,
         elevation: 0,
         leading: InkWell(
-            onTap: ()=>Navigator.of(context).pop(),
-            child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
-        ),
+            onTap: () => Navigator.of(context).pop(),
+            child: Icon(Icons.arrow_back_ios_rounded,
+                color: Utils.colorFromHex(ColorCode.bluePrimary))),
       ),
       body: MediaQuery(
         data: scaleFactor,
@@ -121,30 +133,24 @@ class _BiodataViewState extends State<BiodataView> {
                         child: Stack(
                           children: [
                             StreamBuilder(
-                                stream: bloc.imageKtp,
-                                builder: (context, snapshot) {
-                                  File img = bloc.imgFotoKtp;
-                                  if(snapshot.data != null){
-                                    img = snapshot.data;
-                                  }
-                                  return img != null ? Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
-                                    ),
-                                    child: ClipOval(
-                                      child: Image.file(
-                                        _image,
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ) : StreamBuilder(
+                              stream: bloc.imageKtp,
+                              builder: (context, snapshot) {
+                                File img = bloc.imgFotoKtp;
+                                if (snapshot.data != null) {
+                                  img = snapshot.data;
+                                }
+                                return img != null ? Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
+                                  ),
+                                  child: ClipOval(
+                                    child: Image.file(_image, width: 100, height: 100, fit: BoxFit.cover),
+                                  )) : StreamBuilder(
                                       stream: bloc.picBiodata,
                                       builder: (context, snapshot) {
                                         String urlImg = '';
-                                        if(snapshot.data != null){
+                                        if (snapshot.data != null) {
                                           urlImg = snapshot.data;
                                         }
                                         return Container(
@@ -156,26 +162,24 @@ class _BiodataViewState extends State<BiodataView> {
                                           ),
                                           child: ClipOval(
                                             child: CachedNetworkImage(
-                                              placeholder: (context, url) => Center(
-                                                child: Image.asset(ImageConstant.placeHolderElsimil),
-                                              ),
+                                              placeholder: (context, url) => Center(child: Image.asset(ImageConstant.placeHolderElsimil)),
                                               imageUrl: urlImg, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
                                               fit: BoxFit.cover,
+                                              errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
                                             ),
                                           ),
                                         );
-                                      }
-                                  );
-                                }
-                            ),
+                                      });
+                                }),
                             Positioned(
                                 bottom: 0,
                                 right: 5,
                                 child: InkWell(
-                                  onTap: ()=>showPicker(),
-                                  child: Icon(Icons.camera_alt_rounded, color: Colors.grey,))
-                            )
-
+                                    onTap: () => showPicker(),
+                                    child: Icon(
+                                      Icons.camera_alt_rounded,
+                                      color: Colors.grey,
+                                    )))
                           ],
                         ),
                       ),
@@ -191,13 +195,12 @@ class _BiodataViewState extends State<BiodataView> {
                             controller: bloc.edtNamaLengkap,
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Nama lengkap sesuai KTP',
-                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                              contentPadding: EdgeInsets.only(bottom:16)
-                            ),
-                          )
-                      ),
+                                border: InputBorder.none,
+                                hintText: 'Nama lengkap sesuai KTP',
+                                hintStyle:
+                                TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                contentPadding: EdgeInsets.only(bottom: 16)),
+                          )),
                       SizedBox(height: 15),
                       TextAvenir(
                         'No Telepon',
@@ -208,7 +211,11 @@ class _BiodataViewState extends State<BiodataView> {
                       BoxBorderDefault(
                           child: Row(
                             children: [
-                              Text('+62', style: TextStyle(fontSize: 16),textScaleFactor: 1.0,),
+                              Text(
+                                '+62',
+                                style: TextStyle(fontSize: 16),
+                                textScaleFactor: 1.0,
+                              ),
                               SizedBox(width: 10),
                               Expanded(
                                 child: TextField(
@@ -222,18 +229,17 @@ class _BiodataViewState extends State<BiodataView> {
                                   ],
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
-                                      contentPadding: EdgeInsets.only(bottom:15)
-                                  ),
-                                  onChanged: (val){
-                                    if(val[0] == '0'){
-                                      bloc.edtNoTlp.text = val.replaceFirst(new RegExp(r'^0+'), '');
+                                      contentPadding: EdgeInsets.only(bottom: 15)),
+                                  onChanged: (val) {
+                                    if (val[0] == '0') {
+                                      bloc.edtNoTlp.text =
+                                          val.replaceFirst(new RegExp(r'^0+'), '');
                                     }
                                   },
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                       SizedBox(height: 15),
                       TextAvenir(
                         'Email',
@@ -247,8 +253,7 @@ class _BiodataViewState extends State<BiodataView> {
                             textAlignVertical: TextAlignVertical.center,
                             keyboardType: TextInputType.emailAddress,
                             decoration: ConstantStyle.decorTextField,
-                          )
-                      ),
+                          )),
                     ],
                   ),
                 ),
@@ -277,10 +282,7 @@ class _BiodataViewState extends State<BiodataView> {
                             decoration: ConstantStyle.decorTextField,
                             style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                             enabled: false,
-                          )
-                      ),
-
-
+                          )),
                       SizedBox(height: 15),
                       Row(
                         children: [
@@ -292,7 +294,8 @@ class _BiodataViewState extends State<BiodataView> {
                                 TextAvenir(
                                   'Tempat Lahir',
                                   size: 14,
-                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
                                 ),
                                 SizedBox(height: 5),
                                 BoxBorderDefault(
@@ -300,10 +303,10 @@ class _BiodataViewState extends State<BiodataView> {
                                       controller: bloc.edtTmptLahir,
                                       textAlignVertical: TextAlignVertical.center,
                                       decoration: ConstantStyle.decorTextField,
-                                      style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      style: TextStyle(
+                                          color: Utils.colorFromHex('#CCCCCC')),
                                       enabled: false,
-                                    )
-                                ),
+                                    )),
                               ],
                             ),
                           ),
@@ -316,11 +319,12 @@ class _BiodataViewState extends State<BiodataView> {
                                 TextAvenir(
                                   'Tanggal Lahir',
                                   size: 14,
-                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
                                 ),
                                 SizedBox(height: 5),
                                 InkWell(
-                                  onTap: (){
+                                  onTap: () {
                                     bloc.openDatePicker(context);
                                   },
                                   child: BoxBorderDefault(
@@ -330,16 +334,16 @@ class _BiodataViewState extends State<BiodataView> {
                                         decoration: InputDecoration(
                                             border: InputBorder.none,
                                             enabled: false,
-                                            contentPadding: EdgeInsets.only(bottom:16)
-                                        ),
+                                            contentPadding:
+                                            EdgeInsets.only(bottom: 16)),
                                         enabled: false,
-                                        style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                      )
-                                  ),
+                                        style: TextStyle(
+                                            color: Utils.colorFromHex('#CCCCCC')),
+                                      )),
                                 )
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                       SizedBox(height: 15),
@@ -353,27 +357,31 @@ class _BiodataViewState extends State<BiodataView> {
                                 TextAvenir(
                                   'Jenis Kelamin',
                                   size: 14,
-                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
                                 ),
                                 SizedBox(height: 5),
                                 StreamBuilder(
-                                  stream: bloc.jenisKelamin,
-                                  builder: (context, snapshot) {
-                                    String data = bloc.strGender;
-                                    if(snapshot.data != null){
-                                      data = snapshot.data;
-                                    }
-                                    return BoxBorderDefault(
+                                    stream: bloc.jenisKelamin,
+                                    builder: (context, snapshot) {
+                                      String data = bloc.strGender;
+                                      if (snapshot.data != null) {
+                                        data = snapshot.data;
+                                      }
+                                      return BoxBorderDefault(
                                         child: TextField(
                                           controller: bloc.edtGender,
-                                          textAlignVertical: TextAlignVertical.center,
+                                          textAlignVertical:
+                                          TextAlignVertical.center,
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
                                               enabled: false,
-                                              contentPadding: EdgeInsets.only(bottom:16)
-                                          ),
+                                              contentPadding:
+                                              EdgeInsets.only(bottom: 16)),
                                           enabled: false,
-                                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                          style: TextStyle(
+                                              color: Utils.colorFromHex(
+                                                  '#CCCCCC')),
                                         ),
                                         // child: DropdownButtonHideUnderline(
                                         //     child: DropdownButton(
@@ -395,16 +403,40 @@ class _BiodataViewState extends State<BiodataView> {
                                         //       },
                                         //     )
                                         // )
-                                    );
-                                  }
-                                ),
+                                      );
+                                    }),
                               ],
                             ),
                           ),
                           SizedBox(width: 10),
+
                           Expanded(
-                            flex: 3,
-                            child: SizedBox(),
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextAvenir(
+                                  'Status Pernikahan',
+                                  size: 14,
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
+                                ),
+                                SizedBox(height: 5),
+                                BoxBorderDefault(
+                                    child: TextField(
+                                      controller: bloc.edtNikah,
+                                      textAlignVertical: TextAlignVertical.center,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          enabled: false,
+                                          contentPadding:
+                                          EdgeInsets.only(bottom: 16)),
+                                      enabled: false,
+                                      style: TextStyle(
+                                          color: Utils.colorFromHex('#CCCCCC')),
+                                    ))
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -422,8 +454,7 @@ class _BiodataViewState extends State<BiodataView> {
                             decoration: ConstantStyle.decorTextField,
                             enabled: false,
                             style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                          )
-                      ),
+                          )),
                       SizedBox(height: 15),
                       TextAvenir(
                         'Provinsi',
@@ -439,7 +470,8 @@ class _BiodataViewState extends State<BiodataView> {
                             textAlignVertical: TextAlignVertical.center,
                             decoration: ConstantStyle.decorTextField,
                             enabled: false,
-                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                            style:
+                            TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                           ),
                         ),
                       ),
@@ -454,7 +486,7 @@ class _BiodataViewState extends State<BiodataView> {
                           stream: bloc.downloadKab,
                           builder: (context, snapshot) {
                             var load = false;
-                            if(snapshot.data != null){
+                            if (snapshot.data != null) {
                               load = snapshot.data;
                             }
                             return BoxBorderDefault(
@@ -465,24 +497,25 @@ class _BiodataViewState extends State<BiodataView> {
                                       Expanded(
                                         child: TextField(
                                           controller: bloc.edtKotaKab,
-                                          textAlignVertical: TextAlignVertical.center,
+                                          textAlignVertical:
+                                          TextAlignVertical.center,
                                           decoration: ConstantStyle.decorTextField,
                                           enabled: false,
-                                          style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                          style: TextStyle(
+                                              color: Utils.colorFromHex('#CCCCCC')),
                                         ),
                                       ),
-                                      load ? Container(
+                                      load
+                                          ? Container(
                                           height: 20,
                                           width: 20,
-                                          child: CircularProgressIndicator()
-                                      ):SizedBox(),
+                                          child: CircularProgressIndicator())
+                                          : SizedBox(),
                                       SizedBox(width: load ? 10 : 0)
                                     ],
                                   ),
-                                )
-                            );
-                          }
-                      ),
+                                ));
+                          }),
                       SizedBox(height: 15),
                       Row(
                         children: [
@@ -494,14 +527,15 @@ class _BiodataViewState extends State<BiodataView> {
                                 TextAvenir(
                                   'Kecamatan',
                                   size: 14,
-                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
                                 ),
                                 SizedBox(height: 5),
                                 StreamBuilder(
                                     stream: bloc.downloadKec,
                                     builder: (context, snapshot) {
                                       var load = false;
-                                      if(snapshot.data != null){
+                                      if (snapshot.data != null) {
                                         load = snapshot.data;
                                       }
                                       return BoxBorderDefault(
@@ -512,24 +546,28 @@ class _BiodataViewState extends State<BiodataView> {
                                                 Expanded(
                                                   child: TextField(
                                                     controller: bloc.edtKecamatan,
-                                                    textAlignVertical: TextAlignVertical.center,
-                                                    decoration: ConstantStyle.decorTextField,
+                                                    textAlignVertical:
+                                                    TextAlignVertical.center,
+                                                    decoration: ConstantStyle
+                                                        .decorTextField,
                                                     enabled: false,
-                                                    style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                                    style: TextStyle(
+                                                        color: Utils.colorFromHex(
+                                                            '#CCCCCC')),
                                                   ),
                                                 ),
-                                                load ? Container(
+                                                load
+                                                    ? Container(
                                                     height: 20,
                                                     width: 20,
-                                                    child: CircularProgressIndicator()
-                                                ):SizedBox(),
+                                                    child:
+                                                    CircularProgressIndicator())
+                                                    : SizedBox(),
                                                 SizedBox(width: load ? 10 : 0)
                                               ],
                                             ),
-                                          )
-                                      );
-                                    }
-                                ),
+                                          ));
+                                    }),
                               ],
                             ),
                           ),
@@ -542,14 +580,15 @@ class _BiodataViewState extends State<BiodataView> {
                                 TextAvenir(
                                   'Kel/Desa',
                                   size: 14,
-                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
                                 ),
                                 SizedBox(height: 5),
                                 StreamBuilder(
                                     stream: bloc.downloadKel,
                                     builder: (context, snapshot) {
                                       var load = false;
-                                      if(snapshot.data != null){
+                                      if (snapshot.data != null) {
                                         load = snapshot.data;
                                       }
                                       return BoxBorderDefault(
@@ -560,24 +599,28 @@ class _BiodataViewState extends State<BiodataView> {
                                                 Expanded(
                                                   child: TextField(
                                                     controller: bloc.edtDesa,
-                                                    textAlignVertical: TextAlignVertical.center,
-                                                    decoration: ConstantStyle.decorTextField,
+                                                    textAlignVertical:
+                                                    TextAlignVertical.center,
+                                                    decoration: ConstantStyle
+                                                        .decorTextField,
                                                     enabled: false,
-                                                    style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                                    style: TextStyle(
+                                                        color: Utils.colorFromHex(
+                                                            '#CCCCCC')),
                                                   ),
                                                 ),
-                                                load ? Container(
+                                                load
+                                                    ? Container(
                                                     height: 20,
                                                     width: 20,
-                                                    child: CircularProgressIndicator()
-                                                ):SizedBox(),
+                                                    child:
+                                                    CircularProgressIndicator())
+                                                    : SizedBox(),
                                                 SizedBox(width: load ? 10 : 0)
                                               ],
                                             ),
-                                          )
-                                      );
-                                    }
-                                ),
+                                          ));
+                                    }),
                               ],
                             ),
                           )
@@ -593,29 +636,34 @@ class _BiodataViewState extends State<BiodataView> {
                                 Expanded(
                                   flex: 2,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: [
                                       TextAvenir(
                                         'RT',
                                         size: 14,
-                                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                        color: Utils.colorFromHex(
+                                            ColorCode.bluePrimary),
                                       ),
                                       SizedBox(height: 5),
                                       BoxBorderDefault(
                                           child: TextField(
                                             controller: bloc.edtRT,
-                                            textAlignVertical: TextAlignVertical.center,
+                                            textAlignVertical:
+                                            TextAlignVertical.center,
                                             keyboardType: TextInputType.number,
-                                            decoration: ConstantStyle.decorTextField,
+                                            decoration:
+                                            ConstantStyle.decorTextField,
                                             inputFormatters: [
                                               LengthLimitingTextInputFormatter(3),
                                               new BlacklistingTextInputFormatter(
                                                   new RegExp('[\\-|\\,|\\.]')),
                                             ],
-                                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                            style: TextStyle(
+                                                color:
+                                                Utils.colorFromHex('#CCCCCC')),
                                             enabled: false,
-                                          )
-                                      ),
+                                          )),
                                     ],
                                   ),
                                 ),
@@ -623,29 +671,34 @@ class _BiodataViewState extends State<BiodataView> {
                                 Expanded(
                                   flex: 2,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                     children: [
                                       TextAvenir(
                                         'RW',
                                         size: 14,
-                                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                        color: Utils.colorFromHex(
+                                            ColorCode.bluePrimary),
                                       ),
                                       SizedBox(height: 5),
                                       BoxBorderDefault(
                                           child: TextField(
                                             controller: bloc.edtRW,
-                                            textAlignVertical: TextAlignVertical.center,
+                                            textAlignVertical:
+                                            TextAlignVertical.center,
                                             keyboardType: TextInputType.number,
-                                            decoration: ConstantStyle.decorTextField,
+                                            decoration:
+                                            ConstantStyle.decorTextField,
                                             inputFormatters: [
                                               LengthLimitingTextInputFormatter(3),
                                               new BlacklistingTextInputFormatter(
                                                   new RegExp('[\\-|\\,|\\.]')),
                                             ],
-                                            style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                            style: TextStyle(
+                                                color:
+                                                Utils.colorFromHex('#CCCCCC')),
                                             enabled: false,
-                                          )
-                                      ),
+                                          )),
                                     ],
                                   ),
                                 )
@@ -661,7 +714,8 @@ class _BiodataViewState extends State<BiodataView> {
                                 TextAvenir(
                                   'Kode POS',
                                   size: 14,
-                                  color: Utils.colorFromHex(ColorCode.bluePrimary),
+                                  color:
+                                  Utils.colorFromHex(ColorCode.bluePrimary),
                                 ),
                                 SizedBox(height: 5),
                                 BoxBorderDefault(
@@ -675,15 +729,39 @@ class _BiodataViewState extends State<BiodataView> {
                                         new BlacklistingTextInputFormatter(
                                             new RegExp('[\\-|\\,|\\.]')),
                                       ],
-                                      style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                      style: TextStyle(
+                                          color: Utils.colorFromHex('#CCCCCC')),
                                       enabled: false,
-                                    )
-                                ),
+                                    )),
                               ],
                             ),
                           )
                         ],
-                      )
+                      ),
+                      // SizedBox(height: 15),
+                      // TextAvenir(
+                      //   'Rencana Tanggal Pernikahan',
+                      //   size: 14,
+                      //   color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      // ),
+                      // SizedBox(height: 5),
+                      // InkWell(
+                      //   onTap: () {
+                      //     bloc.openDatePickerMarriage(context);
+                      //   },
+                      //   child: BoxBorderDefault(
+                      //       child: TextField(
+                      //     controller: bloc.edtTglNikah,
+                      //     textAlignVertical: TextAlignVertical.center,
+                      //     decoration: InputDecoration(
+                      //         border: InputBorder.none,
+                      //         enabled: false,
+                      //         contentPadding: EdgeInsets.only(bottom: 16)),
+                      //     enabled: false,
+                      //     style:
+                      //         TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                      //   )),
+                      // )
                     ],
                   ),
                 ),
@@ -705,25 +783,27 @@ class _BiodataViewState extends State<BiodataView> {
           bloc.validasiUpdate(context, user.id.toString());
         },
         child: Container(
-          alignment: Alignment.bottomCenter,
-          height: 60,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Utils.colorFromHex(ColorCode.blueSecondary)
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-          margin: EdgeInsets.symmetric(horizontal: 30),
-          child: Center(
-            child: TextAvenir('Simpan', color: Colors.white, size: 18,),
-          )
-        ),
+            alignment: Alignment.bottomCenter,
+            height: 60,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Utils.colorFromHex(ColorCode.blueSecondary)),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            child: Center(
+              child: TextAvenir(
+                'Simpan',
+                color: Colors.white,
+                size: 18,
+              ),
+            )),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  getDataFinder(String type){
-    switch(type){
+  getDataFinder(String type) {
+    switch (type) {
       case 'provinsi':
         return bloc.dataProvinsi;
       case 'kota':
@@ -735,8 +815,8 @@ class _BiodataViewState extends State<BiodataView> {
     }
   }
 
-  finding(String type, String param){
-    switch(type){
+  finding(String type, String param) {
+    switch (type) {
       case 'provinsi':
         bloc.findProvinsi(param);
         break;
@@ -752,8 +832,8 @@ class _BiodataViewState extends State<BiodataView> {
     }
   }
 
-  setFindingValue(String type, dynamic data){
-    switch(type){
+  setFindingValue(String type, dynamic data) {
+    switch (type) {
       case 'provinsi':
         bloc.changeProvinsi(data);
         break;
@@ -789,8 +869,7 @@ class _BiodataViewState extends State<BiodataView> {
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(color: Colors.grey[300])
-                        ),
+                            border: Border.all(color: Colors.grey[300])),
                         padding: EdgeInsets.only(right: 25),
                         margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                         height: 45,
@@ -803,9 +882,8 @@ class _BiodataViewState extends State<BiodataView> {
                               hintText: 'Cari ${type}...',
                               fillColor: Colors.grey,
                               prefixIcon: Icon(Icons.search, size: 20),
-                              contentPadding: EdgeInsets.only(bottom: 7)
-                          ),
-                          onChanged: (val){
+                              contentPadding: EdgeInsets.only(bottom: 7)),
+                          onChanged: (val) {
                             finding(type, val);
                           },
                         ),
@@ -814,7 +892,7 @@ class _BiodataViewState extends State<BiodataView> {
                           stream: dataSink,
                           builder: (context, snapshot) {
                             List<dynamic> data = [];
-                            if(snapshot.data != null){
+                            if (snapshot.data != null) {
                               data = snapshot.data;
                             }
                             return Expanded(
@@ -822,27 +900,30 @@ class _BiodataViewState extends State<BiodataView> {
                                   itemCount: data.length,
                                   itemBuilder: (context, index) {
                                     return InkWell(
-                                      onTap: (){
+                                      onTap: () {
                                         setFindingValue(type, data[index]);
                                         Navigator.of(context).pop();
                                       },
                                       child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 8),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                             children: [
                                               Text(data[index].nama),
                                               SizedBox(height: 5),
-                                              Container(height: 0.8, width: double.infinity, color: Colors.grey[200],)
+                                              Container(
+                                                height: 0.8,
+                                                width: double.infinity,
+                                                color: Colors.grey[200],
+                                              )
                                             ],
-                                          )
-                                      ),
+                                          )),
                                     );
-                                  }
-                              ),
+                                  }),
                             );
-                          }
-                      ),
+                          }),
                     ],
                   ),
                 );
@@ -850,7 +931,7 @@ class _BiodataViewState extends State<BiodataView> {
         });
   }
 
-  showPicker(){
+  showPicker() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -889,7 +970,6 @@ class _BiodataViewState extends State<BiodataView> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

@@ -99,6 +99,7 @@ class _AkunScreenState extends State<AkunView> {
                               ),
                               imageUrl: user != null ? user['pic']:'', //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
                               fit: BoxFit.cover,
+                              errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
                             ),
                           ),
                         ),
@@ -172,7 +173,7 @@ class _AkunScreenState extends State<AkunView> {
                     },
                     child: itemList('Keluar'),
                   ),
-                  SizedBox(height: is5Inc() ? size.height * 0.35:15,)
+                  SizedBox(height: is5Inc() ? size.height * 0.45:15,)
                 ],
               ),
             ),

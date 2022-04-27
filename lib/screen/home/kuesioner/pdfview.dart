@@ -73,6 +73,7 @@ class _PdfviewState extends State<Pdfview> {
   Future<File> getFileFromUrl(BuildContext context, String url, {name}) async {
     try {
       // Utils.progressDialog(context);
+      print('download file : $url');
       var data = await http.get(Uri.parse(url));
       var bytes = data.bodyBytes;
       var dir = await getApplicationDocumentsDirectory();

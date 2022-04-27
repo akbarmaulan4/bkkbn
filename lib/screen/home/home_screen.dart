@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:kua/bloc/home/home_bloc.dart';
 import 'package:kua/screen/home/akun/akun_view.dart';
 import 'package:kua/screen/home/beranda/beranda_view.dart';
+import 'package:kua/screen/home/beranda/new_beranda_view.dart';
 import 'package:kua/screen/home/edukasi/edukasi_view.dart';
 import 'package:kua/screen/home/kuesioner/list_quiz_view.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
+import 'package:kua/util/image_constant.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+import 'beranda/chat/landing_chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   int loadFirstMenu;
@@ -133,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
       ),
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 13),
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Row(
         children: [
@@ -143,8 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(0),
                 child: Column(
                   children: [
-                    Icon(CupertinoIcons.home, color: position == 0 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Beranda', style: TextStyle(fontSize: 13, color: position == 0 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    Image.asset(position == 0 ? ImageConstant.home_active:ImageConstant.home_inactive, height: 24, width: 24,),
+                    Text('Beranda', style: TextStyle(fontSize: 13, color: position == 0 ? Colors.white : Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -155,8 +159,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(1),
                 child: Column(
                   children: [
-                    Icon(Icons.lightbulb_outline_rounded, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Kuesioner', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    Image.asset(position == 1 ? ImageConstant.edukasi_active:ImageConstant.edukasi_inactive, height: 24, width: 24,),
+                    Text('Edukasi', style: TextStyle(fontSize: 13, color: position == 1 ? Colors.white:Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
+                    // Icon(Icons.lightbulb_outline_rounded, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
+                    // Text('Kuesioner', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -167,11 +173,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(2),
                 child: Column(
                   children: [
-                    Icon(CupertinoIcons.book, color: position == 2 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Edukasi', style: TextStyle(fontSize: 13, color: position == 2 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    Image.asset(position == 2 ? ImageConstant.akun_active:ImageConstant.akun_inactive, height: 24, width: 24,),
+                    Text('Akun', style: TextStyle(fontSize: 13, color: position == 2 ? Colors.white:Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
+          ),
+          Container(
+            width: 1,
+            margin: EdgeInsets.only(bottom: 5),
+            color: Utils.colorFromHex(ColorCode.lightBlueDark),
           ),
           Expanded(
               flex: 4,
@@ -179,8 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(3),
                 child: Column(
                   children: [
-                    Icon(Icons.person_pin, color: position == 3 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Akun', style: TextStyle(fontSize: 13, color: position == 3 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    // Icon(Icons.person_pin, color: position == 3 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
+                    Image.asset(position == 3 ? ImageConstant.chat_active:ImageConstant.chat_inactive, height: 24, width: 24,),
+                    Text('Chat', style: TextStyle(fontSize: 13, color: position == 3 ? Colors.white:Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -195,13 +207,16 @@ class _HomeScreenState extends State<HomeScreen> {
   loadView(int val){
     switch(val){
       case 0:
-        return BerandaVIew();
+        return NewBerandaView();
+        // return BerandaVIew();
       case 1:
-        return ListQuizView();
-      case 2:
         return EdukasiView();
-      case 3:
+        // return ListQuizView();
+      case 2:
         return AkunView();
+        // return EdukasiView();
+      case 3:
+        return LandingScreen(true);
       default:
         return BerandaVIew();
     }

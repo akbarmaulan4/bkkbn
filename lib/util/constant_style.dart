@@ -83,6 +83,24 @@ class ConstantStyle {
     );
   }
 
+  static boxButtonOnly({
+    double topLeft = 0.0,
+    double topRight = 0.0,
+    double bottomLeft = 0.0,
+    double bottomRight= 0.0,
+    Color color,
+  }){
+    return BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(topLeft),
+          topRight: Radius.circular(topRight),
+          bottomLeft: Radius.circular(bottomLeft),
+          bottomRight: Radius.circular(bottomRight),
+        ),
+        color: color
+    );
+  }
+
   static boxButtonBorder({
     double radius,
     Color color,
@@ -93,6 +111,22 @@ class ConstantStyle {
       borderRadius: BorderRadius.all(Radius.circular(radius)),
       color: color,
       border: Border.all(color: colorBorder, width: widthBorder)
+    );
+  }
+
+  static boxButtonBorderOnly({
+    // double radius,
+    Color color,
+    Color colorBorder,
+    double widthBorder
+  }){
+    return BoxDecoration(
+        // borderRadius: BorderRadius.all(Radius.circular(radius)),
+        color: color,
+        border: Border(
+          left: BorderSide(width: widthBorder, color: colorBorder),
+          // bottom: BorderSide(width: widthBorder, color: colorBorder),
+        ),
     );
   }
 

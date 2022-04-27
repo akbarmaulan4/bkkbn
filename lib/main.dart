@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:kua/screen/auth/forgotpassword/forgot_password_screen.dart';
 import 'package:kua/screen/auth/forgotpassword/otp_password_screen.dart';
 import 'package:kua/screen/auth/login/login_screen.dart';
 import 'package:kua/screen/auth/register/register_screen.dart';
 import 'package:kua/screen/gateway/gateway_screen.dart';
+import 'package:kua/screen/hamil/detail_riwayat_janin_screen.dart';
+import 'package:kua/screen/hamil/hamil_entrance_screen.dart';
+import 'package:kua/screen/hamil/janin_entrance_screen.dart';
+import 'package:kua/screen/hamil/riwayat_janin_screen.dart';
 import 'package:kua/screen/home/akun/bantuan/detail_bantuan.dart';
 import 'package:kua/screen/home/akun/bantuan/list_bantuan.dart';
+import 'package:kua/screen/home/akun/bantuan/web_screen.dart';
 import 'package:kua/screen/home/akun/biodata/biodata_screen.dart';
 import 'package:kua/screen/home/akun/biodata/biodata_spouse.dart';
 import 'package:kua/screen/home/akun/biodata/tambah_pasangan.dart';
@@ -22,16 +28,35 @@ import 'package:kua/screen/home/home_screen.dart';
 import 'package:kua/screen/home/kuesioner/edit_quiz.dart';
 import 'package:kua/screen/home/kuesioner/generate_quiz.dart';
 import 'package:kua/screen/home/kuesioner/landing_quiz.dart';
+import 'package:kua/screen/home/kuesioner/list_quiz_view.dart';
 import 'package:kua/screen/home/kuesioner/pdfview.dart';
 import 'package:kua/screen/home/kuesioner/result_quiz.dart';
 import 'package:kua/screen/splash/splash_screen.dart';
 
 import 'screen/home/beranda/notif/list_notif.dart';
 
-void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  runApp(MyApp());
-}
+// void main() {
+//   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+//   // FlavorConfig(
+//   //   name: "Elsimil-DEV",
+//   //   color: Colors.red,
+//   //   location: BannerLocation.bottomStart,
+//   //   variables: {
+//   //     // "counter": 5,
+//   //     "baseUrl": 'http://elsimil-test.axara.co.id/api/v1',
+//   //   },
+//   // );
+//   // FlavorConfig(
+//   //   name: "Elsimil",
+//   //   color: Colors.red,
+//   //   location: BannerLocation.bottomStart,
+//   //   variables: {
+//   //     // "counter": 5,
+//   //     "baseUrl": 'https://elsimil.bkkbn.go.id/api/v1',
+//   //   },
+//   // );
+//   runApp(MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -157,7 +182,7 @@ class MyApp extends StatelessWidget {
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
-                  return LandingScreen();
+                  return LandingScreen(arguments['main']);
                 },
                 settings: RouteSettings());
           case '/chat_screen':
@@ -245,6 +270,16 @@ class MyApp extends StatelessWidget {
                   return DetailBantuan(data: arguments['data']);
                 },
                 settings: RouteSettings());
+          case '/web_screen':
+            return MaterialPageRoute(
+                builder: (context) {
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return WebScreen(title: arguments['title'],url: arguments['url'],);
+                },
+                settings: RouteSettings());
           case '/riwayat':
             return MaterialPageRoute(
                 builder: (context) {
@@ -295,9 +330,53 @@ class MyApp extends StatelessWidget {
                   return UbahPassword();
                 },
                 settings: RouteSettings());
+          case '/hamil_screen':
+            return MaterialPageRoute(
+                builder: (context){
+                  return HamilEntranceScreen();
+                },
+                settings: RouteSettings());
+          case '/janin_screen':
+            return MaterialPageRoute(
+                builder: (context){
+                  return JaninEntranceScreen();
+                },
+                settings: RouteSettings());
+          case '/riwayat_janin_screen':
+            return MaterialPageRoute(
+                builder: (context){
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return RiwayatJaninScreen(idJanin: arguments['idJanin']);
+                },
+                settings: RouteSettings());
+          case '/detail_riwayat_janin_screen':
+            return MaterialPageRoute(
+                builder: (context){
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return DetailRiwayatJaninScreen(idJanin: arguments['idJanin'], quizHamilId: arguments['quizId'],);
+                },
+                settings: RouteSettings());
+          case '/list_quiz':
+            return MaterialPageRoute(
+                builder: (context){
+                  return ListQuizView();
+                },
+                settings: RouteSettings());
           default: return null;
         }
       },
     );
   }
 }
+
+class EnvironmentConfig {
+  static Environment environment;
+}
+
+enum Environment { dev, prod }

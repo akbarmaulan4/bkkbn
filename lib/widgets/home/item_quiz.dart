@@ -85,11 +85,11 @@ class _ItemQuizState extends State<ItemQuiz> {
     final size = MediaQuery.of(context).size;
     return InkWell(
       onTap: (){
-        // if(data.result_id < 1){
+        if(data.result_id < 1){
           Navigator.pushNamed(context, '/landing_quiz', arguments: {'id': data.kuis_id, 'result_id': data.result_id});
-        // }else{
-        //   Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id':data.result_id});
-        // }
+        }else{
+          Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id':data.result_id});
+        }
       },
       child: Container(
         padding: EdgeInsets.only(left: 20),

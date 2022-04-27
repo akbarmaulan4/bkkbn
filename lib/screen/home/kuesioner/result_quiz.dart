@@ -133,17 +133,11 @@ class _ResultQuizState extends State<ResultQuiz>{
                                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                                   child: Row(
                                     children: [
-                                      // TextAvenir(widget.data.header.rating, size: 50, color: Colors.white,),
-                                      // SizedBox(width: 10),
-                                      // Container(width: 0.5,color: Colors.grey, height: 30,),
-                                      // SizedBox(width: 10),
                                       Expanded(child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.baseline,
                                         textBaseline: TextBaseline.ideographic,
                                         children: [
-                                          // SizedBox(height: 5),
                                           TextAvenir(widget.data.header.label, size: 16, color: Colors.white,),
-                                          // SizedBox(height: 5),
                                           TextAvenir('${widget.data.header.member_kuis_nilai}/${widget.data.header.kuis_max_nilai}', size: 14, color: Colors.white,),
                                         ],
                                       ))
@@ -151,10 +145,10 @@ class _ResultQuizState extends State<ResultQuiz>{
                                   ),
                                 ),
                                 Positioned(
-                                    right: 0,
-                                    child: Padding(
-                                        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                                        child: Image.asset(ImageConstant.logoElsimilPutih, height: is5Inc() ? 18:20,)))
+                                  right: 0,
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                                      child: Image.asset(ImageConstant.logoElsimilPutih, height: is5Inc() ? 18:20,)))
                               ],
                             ),
                             SizedBox(height: 10),
@@ -178,7 +172,7 @@ class _ResultQuizState extends State<ResultQuiz>{
                           child: Container(
                             width: 200,
                             decoration: BoxDecoration(
-                              color: Utils.colorFromHex(ColorCode.greyElsimil),
+                              color: widget.data.header.url != '' ? Utils.colorFromHex(ColorCode.bluePrimary):Utils.colorFromHex(ColorCode.greyElsimil),
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
                             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),

@@ -28,6 +28,7 @@ class QuizBloc {
   final _resultSubmit = PublishSubject<ResultSubmit>();
   final _infoMaxLenght = PublishSubject<bool>();
   final _isSearch = PublishSubject<bool>();
+  final _isTypingSearch = PublishSubject<bool>();
 
   Stream<String> get messageError => _messageError.stream;
   Stream<List<DataKuesioner>> get dataListKuesioner => _dataListKuesioner.stream;
@@ -38,6 +39,7 @@ class QuizBloc {
   Stream<ResultSubmit> get resultSubmit => _resultSubmit.stream;
   Stream<bool> get infoMaxLenght => _infoMaxLenght.stream;
   Stream<bool> get isSearch => _isSearch.stream;
+  Stream<bool> get isTypingSearch => _isTypingSearch.stream;
 
   TextEditingController edtFind = TextEditingController();
 
@@ -82,6 +84,9 @@ class QuizBloc {
     }
   }
 
+  typingSearch(bool val){
+    _isTypingSearch.sink.add(val);
+  }
   findQuiz(String title){
     if(title.length < 1){
       _isSearch.sink.add(false);
@@ -93,6 +98,7 @@ class QuizBloc {
         _dataListKuesioner.sink.add(dataQuery.toList());
       }
     }
+    typingSearch(false);
   }
 
   IntroQuiz _dataIntro;
@@ -220,10 +226,13 @@ class QuizBloc {
           var data = ResultSubmit.fromJson(json['data']);
           _resultSubmit.sink.add(data);
         }else{
-          _messageError.sink.add(result['message']);
+          Utils.alertError(context, error['message'], () { });
+          // _messageError.sink.add(result['message']);
         }
       }else{
-        _messageError.sink.add(error['message']);
+
+        Utils.alertError(context, error['message'], () { });
+        // _messageError.sink.add(error['message']);
       }
     });
   }

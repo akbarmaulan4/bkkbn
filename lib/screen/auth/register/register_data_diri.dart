@@ -81,6 +81,8 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
     }
   }
 
+  List<String> dataNikah = ['Sudah Menikah', 'Belum Menikah'];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -109,6 +111,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                           child: TextField(
                             controller: widget.bloc.edtTmptLahir,
                             textAlignVertical: TextAlignVertical.center,
+                            inputFormatters: [
+                              WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),
+                            ],
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Tempat Lahir',
@@ -211,7 +216,49 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                 SizedBox(width: 10),
                 Expanded(
                   flex: 2,
-                  child: SizedBox(),
+                  child: Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir(
+                          'Status Pernikahan',
+                          size: 14,
+                          color: Utils.colorFromHex(ColorCode.bluePrimary),
+                        ),
+                        SizedBox(height: 5),
+                        StreamBuilder(
+                            stream: widget.bloc.dataStatusNikah,
+                            builder: (context, snapshot) {
+                              String data = widget.bloc.strStatusNikah;
+                              if (snapshot.data != null) {
+                                data = snapshot.data;
+                              }
+                              return BoxBorderDefault(
+                                  child: DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                        hint: TextAvenir(
+                                          'Status Pernikahan',
+                                          size: 12,
+                                        ),
+                                        value: data,
+                                        items: dataNikah.map((value) {
+                                          return DropdownMenuItem(
+                                            child: Container(
+                                                margin:
+                                                EdgeInsets.symmetric(horizontal: 10),
+                                                child: Text(value)),
+                                            value: value,
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          widget.bloc.statusNikah(value);
+                                        },
+                                      )));
+                            }),
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
@@ -226,6 +273,9 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                 child: TextField(
                   controller: widget.bloc.edtAlamatKtp,
                   textAlignVertical: TextAlignVertical.center,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(150)
+                  ],
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Alamat Sesuai Domisili',
@@ -551,8 +601,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                   ),
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(3),
-                                    new BlacklistingTextInputFormatter(
-                                        new RegExp('[\\-|\\,|\\.]')),
+                                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
                                   ],
                                 )
                             ),
@@ -584,8 +633,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                   ),
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(3),
-                                    new BlacklistingTextInputFormatter(
-                                        new RegExp('[\\-|\\,|\\.]')),
+                                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
                                   ],
                                 )
                             ),
@@ -620,8 +668,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                             ),
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(5),
-                              new BlacklistingTextInputFormatter(
-                                  new RegExp('[\\-|\\,|\\.]')),
+                              WhitelistingTextInputFormatter(RegExp("[0-9]")),
                             ],
                           )
                       ),

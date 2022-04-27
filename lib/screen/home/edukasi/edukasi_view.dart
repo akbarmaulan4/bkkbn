@@ -149,6 +149,7 @@ class _EdukasiViewState extends State<EdukasiView> {
                           child: Image.asset(ImageConstant.placeHolderElsimil),
                         ),
                         imageUrl: item != null ? item.image:'',
+                        errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
                         fit: BoxFit.cover,
                       ),
                     ),

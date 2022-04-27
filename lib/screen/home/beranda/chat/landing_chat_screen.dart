@@ -8,6 +8,8 @@ import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class LandingScreen extends StatefulWidget{
+  bool main;
+  LandingScreen(this.main);
   @override
   _LandingScreenState createState() => _LandingScreenState();
 }
@@ -32,7 +34,7 @@ class _LandingScreenState extends State<LandingScreen> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-          leading: InkWell(
+          leading: widget.main ? null:InkWell(
               onTap: ()=>Navigator.of(context).pop(),
               child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary))
           ),

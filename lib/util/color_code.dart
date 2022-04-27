@@ -15,6 +15,8 @@ class ColorCode {
   static String yellow_light = '#fcefac';
   static String softGreyElsimil = '#FAFBFF';
   static String bubleRight = '#e5e5e5';
+  static String bgCatin = '#D9FFFE';
+  static String bgHamil = '#E7F9CC';
 
   static String colorPrimary =  "#febd3f";
   static String colorWhite = "#FFFFFF";

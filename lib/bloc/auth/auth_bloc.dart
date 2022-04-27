@@ -27,6 +27,7 @@ class AuthBloc{
   final _remember = PublishSubject<bool>();
   final _regisScreen = PublishSubject<int>();
   final _jenisKelamin = PublishSubject<String>();
+  final _dataStatusNikah = PublishSubject<String>();
   final _imageKtp = PublishSubject<File>();
   final _fileDoc = PublishSubject<File>();
   final _messageError = PublishSubject<String>();
@@ -64,6 +65,7 @@ class AuthBloc{
   Stream<bool> get remember => _remember.stream;
   Stream<int> get regisScreen => _regisScreen.stream;
   Stream<String> get jenisKelamin => _jenisKelamin.stream;
+  Stream<String> get dataStatusNikah => _dataStatusNikah.stream;
   Stream<File> get imageKtp => _imageKtp.stream;
   Stream<File> get fileDoc => _fileDoc.stream;
   Stream<String> get messageError => _messageError.stream;
@@ -128,6 +130,7 @@ class AuthBloc{
   TextEditingController _edtRW = new TextEditingController();
   TextEditingController _edtKodePos = new TextEditingController();
   TextEditingController _edtGender = new TextEditingController();
+  TextEditingController _edtTglNikah = new TextEditingController();
   TextEditingController get edtTmptLahir => _edtTmptLahir;
   TextEditingController get edtTglLahir => _edtTglLahir;
   TextEditingController get edtAlamatKtp => _edtAlamatKtp;
@@ -139,6 +142,8 @@ class AuthBloc{
   TextEditingController get edtRW => _edtRW;
   TextEditingController get edtKodePos => _edtKodePos;
   TextEditingController get edtGender => _edtGender;
+  TextEditingController get edtTglNikah => _edtTglNikah;
+  TextEditingController edtNikah = TextEditingController();
 
   //forgot password
   TextEditingController _edtForgotPassword = new TextEditingController();
@@ -160,13 +165,11 @@ class AuthBloc{
   String _strGender;
   String get strGender => _strGender;
 
-  // changeGender(String val){
-  //   if(val == 'Laki-laki'){
-  //     _gender = 0;
-  //   }else{
-  //     _gender = 1;
-  //   }
-  // }
+  int _idStatusNikah = -1; // 0:register data, 1:register foto, 2:register alamat
+  int get idStatusNikah => _idStatusNikah;
+
+  String _strStatusNikah;
+  String get strStatusNikah => _strStatusNikah;
 
   bool _isRemember = false;
   bool get isRemember => _isRemember;
@@ -220,6 +223,16 @@ class AuthBloc{
       _gender = 1;
     }else{
       _gender = 2;
+    }
+  }
+
+  statusNikah(String val) {
+    _strStatusNikah = val;
+    _dataStatusNikah.sink.add(val);
+    if (val == 'Sudah Menikah' || val == 'Belum Menikah') {
+      _idStatusNikah = 1;
+    } else {
+      _idStatusNikah = 0;
     }
   }
 
@@ -326,10 +339,14 @@ class AuthBloc{
     DateTime dateTime;
     dateTime = DateTime.now();
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate:  dateTime,
-        firstDate: new DateTime(1900),
-        lastDate: dateTime //new DateTime(2100)
+      context: context,
+      initialDate: DateTime.now().subtract(Duration(days: 3652)),
+      firstDate: new DateTime(1900),
+      lastDate: DateTime.now().subtract(Duration(days: 3652)),
+        // context: context,
+        // initialDate:  dateTime,
+        // firstDate: new DateTime(1900),
+        // lastDate: dateTime //new DateTime(2100)
     );
     if (picked != null){
       final dateFormat = DateFormat("yyyy-MM-dd");
@@ -624,6 +641,8 @@ class AuthBloc{
       edtRT.text,
       edtRW.text,
       edtKodePos.text,
+      edtTglNikah.text,
+      idStatusNikah.toString(),
         (result, error) {
           Navigator.of(context).pop();
       if(result != null){
@@ -653,6 +672,7 @@ class AuthBloc{
           _edtTmptLahir.text = data['tempat_lahir'];
           _edtTglLahir.text = data['tgl_lahir'];
           _edtAlamatKtp.text = data['alamat'];
+          edtNikah.text = data['status_pernikahan'] == '0' ? 'Belum Menikah':'Sudah Menikah';
 
           _picBiodata.sink.add(data['pic']);
 
@@ -683,8 +703,9 @@ class AuthBloc{
           _edtRW.text = data['rw'];
           _edtRT.text = data['rt'];
           _edtKodePos.text = data['kodepos'];
-          _edtGender.text = data['gender'] == '1' ? 'Laki-laki':'Perempuan';
-          pilihJenisKelamin(data['gender'] == '1' ? 'Laki-laki':'Perempuan');
+          _edtTglNikah.text = data['rencana_pernikahan'];
+          _edtGender.text = data['gender'] == '1' ? 'Laki-laki' : 'Perempuan';
+          pilihJenisKelamin(data['gender'] == '1' ? 'Laki-laki' : 'Perempuan');
         }else{
           _messageError.sink.add(result['message']);
         }

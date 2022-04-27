@@ -139,8 +139,9 @@ class _RegisterFotoState extends State<RegisterFoto> {
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(16),
-                    new BlacklistingTextInputFormatter(
-                        new RegExp('[\\-|\\,|\\.]')),
+                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                    // new BlacklistingTextInputFormatter(
+                    //     new RegExp('[\\-|\\,|\\.]')),
                   ],
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -196,7 +197,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
                               ),
                               SizedBox(height: 8),
                               TextAvenir(
-                                'File yang didukung: Word/PDF/jpeg/png',
+                                'File yang didukung: jpeg/png',
                                 size: 12,
                                 color: Colors.grey[400],
                               ),

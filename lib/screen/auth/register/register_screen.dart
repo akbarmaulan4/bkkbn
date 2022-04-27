@@ -137,6 +137,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   loadScreenRegist(int val){
     switch(val){
       case 0:
+        // return RegisterDataDiri(bloc: bloc);
         return RegisterData(bloc: bloc);
       case 1:
         return RegisterFoto(bloc: bloc);

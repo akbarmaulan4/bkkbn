@@ -25,4 +25,21 @@ class ImageConstant{
   static const String icBookOpen = 'assets/icon/ic_book_open.png';
   static const String icChat = 'assets/icon/ic_chat.png';
   static const String icAccount = 'assets/icon/ic_account.png';
+
+ //new design
+  static const String akun_active = 'assets/new_design/akun_active.png';
+  static const String akun_inactive = 'assets/new_design/akun_inactive.png';
+  static const String chat_active = 'assets/new_design/chat_active.png';
+  static const String chat_inactive = 'assets/new_design/chat_inactive.png';
+  static const String edukasi_active = 'assets/new_design/edukasi_active.png';
+  static const String edukasi_inactive = 'assets/new_design/edukasi_inactive.png';
+  static const String home_active = 'assets/new_design/home_active.png';
+  static const String home_inactive = 'assets/new_design/home_inactive.png';
+  static const String placeholder_baduta = 'assets/new_design/placeholder_baduta.png';
+  static const String placeholder_catin = 'assets/new_design/placeholder_catin.png';
+  static const String placeholder_hamil = 'assets/new_design/placeholder_hamil.png';
+  static const String placeholder_baduta_inactive = 'assets/new_design/placeholder_baduta_inactive.png';
+  static const String placeholder_catin_inactive = 'assets/new_design/placeholder_catin_inactive.png';
+  static const String placeholder_hamil_inactive = 'assets/new_design/placeholder_hamil_inactive.png';
+  static const String bg_banner = 'assets/new_design/banner_bgr.png';
 }
