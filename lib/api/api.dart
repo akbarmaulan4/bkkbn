@@ -613,6 +613,17 @@ class API{
     });
   }
 
+  static listAnak(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    // post['id'] = '9389';
+    post['id'] = id;
+    basePost('/baduta/listbaduta', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
   static resultQuizHamil(String id, String janinID, void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
@@ -620,6 +631,19 @@ class API{
     post['id'] = id; //113;
     post['janin_id'] = janinID; //3;
     basePost('/hamil/resultkuis', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static resultQuizBaduta(String id, String badutaID, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    // post['id'] = '9389';
+    // post['baduta_id'] = 1;
+    post['id'] = id;
+    post['baduta_id'] = badutaID;
+    basePost('/baduta/resultkuis', post, header, true, (result, error){
       callback(result, error);
     });
   }
@@ -654,6 +678,16 @@ class API{
     header['Content-Type'] = 'application/json';
     post['id'] = id;
     basePost('/hamil/updatestatus', post, header, true, (result, error){
+      callback(result, error);
+    });
+  }
+
+  static updateStatusBaduta(String id, void callback(Map, Exception)) async {
+    var header = new Map<String, String>();
+    var post = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    post['id'] = id;
+    basePost('/baduta/updatestatus', post, header, true, (result, error){
       callback(result, error);
     });
   }
@@ -768,6 +802,14 @@ class API{
     var header = new Map<String, String>();
     header['Content-Type'] = 'application/json';
     baseGet('/hamil/checkstatus/${id}', header, (result, error) {
+      callback(result, error);
+    });
+  }
+
+  static getStatusBaduta(int id, void callback(Map, Exception)) {
+    var header = new Map<String, String>();
+    header['Content-Type'] = 'application/json';
+    baseGet('/baduta/checkstatus/${id}', header, (result, error) {
       callback(result, error);
     });
   }

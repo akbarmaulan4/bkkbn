@@ -43,8 +43,6 @@ class _BerandaVIewState extends State<BerandaVIew> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // bloc.inboxNotif();
-      // bloc.checkNotif();
       bloc.checkVersion(context);
       bloc.checkVerify();
       bloc.home(context);
@@ -224,7 +222,7 @@ class _BerandaVIewState extends State<BerandaVIew> {
                             // onTap: ()=> Navigator.pushNamed(context, '/chat_screen').then((value){
                             //   bloc.inboxNotif();
                             // }),
-                            onTap: ()=> Navigator.pushNamed(context, '/landing_chat').then((value){
+                            onTap: ()=> Navigator.pushNamed(context, '/landing_chat',  arguments: {'main':false} ).then((value){
                               bloc.inboxNotif();
                             }),
                             child: StreamBuilder(

@@ -36,7 +36,7 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
         leading: InkWell(
           onTap: ()=>Navigator.pop(context),
           child: Icon(Icons.chevron_left_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary), size: 30,)),
-        title: TextAvenir('Riwayat', color: Utils.colorFromHex(ColorCode.bluePrimary),),
+        title: TextAvenir('Riwayat Janin', color: Utils.colorFromHex(ColorCode.bluePrimary),),
       ),
       body: StreamBuilder(
         stream: controller.dataRiwayatJanin,
@@ -149,7 +149,7 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
                 width: size.width * 0.27,
                 child: Center(
                   // child: Text(getLabel(data.color), style: TextStyle(color: Utils.colorFromHex(data.color)),),
-                  child: Text('', style: TextStyle(color: Colors.white),),
+                  child: Text(data.label_color, style: TextStyle(color: Colors.white),),
                 ),
               )
             ],
@@ -158,23 +158,5 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
         ],
       ),
     );
-  }
-
-  getLabel(String color){
-    if(color == 'yellow'){
-      return 'Tidak Normal';
-    }else if(color == 'red'){
-      return 'Bahaya';
-    }else{
-      return 'Normal';
-    }
-    // switch(color){
-    //   case 'yellow':
-    //     return 'Tidak Normal';
-    //   case 'green':
-    //     return 'Normal';
-    //   case 'red':
-    //     return "Bahaya";
-    // }
   }
 }

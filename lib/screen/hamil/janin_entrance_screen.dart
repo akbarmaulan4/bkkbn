@@ -44,8 +44,10 @@ class _JaninEntranceScreenState extends State<JaninEntranceScreen> {
           return Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 15),
-            child: dataJanin.length > 0 ? Column(
-              children: loadCard(dataJanin),
+            child: dataJanin.length > 0 ? SingleChildScrollView(
+              child: Column(
+                children: loadCard(dataJanin),
+              ),
             ):Column(
               children: [
                 Container(

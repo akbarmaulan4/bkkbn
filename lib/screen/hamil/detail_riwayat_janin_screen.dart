@@ -27,7 +27,7 @@ class _DetailRiwayatJaninScreenState extends State<DetailRiwayatJaninScreen> {
     // TODO: implement initState
     super.initState();
     // bloc.detailRiwayatJanin(idJanin);
-    bloc.getDetailRiwayatJanin(widget.quizHamilId, widget.quizHamilId);
+    bloc.getDetailRiwayatJanin(widget.idJanin, widget.quizHamilId);
 
   }
   @override

@@ -27,13 +27,6 @@ class _QuizViewState extends State<ListQuizView> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bloc.quizList(context);
     });
-
-    // bloc.messageError.listen((error) {
-    //   if(error != null){
-    //     Utils.alertError(context, error, () { });
-    //   }
-    // });
-
   }
 
   is5Inc(){

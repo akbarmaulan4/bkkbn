@@ -4,6 +4,7 @@ class ModelItemRiwayat{
   String label;
   String value;
   String color;
+  String label_color;
 
   factory ModelItemRiwayat.fromJson(Map<String, dynamic> json) => _$fromJson(json);
   Map<String, dynamic> toJson() => _$toJson(this);

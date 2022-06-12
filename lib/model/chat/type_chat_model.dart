@@ -3,6 +3,7 @@ class TypeChatModel{
   TypeChatModel(){}
   String type;
   String name;
+  String officer_name;
   String status;
 
   factory TypeChatModel.fromJson(Map<String, dynamic> json) => _$fromJson(json);

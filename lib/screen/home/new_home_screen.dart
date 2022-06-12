@@ -1,29 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kua/bloc/home/home_bloc.dart';
-import 'package:kua/screen/home/akun/akun_view.dart';
-import 'package:kua/screen/home/beranda/beranda_view.dart';
-import 'package:kua/screen/home/beranda/new_beranda_view.dart';
-import 'package:kua/screen/home/edukasi/edukasi_view.dart';
-import 'package:kua/screen/home/kuesioner/list_quiz_view.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/image_constant.dart';
-import 'package:kua/util/local_data.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+import 'akun/akun_view.dart';
 import 'beranda/chat/landing_chat_screen.dart';
+import 'beranda/new_beranda_view.dart';
+import 'edukasi/edukasi_view.dart';
 
-class HomeScreen extends StatefulWidget {
+class NewHomeScreen extends StatefulWidget {
   int loadFirstMenu;
-  HomeScreen({this.loadFirstMenu});
+  NewHomeScreen({this.loadFirstMenu});
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _NewHomeScreenState createState() => _NewHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _NewHomeScreenState extends State<NewHomeScreen> {
 
   HomeBloc bloc = new HomeBloc();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -71,49 +68,46 @@ class _HomeScreenState extends State<HomeScreen> {
     //   }
     // }
 
-   // await OneSignal.shared.postNotification(OSCreateNotification(
-   //     // playerIds: [playerId],
-   //     content: "this is a test from OneSignal's Flutter SDK",
-   //     heading: "Test Notification",
-   //     buttons: [
-   //       OSActionButton(text: "test1", id: "id1"),
-   //       OSActionButton(text: "test2", id: "id2")
-   //     ]
-   // ));
+    // await OneSignal.shared.postNotification(OSCreateNotification(
+    //     // playerIds: [playerId],
+    //     content: "this is a test from OneSignal's Flutter SDK",
+    //     heading: "Test Notification",
+    //     buttons: [
+    //       OSActionButton(text: "test1", id: "id1"),
+    //       OSActionButton(text: "test2", id: "id2")
+    //     ]
+    // ));
 
 //    var myCustomUniqueUserId = "something from my backend server";
 //    OneSignal.shared.setExternalUserId(myCustomUniqueUserId);
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: ()=> null,
       child: Scaffold(
         body: StreamBuilder(
-          stream: bloc.viewScreen,
-          builder: (context, snapshot) {
-            int view = widget.loadFirstMenu;
-            if(snapshot.data != null){
-              view = snapshot.data;
+            stream: bloc.viewScreen,
+            builder: (context, snapshot) {
+              int view = widget.loadFirstMenu;
+              if(snapshot.data != null){
+                view = snapshot.data;
+              }
+              return Container(
+                child: loadView(view),
+              );
             }
-            return Container(
-              child: loadView(view),
-            );
-          }
         ),
         floatingActionButton: StreamBuilder(
-          stream: bloc.viewScreen,
-          builder: (context, snapshot) {
-            int view = 0;
-            if(snapshot.data != null){
-              view = snapshot.data;
+            stream: bloc.viewScreen,
+            builder: (context, snapshot) {
+              int view = 0;
+              if(snapshot.data != null){
+                view = snapshot.data;
+              }
+              return bottomMenu(view);
             }
-            return bottomMenu(view);
-          }
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
@@ -125,16 +119,17 @@ class _HomeScreenState extends State<HomeScreen> {
       alignment: Alignment.bottomCenter,
       height: 70,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(45)),
-          color: Utils.colorFromHex(ColorCode.blueSecondary),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 7,
-              blurRadius: 7,
-              offset: Offset(0,0),
-            ),
-          ],
+        borderRadius: BorderRadius.all(Radius.circular(45)),
+        color: Utils.colorFromHex(ColorCode.blueSecondary),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            // color: Colors.grey[200],
+            spreadRadius: 7,
+            blurRadius: 7,
+            offset: Offset(0,0),
+          ),
+        ],
       ),
       padding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
       margin: EdgeInsets.symmetric(horizontal: 30),
@@ -146,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(0),
                 child: Column(
                   children: [
-                    Icon(Icons.home, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Kuesioner', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    Image.asset(position == 0 ? ImageConstant.home_active:ImageConstant.home_inactive, height: 24, width: 24,),
+                    Text('Beranda', style: TextStyle(fontSize: 13, color: position == 0 ? Colors.white : Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -158,8 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(1),
                 child: Column(
                   children: [
-                    Icon(Icons.lightbulb_outline_rounded, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Kuesioner', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    Image.asset(position == 1 ? ImageConstant.edukasi_active:ImageConstant.edukasi_inactive, height: 24, width: 24,),
+                    Text('Edukasi', style: TextStyle(fontSize: 13, color: position == 1 ? Colors.white:Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -170,8 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: ()=>bloc.changeScreen(2),
                 child: Column(
                   children: [
-                    Icon(CupertinoIcons.book, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Edukasi', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                    Image.asset(position == 2 ? ImageConstant.akun_active:ImageConstant.akun_inactive, height: 24, width: 24,),
+                    Text('Akun', style: TextStyle(fontSize: 13, color: position == 2 ? Colors.white:Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -186,9 +181,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: InkWell(
                 onTap: ()=>bloc.changeScreen(3),
                 child: Column(
-                  children: [
-                    Icon(Icons.person_pin, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white ),
-                    Text('Akun', style: TextStyle(fontSize: 13, color: position == 1 ? Utils.colorFromHex(ColorCode.lightGreyElsimil) : Colors.white), textScaleFactor: 1.0,)
+                  children: [//new
+                    Image.asset(position == 3 ? ImageConstant.chat_active:ImageConstant.chat_inactive, height: 24, width: 24,),
+                    Text('Chat', style: TextStyle(fontSize: 13, color: position == 3 ? Colors.white:Utils.colorFromHex(ColorCode.lightGreyElsimil)), textScaleFactor: 1.0,)
                   ],
                 ),
               )
@@ -197,21 +192,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  
 
-  
+
+
   loadView(int val){
     switch(val){
       case 0:
-        return BerandaVIew();
+        return NewBerandaView();
       case 1:
-        return ListQuizView();
-      case 2:
         return EdukasiView();
+      case 2:
+        return AkunView();
       case 3:
-      return AkunView();
+        return LandingScreen(true);
       default:
-        return BerandaVIew();
+        return NewBerandaView();
     }
   }
 }

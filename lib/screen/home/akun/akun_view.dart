@@ -33,7 +33,7 @@ class _AkunScreenState extends State<AkunView> {
 
   is5Inc(){
     var size = MediaQuery.of(context).size;
-    if(size.height < 650){
+    if(size.height < 685){
       return true;
     }else{
       return false;
@@ -173,7 +173,7 @@ class _AkunScreenState extends State<AkunView> {
                     },
                     child: itemList('Keluar'),
                   ),
-                  SizedBox(height: is5Inc() ? size.height * 0.45:15,)
+                  SizedBox(height: is5Inc() ? size.height * 0.25:15,)
                 ],
               ),
             ),

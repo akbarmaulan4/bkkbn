@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
+import 'package:kua/bloc/baduta/baduta_controller.dart';
 import 'package:kua/bloc/hamil/hamil_controller.dart';
 import 'package:kua/bloc/home/home_bloc.dart';
 import 'package:kua/model/home/data_home.dart';
@@ -48,6 +49,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
   }
   HomeBloc bloc = new HomeBloc();
   HamilController controller = HamilController();
+  BadutaController badutaController = BadutaController();
 
   @override
   void initState() {
@@ -67,6 +69,18 @@ class _NewBerandaViewState extends State<NewBerandaView> {
       }
     });
 
+    badutaController.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
+
+    controller.messageError.listen((event) {
+      if(event != null){
+        Utils.alertError(context, event, () { });
+      }
+    });
+
     OneSignal.shared.setNotificationReceivedHandler((notification) {
       if (notification != null) {
         LocalData.haveNotif(true);
@@ -79,6 +93,14 @@ class _NewBerandaViewState extends State<NewBerandaView> {
         Navigator.of(context).pushNamed('/janin_screen');
       }else{
         Navigator.of(context).pushNamed('/hamil_screen');
+      }
+    });
+
+    badutaController.baduta.listen((data) {
+      if(data){
+        Navigator.of(context).pushNamed('/riwayat_baduta_screen');
+      }else{
+        Navigator.of(context).pushNamed('/baduta_entrance');
       }
     });
 
@@ -142,9 +164,10 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Expanded(
-                                  flex:2,
+                                  flex: 3,
                                   child: cardCategory(
                                     label: 'Pendampingan Calon Pengantin',
+                                    type: 'catin',
                                     male: false,
                                     onClick: (){
                                       Navigator.pushNamed(context, '/list_quiz');
@@ -153,9 +176,11 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                                 ),
                                 SizedBox(width: 10),
                                 Expanded(
-                                  flex: 2,
+                                  flex: 3,
                                   child: cardCategory(
-                                    label: 'Pendampingan Ibu Hamil', male: userModel != null && userModel.gender == '1',
+                                    label: 'Pendampingan Ibu Hamil',
+                                    male: userModel != null && userModel.gender == '1',
+                                    type: 'hamil',
                                     onClick: (){
                                       if(userModel.gender == '1'){
                                         Utils.alertError(context, 'Pendampingan Ibu Hamil dikhususkan pada perempuan saja', () { });
@@ -165,7 +190,24 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                                     }
                                   ),
                                 ),
-                                // cardCategory(label: 'Baduta'),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  flex: 3,
+                                  child: cardCategory(
+                                      label: 'Pendampingan Baduta',
+                                      male: userModel != null && userModel.gender == '1',
+                                      type: 'baduta',
+                                      onClick: (){
+                                        // badutaController.getStatusBaduta(context);
+                                        // Navigator.of(context).pushNamed('/baduta_entrance');
+                                        if(userModel.gender == '1'){
+                                          Utils.alertError(context, 'Pendampingan Baduta dikhususkan pada perempuan saja', () { });
+                                        }else{
+                                          badutaController.getStatusBaduta(context);
+                                        }
+                                      }
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -475,29 +517,62 @@ class _NewBerandaViewState extends State<NewBerandaView> {
     );
   }
 
-  cardCategory({String label, bool male, Function onClick}){
+  cardCategory({
+    String label,
+    String type,
+    bool male, 
+    Function onClick}){
     final size = MediaQuery.of(context).size;
     return InkWell(
       onTap: ()=>onClick(),
       child: Container(
         decoration: ConstantStyle.boxButton(radius: 10,
-            color: label.contains('Pengantin') ? Utils.colorFromHex(ColorCode.bgCatin):
-            male ? Colors.grey.shade200: Utils.colorFromHex(ColorCode.bgHamil)),
+            color: getBgImgPlaceHolder(type, male)),
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        // height: size.height * 0.16,
         height: size.height * 0.18,
-        // width: size.height * 0.20,
         child: Column(
           children: [
-            label.contains('Pengantin') ? Image.asset(ImageConstant.placeholder_catin, height: size.height * 0.11,):
-            male ? Image.asset(ImageConstant.placeholder_hamil_inactive, height: size.height * 0.11,):Image.asset(ImageConstant.placeholder_hamil, height: size.height * 0.11,),
-            SizedBox(height: 5),
+            // label.contains('Pengantin') ? Image.asset(ImageConstant.placeholder_catin, height: size.height * 0.10,):
+            // male ? Image.asset(ImageConstant.placeholder_hamil_inactive, height: size.height * 0.11,):
+            // Image.asset(ImageConstant.placeholder_hamil, height: size.height * 0.11,),
+            Image.asset(getImgPlaceHolder(type, male), height: size.height * 0.10,),
+            // Image.asset(getImgPlaceHolder(type, male), height: size.height * 0.13,),
+            SizedBox(height: 8),
             Center(
-              child: TextAvenir(label, textAlign: TextAlign.center,),
+              child: TextAvenir(label, textAlign: TextAlign.center, size: 11,),
+              // child: TextAvenir(label, textAlign: TextAlign.center, size: 12,),
             ),
           ],
         ),
       ),
     );
+  }
+  
+  getImgPlaceHolder(String label, bool male){
+    if(label == 'catin'){
+      return ImageConstant.placeholder_catin;
+    }else if(label == 'hamil' && male == true){
+      return ImageConstant.placeholder_hamil_inactive;
+    }else if(label == 'hamil' && male == false){
+      return ImageConstant.placeholder_hamil;
+    }else if(label == 'baduta' && male == false){
+      return ImageConstant.placeholder_baduta;
+    }else if(label == 'baduta' && male == true){
+      return ImageConstant.placeholder_baduta_inactive;
+    }
+  }
+
+  getBgImgPlaceHolder(String label, bool male){
+    if(label == 'catin'){
+      return Utils.colorFromHex(ColorCode.bgCatin);
+    }else if(label == 'hamil' && male == false){
+      return Utils.colorFromHex(ColorCode.bgHamil);
+    }else if(label == 'baduta' && male == false){
+      return Utils.colorFromHex(ColorCode.bgBaduta);
+    }else{
+      return Colors.grey.shade200;
+    }
   }
 
   info(DataHome data, int pos){

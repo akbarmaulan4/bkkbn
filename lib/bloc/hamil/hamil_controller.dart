@@ -86,7 +86,6 @@ class HamilController{
         }
       });
     }
-
   }
 
   riwayatJanin(int idJanin) async {

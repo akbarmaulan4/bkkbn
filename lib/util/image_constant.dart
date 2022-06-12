@@ -1,4 +1,5 @@
 class ImageConstant{
+
   static const String logo = 'assets/images/bkkbn.png';
   static const String logoPutih = 'assets/images/bkkbn_white.png';
   static const String logoElsimilPutih = 'assets/images/logo_elsimil_putih.png';
@@ -17,7 +18,6 @@ class ImageConstant{
   static const String petugas_kb = 'assets/images/icon_petugas_kb.png';
   static const String midwife = 'assets/images/midwife.png';
 
-
   static const String icMailOpen = 'assets/icon/ic_mail_open.png';
   static const String icPdf = 'assets/icon/icon_pdf.png';
   static const String icPdf2 = 'assets/icon/ic_pdf.png';
@@ -35,6 +35,7 @@ class ImageConstant{
   static const String edukasi_inactive = 'assets/new_design/edukasi_inactive.png';
   static const String home_active = 'assets/new_design/home_active.png';
   static const String home_inactive = 'assets/new_design/home_inactive.png';
+  static const String placeholder_baby = 'assets/new_design/placeholder_baby.png';
   static const String placeholder_baduta = 'assets/new_design/placeholder_baduta.png';
   static const String placeholder_catin = 'assets/new_design/placeholder_catin.png';
   static const String placeholder_hamil = 'assets/new_design/placeholder_hamil.png';
@@ -42,4 +43,11 @@ class ImageConstant{
   static const String placeholder_catin_inactive = 'assets/new_design/placeholder_catin_inactive.png';
   static const String placeholder_hamil_inactive = 'assets/new_design/placeholder_hamil_inactive.png';
   static const String bg_banner = 'assets/new_design/banner_bgr.png';
+
+  static const String ic_petugas_kb_active = 'assets/new_design/ic_petugas_kb_active.png';
+  static const String ic_petugas_kb_inactive = 'assets/new_design/ic_petugas_kb_inactive.png';
+  static const String ic_petugas_bidan_active = 'assets/new_design/ic_petugas_bidan_active.png';
+  static const String ic_petugas_bidan_inactive = 'assets/new_design/ic_petugas_bidan_inactive.png';
+  static const String ic_petugas_pkk_active = 'assets/new_design/ic_petugas_pkk_active.png';
+  static const String ic_petugas_pkk_inactive = 'assets/new_design/ic_petugas_pkk_inactive.png';
 }

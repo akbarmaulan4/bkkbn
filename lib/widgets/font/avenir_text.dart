@@ -5,15 +5,17 @@ class TextAvenir extends Text{
   final Color color;
   final TextAlign textAlign;
   final FontWeight weight;
+  int lines;
   TextAvenir(String data, {
     this.size,
     this.color,
     // this.spacing = 1.0,
     this.textAlign = TextAlign.left,
     this.weight = FontWeight.normal,
+    this.lines = 2
   }) : super(data,
       textAlign: textAlign,
-      maxLines: 2,//isCentered ? TextAlign.center : TextAlign.left,
+      maxLines: lines,//isCentered ? TextAlign.center : TextAlign.left,
       overflow: TextOverflow.ellipsis,
       textScaleFactor: 1.0,
       style: TextStyle(

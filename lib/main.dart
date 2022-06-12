@@ -5,6 +5,9 @@ import 'package:kua/screen/auth/forgotpassword/forgot_password_screen.dart';
 import 'package:kua/screen/auth/forgotpassword/otp_password_screen.dart';
 import 'package:kua/screen/auth/login/login_screen.dart';
 import 'package:kua/screen/auth/register/register_screen.dart';
+import 'package:kua/screen/baduta/baduta_entrance_screen.dart';
+import 'package:kua/screen/baduta/detail_riwayat_baduta_screen.dart';
+import 'package:kua/screen/baduta/riwayat_baduta_screen.dart';
 import 'package:kua/screen/gateway/gateway_screen.dart';
 import 'package:kua/screen/hamil/detail_riwayat_janin_screen.dart';
 import 'package:kua/screen/hamil/hamil_entrance_screen.dart';
@@ -31,6 +34,7 @@ import 'package:kua/screen/home/kuesioner/landing_quiz.dart';
 import 'package:kua/screen/home/kuesioner/list_quiz_view.dart';
 import 'package:kua/screen/home/kuesioner/pdfview.dart';
 import 'package:kua/screen/home/kuesioner/result_quiz.dart';
+import 'package:kua/screen/home/new_home_screen.dart';
 import 'package:kua/screen/splash/splash_screen.dart';
 
 import 'screen/home/beranda/notif/list_notif.dart';
@@ -121,7 +125,8 @@ class MyApp extends StatelessWidget {
             }
             return MaterialPageRoute(
                 builder: (context) {
-                  return HomeScreen(loadFirstMenu: arguments["loadFirstMenu"],);
+                  // return HomeScreen(loadFirstMenu: arguments["loadFirstMenu"],);
+                  return NewHomeScreen(loadFirstMenu: arguments["loadFirstMenu"],);
                 },
                 settings: RouteSettings());
           case '/landing_quiz':
@@ -366,6 +371,28 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (context){
                   return ListQuizView();
+                },
+                settings: RouteSettings());
+          case '/baduta_entrance':
+            return MaterialPageRoute(
+                builder: (context){
+                  return BadutaEntranceScreen();
+                },
+                settings: RouteSettings());
+          case '/riwayat_baduta_screen':
+            return MaterialPageRoute(
+                builder: (context){
+                  return RiwayatBadutaScreen();
+                },
+                settings: RouteSettings());
+          case '/detail_riwayat_baduta_screen':
+            return MaterialPageRoute(
+                builder: (context){
+                  Map<String, dynamic> arguments = null;
+                  if (initial.arguments is Map<String, dynamic>) {
+                    arguments = initial.arguments as Map<String, dynamic>;
+                  }
+                  return DetailRiwayatBadutaScreen(arguments['badutaID']);
                 },
                 settings: RouteSettings());
           default: return null;

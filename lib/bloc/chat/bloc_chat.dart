@@ -39,6 +39,7 @@ class BlocChat {
     // edtMessage.text = '';
     var user = await LocalData.getUser();
     if(user != null){
+      _finishCat.sink.add(false);
       API.postChat(user.id.toString(), message, type, (result, error) {
         if(result != null){
           if(result['code'] == 200 && !result['error']){
@@ -47,9 +48,11 @@ class BlocChat {
             getAllChat(type);
           }else{
             _messageError.sink.add(result['message']);
+            // _finishCat.sink.add(true);
           }
         }else{
           _messageError.sink.add(error['message']);
+          // _finishCat.sink.add(true);
         }
       });
     }
