@@ -37,6 +37,7 @@ import 'package:kua/screen/home/kuesioner/result_quiz.dart';
 import 'package:kua/screen/home/new_home_screen.dart';
 import 'package:kua/screen/splash/splash_screen.dart';
 
+import 'screen/auth/maps/map_screen.dart';
 import 'screen/home/beranda/notif/list_notif.dart';
 
 // void main() {
@@ -393,6 +394,12 @@ class MyApp extends StatelessWidget {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
                   return DetailRiwayatBadutaScreen(arguments['badutaID']);
+                },
+                settings: RouteSettings());
+          case '/maps':
+            return MaterialPageRoute(
+                builder: (context){
+                  return MapScreen();
                 },
                 settings: RouteSettings());
           default: return null;

@@ -173,13 +173,19 @@ class _AkunScreenState extends State<AkunView> {
                     },
                     child: itemList('Keluar'),
                   ),
-                  SizedBox(height: is5Inc() ? size.height * 0.25:15,)
+                  SizedBox(height: is5Inc() ? size.height * 0.35:15,)
                 ],
               ),
             ),
           ):shimmerAkun();
         }
       ),
+      // bottomSheet: Container(
+      //   height: 70,
+      //   padding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
+      //   margin: EdgeInsets.symmetric(horizontal: 30),
+      //   color: Colors.red,
+      // ),
     );
   }
 

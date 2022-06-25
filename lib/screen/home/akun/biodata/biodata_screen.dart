@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
+import 'package:kua/bloc/map_bloc.dart';
+import 'package:kua/model/model_location.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
@@ -20,6 +22,7 @@ class BiodataView extends StatefulWidget {
 
 class _BiodataViewState extends State<BiodataView> {
   AuthBloc bloc = AuthBloc();
+  MapBloc mapBloc = MapBloc();
   List<String> dataGender = [];
   String genderSelected;
 
@@ -44,8 +47,7 @@ class _BiodataViewState extends State<BiodataView> {
 
     bloc.allowDataDiri.listen((event) {
       if (event != null) {
-        Utils.infoDialog(context, 'Informasi', 'Perbaharuan Data Berhasil',
-                () {
+        Utils.infoDialog(context, 'Informasi', 'Perbaharuan Data Berhasil', () {
               // Navigator.popAndPushNamed(context, '/login');
         });
       }
@@ -738,6 +740,48 @@ class _BiodataViewState extends State<BiodataView> {
                           )
                         ],
                       ),
+                      SizedBox(height: 15),
+                      TextAvenir(
+                        'Tandai Lokasi Tempat Tinggal Anda',
+                        size: 14,
+                        color: Utils.colorFromHex(ColorCode.bluePrimary),
+                      ),
+                      SizedBox(height: 5),
+                      InkWell(
+                        onTap: ()=>Navigator.pushNamed(context, '/maps').
+                        then((value){
+                          ModelLocation model = value;
+                          bloc.changeLatLon(double.parse(model.latitude), double.parse(model.longitude));
+                        }),
+                        child: StreamBuilder(
+                            stream: bloc.finishPinLoc,
+                            builder: (context, snapshot) {
+                              bool pinLoc = false;
+                              if(snapshot.data != null){
+                                pinLoc = snapshot.data;
+                              }
+                              return Container(
+                                height: 85,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  image: DecorationImage(
+                                    image: AssetImage(pinLoc ? ImageConstant.map_active:ImageConstant.map_inactive),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.check_circle, color: pinLoc ?  Colors.green : Colors.grey),
+                                    SizedBox(width: 10),
+                                    TextAvenir( pinLoc ? 'Lokasi sudah dipilih':'Ketuk untuk menandai Lokasi')
+                                  ],
+                                ),
+                              );
+                            }
+                        ),
+                      ),
                       // SizedBox(height: 15),
                       // TextAvenir(
                       //   'Rencana Tanggal Pernikahan',
@@ -958,14 +1002,6 @@ class _BiodataViewState extends State<BiodataView> {
                       Navigator.of(context).pop();
                     },
                   ),
-                  // new ListTile(
-                  //   leading: new Icon(Icons.file_present),
-                  //   title: new Text('File'),
-                  //   onTap: () {
-                  //     _selectFile();
-                  //     Navigator.of(context).pop();
-                  //   },
-                  // ),
                 ],
               ),
             ),

@@ -149,6 +149,8 @@ class API{
       String kodepos,
       String tglNikah,
       String statusNikah,
+      String lat,
+      String lon,
       void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
@@ -173,6 +175,8 @@ class API{
     post['kodepos'] = kodepos;
     post['rencana_pernikahan'] = tglNikah;
     post['status_pernikahan'] = statusNikah;
+    post['lat'] = lat;
+    post['lon'] = lon;
     var playerId = await LocalData.getPlayerId();
     var imei = await ImeiPlugin.getImei();
     if(playerId != null){
@@ -403,6 +407,8 @@ class API{
       String kodepos,
       String foto_name,
       String foto_ktp,
+      String lat,
+      String lon,
       void callback(Map, Exception)) async {
     var header = new Map<String, String>();
     var post = new Map<String, dynamic>();
@@ -425,6 +431,8 @@ class API{
     post['kodepos'] = kodepos;
     post['pic_name'] = foto_name;
     post['foto_pic'] = foto_ktp;
+    post['lat'] = lat;
+    post['lon'] = lon;
     basePost('/updateprofile', post, header, true, (result, error){
       callback(result, error);
     });

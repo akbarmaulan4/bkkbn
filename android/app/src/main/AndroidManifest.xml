@@ -21,6 +21,11 @@
         android:allowBackup="false"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDPq_TPd_Jdc_ktaLzFIU2e30GoF11yBvc" />
+
         <activity
             android:name="com.elsimil.kua.MainActivity"
             android:launchMode="singleTop"

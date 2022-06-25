@@ -1,10 +1,17 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
+import 'package:kua/model/model_location.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
 import 'package:kua/util/constant_style.dart';
+import 'package:kua/util/debouncher.dart';
+import 'package:kua/util/image_constant.dart';
 import 'package:kua/util/local_data.dart';
 import 'package:kua/widgets/box_border.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -24,6 +31,40 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
 
   List<String> dataGender = [];
   String genderSelected;
+  var debouncher = new Debouncer(milliseconds: 500);
+
+  File _image;
+  final picker = ImagePicker();
+
+  _imgFromCamera() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    setState(() {
+      if (pickedFile != null) {
+        var image = File(pickedFile.path);
+        widget.bloc.changeImage(image);
+        setState(() {
+          _image = image;
+        });
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  _imgFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    setState(() {
+      if (pickedFile != null) {
+        var image = File(pickedFile.path);
+        widget.bloc.changeImage(image);
+        setState(() {
+          _image = image;
+        });
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -91,132 +132,122 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
       data: scaleFactor,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAvenir(
-                        'Tempat Lahir',
-                        size: 14,
-                        color: Utils.colorFromHex(ColorCode.bluePrimary),
-                      ),
-                      SizedBox(height: 5),
-                      BoxBorderDefault(
-                          child: TextField(
-                            controller: widget.bloc.edtTmptLahir,
-                            textAlignVertical: TextAlignVertical.center,
-                            inputFormatters: [
-                              WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),
-                            ],
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Tempat Lahir',
-                                hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                contentPadding: EdgeInsets.only(bottom:16)
-                            )
-                          )
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAvenir(
-                        'Tangal Lahir',
-                        size: 14,
-                        color: Utils.colorFromHex(ColorCode.bluePrimary),
-                      ),
-                      SizedBox(height: 5),
-                      InkWell(
-                        onTap: (){
-                          widget.bloc.openDatePicker(context);
-                        },
-                        child: BoxBorderDefault(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir(
+                          'Tempat Lahir',
+                          size: 14,
+                          color: Utils.colorFromHex(ColorCode.bluePrimary),
+                        ),
+                        SizedBox(height: 5),
+                        BoxBorderDefault(
                             child: TextField(
-                              controller: widget.bloc.edtTglLahir,
+                              controller: widget.bloc.edtTmptLahir,
                               textAlignVertical: TextAlignVertical.center,
+                              inputFormatters: [
+                                WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),
+                              ],
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Tanggal Lahir',
+                                  hintText: 'Tempat Lahir',
                                   hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
                                   contentPadding: EdgeInsets.only(bottom:16)
-                              ),
-                              enabled: false,
+                              )
                             )
                         ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
-                )
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAvenir(
-                        'Jenis Kelamin',
-                        size: 14,
-                        color: Utils.colorFromHex(ColorCode.bluePrimary),
-                      ),
-                      SizedBox(height: 5),
-                      StreamBuilder(
-                        stream: widget.bloc.jenisKelamin,
-                        builder: (context, snapshot) {
-                          String data = widget.bloc.strGender;
-                          if(snapshot.data != null){
-                            data = snapshot.data;
-                          }
-                          return BoxBorderDefault(
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton(
-                                  hint: TextAvenir(
-                                    'Jenis Kelamin',
-                                    size: 12,
-                                  ),
-                                  value: data,
-                                  items: dataGender.map((value) {
-                                    return DropdownMenuItem(
-                                      child: Container(
-                                          margin: EdgeInsets.symmetric(horizontal: 10),
-                                          child: Text(value)),
-                                      value: value,
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    // widget.bloc.changeGender(value);
-                                    widget.bloc.pilihJenisKelamin(value);
-                                    // setState(() {
-                                    //   genderSelected = value;
-                                    // });
-                                    // widget.bloc.pilihJenisKelamin(value);
-                                  },
-                                )
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir(
+                          'Tangal Lahir',
+                          size: 14,
+                          color: Utils.colorFromHex(ColorCode.bluePrimary),
+                        ),
+                        SizedBox(height: 5),
+                        InkWell(
+                          onTap: (){
+                            widget.bloc.openDatePicker(context);
+                          },
+                          child: BoxBorderDefault(
+                              child: TextField(
+                                controller: widget.bloc.edtTglLahir,
+                                textAlignVertical: TextAlignVertical.center,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Tanggal Lahir',
+                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                    contentPadding: EdgeInsets.only(bottom:16)
+                                ),
+                                enabled: false,
                               )
-                          );
-                        }
-                      ),
-                    ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir('Jenis Kelamin', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                        SizedBox(height: 5),
+                        Container(
+                          width: double.infinity,
+                          child: StreamBuilder(
+                            stream: widget.bloc.jenisKelamin,
+                            builder: (context, snapshot) {
+                              String data = widget.bloc.strGender;
+                              if(snapshot.data != null){
+                                data = snapshot.data;
+                              }
+                              return BoxBorderDefault(
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      hint: TextAvenir('Jenis Kelamin', size: 12),
+                                      value: data,
+                                      items: dataGender.map((value) {
+                                        return DropdownMenuItem(
+                                          child: Container(
+                                              margin: EdgeInsets.symmetric(horizontal: 10),
+                                              child: Text(value)),
+                                          value: value,
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        widget.bloc.pilihJenisKelamin(value);
+                                      },
+                                    )
+                                  )
+                              );
+                            }
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: Expanded(
+                  SizedBox(width: 10),
+                  Expanded(
                     flex: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,487 +258,513 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                           color: Utils.colorFromHex(ColorCode.bluePrimary),
                         ),
                         SizedBox(height: 5),
-                        StreamBuilder(
-                            stream: widget.bloc.dataStatusNikah,
-                            builder: (context, snapshot) {
-                              String data = widget.bloc.strStatusNikah;
-                              if (snapshot.data != null) {
-                                data = snapshot.data;
-                              }
-                              return BoxBorderDefault(
-                                  child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                        hint: TextAvenir(
-                                          'Status Pernikahan',
-                                          size: 12,
-                                        ),
-                                        value: data,
-                                        items: dataNikah.map((value) {
-                                          return DropdownMenuItem(
-                                            child: Container(
-                                                margin:
-                                                EdgeInsets.symmetric(horizontal: 10),
-                                                child: Text(value)),
-                                            value: value,
-                                          );
-                                        }).toList(),
-                                        onChanged: (value) {
-                                          widget.bloc.statusNikah(value);
-                                        },
-                                      )));
-                            }),
+                        Container(
+                          width: double.infinity,
+                          child: StreamBuilder(
+                              stream: widget.bloc.dataStatusNikah,
+                              builder: (context, snapshot) {
+                                String data = widget.bloc.strStatusNikah;
+                                if (snapshot.data != null) {
+                                  data = snapshot.data;
+                                }
+                                return BoxBorderDefault(
+                                    child: DropdownButtonHideUnderline(
+                                        child: DropdownButton(
+                                          hint: TextAvenir(
+                                            'Status Pernikahan',
+                                            size: 12,
+                                          ),
+                                          value: data,
+                                          items: dataNikah.map((value) {
+                                            return DropdownMenuItem(
+                                              child: Container(
+                                                  margin:
+                                                  EdgeInsets.symmetric(horizontal: 10),
+                                                  child: Text(value)),
+                                              value: value,
+                                            );
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            widget.bloc.statusNikah(value);
+                                          },
+                                        )));
+                              }),
+                        ),
                       ],
                     ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 15),
-            TextAvenir(
-              'Alamat Sesuai Domisili',
-              size: 14,
-              color: Utils.colorFromHex(ColorCode.bluePrimary),
-            ),
-            SizedBox(height: 5),
-            BoxBorderDefault(
-                child: TextField(
-                  controller: widget.bloc.edtAlamatKtp,
-                  textAlignVertical: TextAlignVertical.center,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(150)
-                  ],
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Alamat Sesuai Domisili',
-                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                      contentPadding: EdgeInsets.only(bottom:16)
-                  ),
-                )
-            ),
-            SizedBox(height: 15),
-            TextAvenir(
-              'Provinsi',
-              size: 14,
-              color: Utils.colorFromHex(ColorCode.bluePrimary),
-            ),
-            SizedBox(height: 5),
-            // StreamBuilder(
-            //   stream: widget.bloc.downloadProvinsi,
-            //   builder: (context, snapshot) {
-            //     var load = false;
-            //     if(snapshot.data != null){
-            //       load = snapshot.data;
-            //     }
-            //     return BoxBorderDefault(
-            //       child: Row(
-            //         children: [
-            //           Expanded(
-            //             child: TypeAheadField(
-            //               noItemsFoundBuilder: (context){
-            //                 return SizedBox();
-            //               },
-            //               textFieldConfiguration: TextFieldConfiguration(
-            //                 controller: widget.bloc.edtProvinsi,
-            //                 decoration: InputDecoration(border: InputBorder.none),
-            //               ),
-            //               suggestionsCallback: (pattern) async {
-            //                 return await widget.bloc.findProvinsi(pattern);
-            //               },
-            //               itemBuilder: (context, suggestion) {
-            //                 DataProvinsi prov = suggestion;
-            //                 return ListTile(
-            //                   leading: Icon(Icons.location_city_rounded),
-            //                   title: Text(prov.nama),
-            //                 );
-            //               },
-            //               onSuggestionSelected: (suggestion) {
-            //                 widget.bloc.changeProvinsi(suggestion);
-            //               },
-            //             ),
-            //           ),
-            //           load ? Container(
-            //             height: 20,
-            //             width: 20,
-            //             child: CircularProgressIndicator()
-            //           ):SizedBox(),
-            //           SizedBox(width: load ? 10 : 0)
-            //         ],
-            //       )
-            //     );
-            //   }
-            // ),
-            BoxBorderDefault(
-              child: InkWell(
-                onTap: ()=>showFinder('provinsi'),
-                child: TextField(
-                  controller: widget.bloc.edtProvinsi,
-                  textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Provinsi',
-                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                      contentPadding: EdgeInsets.only(bottom:16)
-                  ),
-                  enabled: false,
-                ),
+                  )
+                ],
               ),
-            ),
-            SizedBox(height: 15),
-            TextAvenir(
-              'Kabupaten/Kota',
-              size: 14,
-              color: Utils.colorFromHex(ColorCode.bluePrimary),
-            ),
-            SizedBox(height: 5),
-            StreamBuilder(
-              stream: widget.bloc.downloadKab,
-              builder: (context, snapshot) {
-                var load = false;
-                if(snapshot.data != null){
-                  load = snapshot.data;
-                }
-                return BoxBorderDefault(
-                    child: InkWell(
-                      onTap: ()=>showFinder('kota'),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: widget.bloc.edtKotaKab,
-                              textAlignVertical: TextAlignVertical.center,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Kabupaten/Kota',
-                                  hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                  contentPadding: EdgeInsets.only(bottom:16)
-                              ),
-                              enabled: false,
-                            ),
-                            // child: TypeAheadField(
-                            //   noItemsFoundBuilder: (context){
-                            //     return SizedBox();
-                            //   },
-                            //   textFieldConfiguration: TextFieldConfiguration(
-                            //     controller: widget.bloc.edtKotaKab,
-                            //     decoration: InputDecoration(border: InputBorder.none),
-                            //   ),
-                            //   suggestionsCallback: (pattern) async {
-                            //     return await widget.bloc.findKabupaten(pattern);
-                            //   },
-                            //   itemBuilder: (context, suggestion) {
-                            //     DataKabupaten kab = suggestion;
-                            //     return ListTile(
-                            //       leading: Icon(Icons.location_city_rounded),
-                            //       title: Text(kab.nama),
-                            //     );
-                            //   },
-                            //   onSuggestionSelected: (suggestion) {
-                            //     widget.bloc.changeKabupaten(suggestion);
-                            //   },
-                            // ),
-                          ),
-                          load ? Container(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator()
-                          ):SizedBox(),
-                          SizedBox(width: load ? 10 : 0)
-                        ],
-                      ),
-                    )
-                );
-              }
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAvenir(
-                        'Kecamatan',
-                        size: 14,
-                        color: Utils.colorFromHex(ColorCode.bluePrimary),
-                      ),
-                      SizedBox(height: 5),
-                      StreamBuilder(
-                        stream: widget.bloc.downloadKec,
-                        builder: (context, snapshot) {
-                          var load = false;
-                          if(snapshot.data != null){
-                            load = snapshot.data;
-                          }
-                          return BoxBorderDefault(
-                              child: InkWell(
-                                onTap: ()=>showFinder('kecamatan'),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        controller: widget.bloc.edtKecamatan,
-                                        textAlignVertical: TextAlignVertical.center,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Kecamatan',
-                                            hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                            contentPadding: EdgeInsets.only(bottom:16)
-                                        ),
-                                        enabled: false,
-                                      ),
-                                      // child: TypeAheadField(
-                                      //   noItemsFoundBuilder: (context){
-                                      //     return SizedBox();
-                                      //   },
-                                      //   textFieldConfiguration: TextFieldConfiguration(
-                                      //     controller: widget.bloc.edtKecamatan,
-                                      //     decoration: InputDecoration(border: InputBorder.none),
-                                      //   ),
-                                      //   suggestionsCallback: (pattern) async {
-                                      //     return await widget.bloc.findKecamatan(pattern);
-                                      //   },
-                                      //   itemBuilder: (context, suggestion) {
-                                      //     DataKecamatan kec = suggestion;
-                                      //     return ListTile(
-                                      //       leading: Icon(Icons.location_city_rounded),
-                                      //       title: Text(kec.nama),
-                                      //     );
-                                      //   },
-                                      //   onSuggestionSelected: (suggestion) {
-                                      //     widget.bloc.changeKecamatan(suggestion);
-                                      //   },
-                                      // ),
-                                    ),
-                                    load ? Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator()
-                                    ):SizedBox(),
-                                    SizedBox(width: load ? 10 : 0)
-                                  ],
-                                ),
-                              )
-                          );
-                        }
-                      ),
+              SizedBox(height: 15),
+              TextAvenir(
+                'No KTP',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              BoxBorderDefault(
+                  child: TextField(
+                    controller: widget.bloc.edtKtp,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(16),
+                      WhitelistingTextInputFormatter(RegExp("[0-9]")),
                     ],
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAvenir(
-                        'Kel/Desa',
-                        size: 14,
-                        color: Utils.colorFromHex(ColorCode.bluePrimary),
-                      ),
-                      SizedBox(height: 5),
-                      StreamBuilder(
-                        stream: widget.bloc.downloadKel,
-                        builder: (context, snapshot) {
-                          var load = false;
-                          if(snapshot.data != null){
-                            load = snapshot.data;
-                          }
-                          return BoxBorderDefault(
-                              child: InkWell(
-                                onTap: ()=>showFinder('kelurahan'),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        controller: widget.bloc.edtDesa,
-                                        textAlignVertical: TextAlignVertical.center,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Kelurahan',
-                                            hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                            contentPadding: EdgeInsets.only(bottom:16)
-                                        ),
-                                        enabled: false,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Masukan 16 digit No KTP anda',
+                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                        contentPadding: EdgeInsets.only(bottom:16)
+                    ),
+                    onChanged: (val){
+                      if(val.length > 15){
+                        debouncher.run(() {
+                          widget.bloc.checkNIK();
+                        });
+                      }
+                    },//ConstantStyle.decorTextField,
+                  )
+              ),
+              SizedBox(height: 25),
+              StreamBuilder(
+                stream: widget.bloc.imageKtp,
+                builder: (context, snapshot) {
+                  File img;
+                  if(snapshot.data != null){
+                    img = snapshot.data;
+                  }
+                  return img != null ? Container(
+                    child: Image.file(
+                      img,
+                      width: size.width * 0.88,
+                      height: 220,
+                      fit: BoxFit.cover,
+                    ),
+                  ) : DottedBorder(
+                    color: Utils.colorFromHex(ColorCode.lightBlueDark),
+                    strokeWidth: 1,
+                    child: Container(
+                      child: InkWell(
+                        onTap: (){
+                          showPicker();
+                        },
+                        child: StreamBuilder(
+                            stream: widget.bloc.fileDoc,
+                            builder: (context, snapshot) {
+                              File exist;
+                              String fileName = 'Foto KTP';
+                              if(snapshot.data != null){
+                                exist = snapshot.data;
+                                fileName = exist.path.split('/').last;
+                              }
+                              return Row(
+                                children: [
+                                  Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
+                                  SizedBox(width: 10),
+                                  Expanded(child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      TextAvenir(
+                                        fileName,
+                                        size: 14,
+                                        color: Utils.colorFromHex(ColorCode.bluePrimary),
                                       ),
-                                      // child: TypeAheadField(
-                                      //   noItemsFoundBuilder: (context){
-                                      //     return SizedBox();
-                                      //   },
-                                      //   textFieldConfiguration: TextFieldConfiguration(
-                                      //     controller: widget.bloc.edtDesa,
-                                      //     decoration: InputDecoration(border: InputBorder.none),
-                                      //   ),
-                                      //   suggestionsCallback: (pattern) async {
-                                      //     return await widget.bloc.findKelurahan(pattern);
-                                      //   },
-                                      //   itemBuilder: (context, suggestion) {
-                                      //     DataKelurahan kel = suggestion;
-                                      //     return ListTile(
-                                      //       leading: Icon(Icons.location_city_rounded),
-                                      //       title: Text(kel.nama),
-                                      //     );
-                                      //   },
-                                      //   onSuggestionSelected: (suggestion) {
-                                      //     widget.bloc.changeKelurahan(suggestion);
-                                      //   },
-                                      // ),
-                                    ),
-                                    load ? Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator()
-                                    ):SizedBox(),
-                                    SizedBox(width: load ? 10 : 0)
-                                  ],
-                                ),
-                              )
-                          );
-                        }
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: 15),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextAvenir(
-                              'RT',
-                              size: 14,
-                              color: Utils.colorFromHex(ColorCode.bluePrimary),
-                            ),
-                            SizedBox(height: 5),
-                            BoxBorderDefault(
-                                child: TextField(
-                                  controller: widget.bloc.edtRT,
-                                  textAlignVertical: TextAlignVertical.center,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'RT',
-                                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                      contentPadding: EdgeInsets.only(bottom:16)
-                                  ),
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(3),
-                                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                                  ],
-                                )
-                            ),
-                          ],
+                                      SizedBox(height: 8),
+                                      TextAvenir(
+                                        'File yang didukung: jpeg/png',
+                                        size: 12,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ],
+                                  ))
+                                ],
+                              );
+                            }
                         ),
                       ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                  );
+                }
+              ),
+              SizedBox(height: 15),
+              TextAvenir(
+                'Alamat Sesuai Domisili',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              BoxBorderDefault(
+                  child: TextField(
+                    controller: widget.bloc.edtAlamatKtp,
+                    textAlignVertical: TextAlignVertical.center,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(150)
+                    ],
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Alamat Sesuai Domisili',
+                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                        contentPadding: EdgeInsets.only(bottom:16)
+                    ),
+                  )
+              ),
+              SizedBox(height: 15),
+              TextAvenir(
+                'Provinsi',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              BoxBorderDefault(
+                child: InkWell(
+                  onTap: ()=>showFinder('provinsi'),
+                  child: TextField(
+                    controller: widget.bloc.edtProvinsi,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Provinsi',
+                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                        contentPadding: EdgeInsets.only(bottom:16)
+                    ),
+                    enabled: false,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              TextAvenir(
+                'Kabupaten/Kota',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              StreamBuilder(
+                stream: widget.bloc.downloadKab,
+                builder: (context, snapshot) {
+                  var load = false;
+                  if(snapshot.data != null){
+                    load = snapshot.data;
+                  }
+                  return BoxBorderDefault(
+                      child: InkWell(
+                        onTap: ()=>showFinder('kota'),
+                        child: Row(
                           children: [
-                            TextAvenir(
-                              'RW',
-                              size: 14,
-                              color: Utils.colorFromHex(ColorCode.bluePrimary),
+                            Expanded(
+                              child: TextField(
+                                controller: widget.bloc.edtKotaKab,
+                                textAlignVertical: TextAlignVertical.center,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Kabupaten/Kota',
+                                    hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                    contentPadding: EdgeInsets.only(bottom:16)
+                                ),
+                                enabled: false,
+                              ),
                             ),
-                            SizedBox(height: 5),
-                            BoxBorderDefault(
-                                child: TextField(
-                                  controller: widget.bloc.edtRW,
-                                  textAlignVertical: TextAlignVertical.center,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'RW',
-                                      hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                      contentPadding: EdgeInsets.only(bottom:16)
-                                  ),
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(3),
-                                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                                  ],
-                                )
-                            ),
+                            load ? Container(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator()
+                            ):SizedBox(),
+                            SizedBox(width: load ? 10 : 0)
                           ],
                         ),
                       )
-                    ],
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextAvenir(
-                        'Kode POS',
-                        size: 14,
-                        color: Utils.colorFromHex(ColorCode.bluePrimary),
-                      ),
-                      SizedBox(height: 5),
-                      BoxBorderDefault(
-                          child: TextField(
-                            controller: widget.bloc.edtKodePos,
-                            textAlignVertical: TextAlignVertical.center,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Kode POS',
-                                hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
-                                contentPadding: EdgeInsets.only(bottom:16)
-                            ),
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(5),
-                              WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                            ],
-                          )
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: size.height * 0.04),
-            InkWell(
-              onTap: (){
-                widget.bloc.validasiDataDiri(context);
-              },
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Utils.colorFromHex(ColorCode.blueSecondary),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
-                      spreadRadius: 2,
-                      blurRadius: 7,
-                      offset: Offset(0,0),
+                  );
+                }
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir(
+                          'Kecamatan',
+                          size: 14,
+                          color: Utils.colorFromHex(ColorCode.bluePrimary),
+                        ),
+                        SizedBox(height: 5),
+                        StreamBuilder(
+                          stream: widget.bloc.downloadKec,
+                          builder: (context, snapshot) {
+                            var load = false;
+                            if(snapshot.data != null){
+                              load = snapshot.data;
+                            }
+                            return BoxBorderDefault(
+                                child: InkWell(
+                                  onTap: ()=>showFinder('kecamatan'),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          controller: widget.bloc.edtKecamatan,
+                                          textAlignVertical: TextAlignVertical.center,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Kecamatan',
+                                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                              contentPadding: EdgeInsets.only(bottom:16)
+                                          ),
+                                          enabled: false,
+                                        ),
+                                      ),
+                                      load ? Container(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator()
+                                      ):SizedBox(),
+                                      SizedBox(width: load ? 10 : 0)
+                                    ],
+                                  ),
+                                )
+                            );
+                          }
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir(
+                          'Kel/Desa',
+                          size: 14,
+                          color: Utils.colorFromHex(ColorCode.bluePrimary),
+                        ),
+                        SizedBox(height: 5),
+                        StreamBuilder(
+                          stream: widget.bloc.downloadKel,
+                          builder: (context, snapshot) {
+                            var load = false;
+                            if(snapshot.data != null){
+                              load = snapshot.data;
+                            }
+                            return BoxBorderDefault(
+                                child: InkWell(
+                                  onTap: ()=>showFinder('kelurahan'),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          controller: widget.bloc.edtDesa,
+                                          textAlignVertical: TextAlignVertical.center,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Kelurahan',
+                                              hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                              contentPadding: EdgeInsets.only(bottom:16)
+                                          ),
+                                          enabled: false,
+                                        ),
+                                      ),
+                                      load ? Container(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator()
+                                      ):SizedBox(),
+                                      SizedBox(width: load ? 10 : 0)
+                                    ],
+                                  ),
+                                )
+                            );
+                          }
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextAvenir(
+                                'RT',
+                                size: 14,
+                                color: Utils.colorFromHex(ColorCode.bluePrimary),
+                              ),
+                              SizedBox(height: 5),
+                              BoxBorderDefault(
+                                  child: TextField(
+                                    controller: widget.bloc.edtRT,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'RT',
+                                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                        contentPadding: EdgeInsets.only(bottom:16)
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(3),
+                                      WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                    ],
+                                  )
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextAvenir(
+                                'RW',
+                                size: 14,
+                                color: Utils.colorFromHex(ColorCode.bluePrimary),
+                              ),
+                              SizedBox(height: 5),
+                              BoxBorderDefault(
+                                  child: TextField(
+                                    controller: widget.bloc.edtRW,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'RW',
+                                        hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                        contentPadding: EdgeInsets.only(bottom:16)
+                                    ),
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(3),
+                                      WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                    ],
+                                  )
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextAvenir(
+                          'Kode POS',
+                          size: 14,
+                          color: Utils.colorFromHex(ColorCode.bluePrimary),
+                        ),
+                        SizedBox(height: 5),
+                        BoxBorderDefault(
+                            child: TextField(
+                              controller: widget.bloc.edtKodePos,
+                              textAlignVertical: TextAlignVertical.center,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Kode POS',
+                                  hintStyle: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
+                                  contentPadding: EdgeInsets.only(bottom:16)
+                              ),
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(5),
+                                WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                              ],
+                            )
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 15),
+              TextAvenir(
+                'Tandai Lokasi Tempat Tinggal Anda',
+                size: 14,
+                color: Utils.colorFromHex(ColorCode.bluePrimary),
+              ),
+              SizedBox(height: 5),
+              InkWell(
+                onTap: ()=>Navigator.pushNamed(context, '/maps').
+                then((value){
+                  ModelLocation model = value;
+                  widget.bloc.changeLatLon(double.parse(model.latitude), double.parse(model.longitude));
+                }),
+                child: StreamBuilder(
+                  stream: widget.bloc.finishPinLoc,
+                  builder: (context, snapshot) {
+                    bool pinLoc = false;
+                    if(snapshot.data != null){
+                      pinLoc = snapshot.data;
+                    }
+                    return Container(
+                        height: 85,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          image: DecorationImage(
+                            image: AssetImage(pinLoc ? ImageConstant.map_active:ImageConstant.map_inactive),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.check_circle, color: pinLoc ?  Colors.green : Colors.grey),
+                          SizedBox(width: 10),
+                          TextAvenir( pinLoc ? 'Lokasi sudah dipilih':'Ketuk untuk menandai Lokasi')
+                        ],
+                      ),
+                    );
+                  }
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                child: Center(
-                  child: TextAvenir(
-                    'Lanjutkan',
-                    size: 20,
-                    color: Colors.white,
+              ),
+              SizedBox(height: size.height * 0.04),
+              InkWell(
+                onTap: (){
+                  widget.bloc.validasiDataDiri(context);
+                },
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Utils.colorFromHex(ColorCode.blueSecondary),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                        spreadRadius: 2,
+                        blurRadius: 7,
+                        offset: Offset(0,0),
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  child: Center(
+                    child: TextAvenir(
+                      'Lanjutkan',
+                      size: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: is5Inc() ? 40:0)
-          ],
+              SizedBox(height: is5Inc() ? 40:0)
+            ],
+          ),
         ),
       ),
     );
@@ -893,5 +950,40 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                 );
               });
         });
+  }
+
+  showPicker(){
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        // backgroundColor: Colors.transparent,
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
   }
 }

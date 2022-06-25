@@ -43,6 +43,11 @@ class ImageConstant{
   static const String placeholder_catin_inactive = 'assets/new_design/placeholder_catin_inactive.png';
   static const String placeholder_hamil_inactive = 'assets/new_design/placeholder_hamil_inactive.png';
   static const String bg_banner = 'assets/new_design/banner_bgr.png';
+  static const String map_active = 'assets/new_design/map_active.png';
+  static const String map_inactive = 'assets/new_design/map_inactive.png';
+  static const String markerMap = 'assets/new_design/location_marker.png';
+  static const String boxPin = 'assets/new_design/box_pin.png';
+  static const String markerPin = 'assets/new_design/pin.png';
 
   static const String ic_petugas_kb_active = 'assets/new_design/ic_petugas_kb_active.png';
   static const String ic_petugas_kb_inactive = 'assets/new_design/ic_petugas_kb_inactive.png';

@@ -19,8 +19,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   AuthBloc bloc = new AuthBloc();
 
+  //old
+  // Future<bool> onWillPop() {
+  //   if((bloc.registViewAt-1) < 0){
+  //     Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false);
+  //   }else{
+  //     bloc.changeViewRegist(bloc.registViewAt-1);
+  //     return Future.value(false);
+  //   }
+  // }
+
+  //new
   Future<bool> onWillPop() {
-    if((bloc.registViewAt-1) < 0){
+    if(bloc.registViewAt < 1){
       Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false);
     }else{
       bloc.changeViewRegist(bloc.registViewAt-1);
@@ -81,11 +92,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 80),
+                            padding: EdgeInsets.symmetric(horizontal: 130),
                             child: Row(
                               children: [
                                 Expanded(
-                                    flex: 3,
+                                    flex: 2,
                                     child: Container(
                                       height: 3,
                                       decoration: BoxDecoration(
@@ -96,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 SizedBox(width: 5),
                                 Expanded(
-                                    flex: 3,
+                                    flex: 2,
                                     child: Container(
                                       height: 3,
                                       decoration: BoxDecoration(
@@ -106,16 +117,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     )
                                 ),
                                 SizedBox(width: 5),
-                                Expanded(
-                                    flex: 3,
-                                    child: Container(
-                                      height: 3,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                                        color: screenAt > 2 ? Utils.colorFromHex(ColorCode.bluePrimary) : Colors.grey[300],
-                                      ),
-                                    )
-                                ),
                               ],
                             ),
                           ),

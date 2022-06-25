@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kua/bloc/auth/auth_bloc.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/color_code.dart';
@@ -38,6 +42,10 @@ class _NewRegisterScreenState extends State<RegisterData> {
   }
   Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
+  File _image;
+  final picker = ImagePicker();
+  var debouncher = new Debouncer(milliseconds: 500);
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,7 +60,7 @@ class _NewRegisterScreenState extends State<RegisterData> {
     widget.bloc.emailPass.listen((event) {
       if(event != null){
         if(event){
-          widget.bloc.changeViewRegist(1);
+          widget.bloc.changeViewRegist(2);
         }
       }
     });
@@ -82,11 +90,9 @@ class _NewRegisterScreenState extends State<RegisterData> {
     }
   }
 
-
-  var debouncher = new Debouncer(milliseconds: 500);
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return MediaQuery(
       data: scaleFactor,
@@ -278,8 +284,7 @@ class _NewRegisterScreenState extends State<RegisterData> {
                     )
                 );
               }
-            ),
-            // quiz,
+            ),            // quiz,
             SizedBox(height: 40),
             InkWell(
               onTap: (){

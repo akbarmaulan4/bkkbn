@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:kua/api/api.dart';
 import 'package:kua/model/kabupaten/all_kabupaten.dart';
@@ -52,13 +53,14 @@ class AuthBloc{
   final _dataKotaKab = PublishSubject<List<DataKabupaten>>();
   final _dataKecamatan = PublishSubject<List<DataKecamatan>>();
   final _dataKelurahan = PublishSubject<List<DataKelurahan>>();
-
-
   final _forgotPass = PublishSubject<String>();
-
-
   final _picBiodata = PublishSubject<String>();
   final _emailFormat = PublishSubject<bool>();
+
+  final _currentLatitude = PublishSubject<double>();
+  final _currentLongitude = PublishSubject<double>();
+  final _finishPinLoc = PublishSubject<bool>();
+  final _currentLocation = PublishSubject<Position>();
 
   Stream<bool> get typing => _typing.stream;
   Stream<bool> get showPass => _showPass.stream;
@@ -95,6 +97,11 @@ class AuthBloc{
 
   Stream<String> get picBiodata => _picBiodata.stream;
   Stream<String> get forgotPass => _forgotPass.stream;
+
+  Stream<double> get currentLatitude => _currentLatitude.stream;
+  Stream<double> get currentLongitude => _currentLongitude.stream;
+  Stream<bool> get finishPinLoc => _finishPinLoc.stream;
+  Stream<Position> get currentLocation => _currentLocation.stream;
 
   //login
   TextEditingController _edtUsername = new TextEditingController();
@@ -154,6 +161,15 @@ class AuthBloc{
   int _registViewAt = 0; // 0:register data, 1:register foto, 2:register alamat
   int get registViewAt => _registViewAt;
 
+
+  // Position _currentLocation;
+  // Position get currentLocation => _currentLocation;
+  getCurrentLocation() async {
+    var newLocation = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    // _currentLocation = newLocation;
+    _currentLocation.sink.add(newLocation);
+  }
+
   changeViewRegist(int val){
     _registViewAt = val;
     _regisScreen.sink.add(val);
@@ -181,6 +197,19 @@ class AuthBloc{
   
   String _playerId = '';
   String get playerId => _playerId;
+
+  double _posLat = 0.0;
+  double _posLon = 0.0;
+  double get posLat => _posLat;
+  double get posLon => _posLon;
+
+  changeLatLon(double lat, double lon){
+    _posLat = lat;
+    _posLon = lon;
+    _currentLatitude.sink.add(lat);
+    _currentLongitude.sink.add(lon);
+    _finishPinLoc.sink.add(true);
+  }
   
   setPlayerId(String val){
     _playerId = val;
@@ -330,6 +359,12 @@ class AuthBloc{
       _messageError.sink.add('RT harus diisi!');
     }else if(edtRW.text == ''){
       _messageError.sink.add('RW harus diisi!');
+    }else if(edtKtp.text == ''){
+      _messageError.sink.add('Nomor KTP harus diisi!');
+    }else if(edtKtp.text.length < 16){
+      _messageError.sink.add('Nomor KTP harus 16 digit!');
+    }else if(_imgFotoKtp == null){
+      _messageError.sink.add('Foto KTP harus diisi!');
     }else{
       postRegister(context);
     }
@@ -642,6 +677,8 @@ class AuthBloc{
       edtRW.text,
       edtKodePos.text,
       edtTglNikah.text,
+      posLat.toString(),
+      posLon.toString(),
       idStatusNikah.toString(),
         (result, error) {
           Navigator.of(context).pop();
@@ -673,7 +710,6 @@ class AuthBloc{
           _edtTglLahir.text = data['tgl_lahir'];
           _edtAlamatKtp.text = data['alamat'];
           edtNikah.text = data['status_pernikahan'] == '0' ? 'Belum Menikah':'Sudah Menikah';
-
           _picBiodata.sink.add(data['pic']);
 
           //provinsi
@@ -705,6 +741,11 @@ class AuthBloc{
           _edtKodePos.text = data['kodepos'];
           _edtTglNikah.text = data['rencana_pernikahan'];
           _edtGender.text = data['gender'] == '1' ? 'Laki-laki' : 'Perempuan';
+          if(data['lat'] != null && data['lon'] != null){
+            Position pos = Position(latitude: data['lat'], longitude: data['lon']);
+            _finishPinLoc.sink.add(true);
+            // _currentLocation.sink.add(pos);
+          }
           pilihJenisKelamin(data['gender'] == '1' ? 'Laki-laki' : 'Perempuan');
         }else{
           _messageError.sink.add(result['message']);
@@ -762,6 +803,8 @@ class AuthBloc{
         edtKodePos.text,
         strPhotoName,
         img64,
+        posLat.toString(),
+        posLon.toString(),
             (result, error) async{
           Navigator.of(context).pop();
           if(result != null){
