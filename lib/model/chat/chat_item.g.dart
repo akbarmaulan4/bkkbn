@@ -1,11 +1,11 @@
 part of 'chat_item.dart';
 ChatItem _$fromJson(Map<String, dynamic> json) {
   return ChatItem()
-    ..header = json['header'] as String ?? ''
+    ..header = json['header'] as String
     ..child = (json['child'] as List)
-        ?.map((e) =>
-    e == null ? null : ChatMessage.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+        .map((e) =>
+    e == null ? null : ChatMessage.fromJson(e as Map<String, dynamic>)).cast<ChatMessage>()
+        .toList()
   ;
 }
 

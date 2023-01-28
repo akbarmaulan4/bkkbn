@@ -77,7 +77,7 @@ class _EditQuizState extends State<EditQuiz> {
                     builder: (context, snapshot) {
                       List<GroupQuestion> data = [];
                       if(snapshot.data != null){
-                        data = snapshot.data;
+                        data = snapshot.data as List<GroupQuestion>;
                       }
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +157,7 @@ class _EditQuizState extends State<EditQuiz> {
       dataWidget.add(Container(
         child: Column(
           children: [
-            (data[i].deskripsi != null && data[i].deskripsi != '') ? TextAvenir(data[i].deskripsi, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox(),
+            (data[i].deskripsi != null && data[i].deskripsi != '') ? TextAvenir(data[i].deskripsi!, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox(),
             SizedBox(height: (data[i].deskripsi != null && data[i].deskripsi != '') ? 15:0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -175,7 +175,7 @@ class _EditQuizState extends State<EditQuiz> {
                       child: Center(child: TextAvenir(strNomor, color: Colors.white,)),
                     ),
                     (i+1) != data.length ? Container(
-                      height: getHeightBox(data[i].pertanyaan),
+                      height: getHeightBox(data[i].pertanyaan!),
                       width: 3,
                       decoration: BoxDecoration(color: Utils.colorFromHex(ColorCode.blueSecondary)),
                     ):SizedBox()
@@ -186,11 +186,11 @@ class _EditQuizState extends State<EditQuiz> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      data[i].jenis != 'widget' ? TextAvenir(data[i].caption, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox(),
+                      data[i].jenis != 'widget' ? TextAvenir(data[i].caption!, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)):SizedBox(),
                       SizedBox(height: data[i].jenis != 'widget' ? 8 : 0),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: loadQuestion(data[i].pertanyaan, data[i].jenis),
+                        children: loadQuestion(data[i].pertanyaan!, data[i].jenis!),
                       ),
                       SizedBox(height: 15),
                     ],

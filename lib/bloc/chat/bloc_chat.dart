@@ -11,15 +11,15 @@ class BlocChat {
   final _getMessage = PublishSubject<String>();
   final _allMessage = PublishSubject<List<Map>>();
   final _messageError = PublishSubject<String>();
-  final _allChat = PublishSubject<List<ChatItem>>();
-  final _typeChat = PublishSubject<List<TypeChatModel>>();
+  final _allChat = PublishSubject<List<ChatItem?>>();
+  final _typeChat = PublishSubject<List<TypeChatModel?>>();
   final _finishCat = PublishSubject<bool>();
 
   Stream<String> get getMessage => _getMessage.stream;
   Stream<List<Map>> get allMessage => _allMessage.stream;
   Stream<String> get messageError => _messageError.stream;
-  Stream<List<ChatItem>> get allChat => _allChat.stream;
-  Stream<List<TypeChatModel>> get typeChat => _typeChat.stream;
+  Stream<List<ChatItem?>> get allChat => _allChat.stream;
+  Stream<List<TypeChatModel?>> get typeChat => _typeChat.stream;
   Stream<bool> get finishCat => _finishCat.stream;
 
   List<Map> _allMessageChat = [];
@@ -66,7 +66,7 @@ class BlocChat {
         if(result != null){
           if(result['code'] == 200 && !result['error']){
             var json = result as Map<String, dynamic>;
-            var data = (json['data'] as List)?.map((e) => e == null ? null : ChatItem.fromJson(e as Map<String, dynamic>))?.toList();
+            List<ChatItem?>? data = (json['data'] as List).map((e) => e == null ? null : ChatItem.fromJson(e as Map<String, dynamic>)).toList();
             if(data.length > 0){
               _allChat.sink.add(data);
             }
@@ -83,11 +83,11 @@ class BlocChat {
 
   getChatType() async{
     var dsada = await LocalData.getUser();
-    API.getChatType(dsada.id, (result, error) {
+    API.getChatType(dsada.id!, (result, error) {
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
-          var data = (json['data'] as List)?.map((e) => e == null ? null : TypeChatModel.fromJson(e as Map<String, dynamic>))?.toList();
+          var data = (json['data'] as List).map((e) => e == null ? null : TypeChatModel.fromJson(e as Map<String, dynamic>)).toList();
           if(data != null){
             _typeChat.sink.add(data);
           }

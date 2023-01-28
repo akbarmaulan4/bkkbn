@@ -8,13 +8,13 @@ import '../font/avenir_text.dart';
 import '../box_border.dart';
 
 class DateQuiz extends StatefulWidget {
-  int id;
+  int? id;
   // String headerId;
   // String jenis;
   // String tipe;
-  String question;
-  String answerTxt;
-  Function changeValue;
+  String? question;
+  String? answerTxt;
+  Function? changeValue;
 
   DateQuiz({
     this.id,
@@ -39,7 +39,7 @@ class _InputQuizState extends State<DateQuiz> {
 
   setAnswer(String val){
     widget.answerTxt = val;
-    widget.changeValue(val);
+    widget.changeValue!(val);
   }
   berbobot(){
 
@@ -60,7 +60,7 @@ class _InputQuizState extends State<DateQuiz> {
             //   size: 14,
             //   color: Colors.grey,
             // ),
-            Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+            Text(widget.question!, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
             SizedBox(height: 5),
             InkWell(
               onTap: (){
@@ -91,7 +91,7 @@ class _InputQuizState extends State<DateQuiz> {
   openDatePicker(BuildContext context) async {
     DateTime dateTime;
     dateTime = DateTime.now();
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
         context: context,
         initialDate:  dateTime,
         firstDate: new DateTime(1900),

@@ -24,7 +24,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
 
   Completer<GoogleMapController> _controller = Completer();
-  GoogleMapController googleMapController;
+  GoogleMapController? googleMapController;
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-6.252300, 106.847336),
     zoom: 14.4746,
@@ -36,7 +36,7 @@ class _MapScreenState extends State<MapScreen> {
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
   //contrller for Google map
-  CameraPosition cameraPosition;
+  CameraPosition? cameraPosition;
   MapBloc bloc = MapBloc();
   AuthBloc authBloc = AuthBloc();
   // MapController controller = MapController();
@@ -115,14 +115,14 @@ class _MapScreenState extends State<MapScreen> {
         builder: (context, snapshot) {
           String addrs = '';
           if(snapshot.data != null){
-            addrs = snapshot.data;
+            addrs = snapshot.data.toString();
           }
           return StreamBuilder(
               stream: bloc.currentAddressName,
               builder: (context, snapshot) {
               String addrsName = '';
               if(snapshot.data != null){
-                addrsName = snapshot.data;
+                addrsName = snapshot.data.toString();
               }
               return Container(
                 child: Column(
@@ -174,7 +174,7 @@ class _MapScreenState extends State<MapScreen> {
                                 cameraPosition = pos;
                               },
                               onCameraIdle: () async {
-                                bloc.changeAddress(cameraPosition);
+                                bloc.changeAddress(cameraPosition!);
                               },
                             ),
                             Center(
@@ -203,7 +203,7 @@ class _MapScreenState extends State<MapScreen> {
                                           ),
                                         ),
                                         child: Center(
-                                          child: Text('Geser peta untuk tentukan lokasi anda',
+                                          child: Text('Geser peta untuk tentukan domisili anda',
                                             style: TextStyle(color: Colors.white))
                                         ),
                                       ),
@@ -221,35 +221,35 @@ class _MapScreenState extends State<MapScreen> {
                                 ),
                               )
                             ),
-                            addrsName != '' ? Wrap(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
-                                        spreadRadius: 2,
-                                        blurRadius: 7,
-                                        offset: Offset(0,0),
-                                      ),
-                                    ],
-                                  ),
-                                  padding: EdgeInsets.all(20),
-                                  margin: EdgeInsets.all(20),
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      TextAvenir(addrsName, color: Colors.black45, size: 14, weight: FontWeight.w600,),
-                                      SizedBox(height: 10),
-                                      Text(addrs, style: TextStyle(color: Colors.black45, fontSize: 13),),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ):SizedBox()
+                            // addrsName != '' ? Wrap(
+                            //   children: [
+                            //     Container(
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                            //         color: Colors.white,
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //             color: Utils.colorFromHex(ColorCode.lightGreyElsimil),
+                            //             spreadRadius: 2,
+                            //             blurRadius: 7,
+                            //             offset: Offset(0,0),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       padding: EdgeInsets.all(20),
+                            //       margin: EdgeInsets.all(20),
+                            //       width: double.infinity,
+                            //       child: Column(
+                            //         crossAxisAlignment: CrossAxisAlignment.start,
+                            //         children: [
+                            //           TextAvenir(addrsName, color: Colors.black45, size: 14, weight: FontWeight.w600,),
+                            //           SizedBox(height: 10),
+                            //           Text(addrs, style: TextStyle(color: Colors.black45, fontSize: 13),),
+                            //         ],
+                            //       ),
+                            //     )
+                            //   ],
+                            // ):SizedBox()
                           ],
                         ),
                       ),
@@ -267,7 +267,7 @@ class _MapScreenState extends State<MapScreen> {
         builder: (context, snapshot) {
           String addrs = '';
           if(snapshot.data != null){
-            addrs = snapshot.data;
+            addrs = snapshot.data.toString();
           }
           return Wrap(
             children: [
@@ -311,21 +311,35 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   loadAutocomplete() async {
-    Prediction p = await PlacesAutocomplete.show(
-        context: context,
-        mode: Mode.fullscreen,
-        apiKey: 'AIzaSyDPq_TPd_Jdc_ktaLzFIU2e30GoF11yBvc',
-        language: 'id',
-        components: [new Component(Component.country, "id")]
+
+    Prediction? p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: 'AIzaSyDbURAmd-bG6EpWJby9qb2txnJLMxbHoFM',
+      onError: (PlacesAutocompleteResponse data){},
+      language: "id",
+      types: [''],
+      strictbounds: false,
+      logo: Container(),
+      components: [Component(Component.country, "id")],
     );
+
+    // Prediction p = await PlacesAutocomplete.show(
+    //     context: context,
+    //     mode: Mode.fullscreen,
+    //     // apiKey: 'AIzaSyDPq_TPd_Jdc_ktaLzFIU2e30GoF11yBvc',
+    //     apiKey: 'AIzaSyDthndeninlwCBKshAwg8yTqqWsUEHVb04',
+    //     language: 'id',
+    //     components: [new Component(Component.country, "id")]
+    // );
     if (p != null) {
-      final places = new GoogleMapsPlaces(apiKey: "AIzaSyDPq_TPd_Jdc_ktaLzFIU2e30GoF11yBvc");
-      PlacesDetailsResponse response = await places.getDetailsByPlaceId(p.placeId);
+      final places = new GoogleMapsPlaces(apiKey: "AIzaSyDbURAmd-bG6EpWJby9qb2txnJLMxbHoFM");
+      // final places = new GoogleMapsPlaces(apiKey: "AIzaSyDPq_TPd_Jdc_ktaLzFIU2e30GoF11yBvc");
+      PlacesDetailsResponse response = await places.getDetailsByPlaceId(p.placeId!);
       if(response != null){
         bloc.edtSearch.text = response.result.name;
-        bloc.changeAddressName(response.result.name, response.result.formattedAddress);
+        bloc.changeAddressName(response.result.name, response.result.formattedAddress!);
         cameraMove(CameraPosition(
-            target: LatLng(response.result.geometry.location.lat, response.result.geometry.location.lng),
+            target: LatLng(response.result.geometry!.location.lat, response.result.geometry!.location.lng),
             zoom: 19.151926040649414
         ));
       }
@@ -381,6 +395,6 @@ class _MapScreenState extends State<MapScreen> {
   cameraIdle() async{
     List<Placemark> placemarks = await placemarkFromCoordinates(bloc.posLat, bloc.posLon);
     Placemark place = placemarks[0];
-    bloc.changeAddressName(place.name, '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}');
+    bloc.changeAddressName(place.name!, '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}');
   }
 }

@@ -68,8 +68,8 @@ class QuizBloc {
               var json = result as Map<String, dynamic>;
               var data = AllResultQuiz.fromJson(json);
               if(data != null){
-                _allListQuiz.addAll(data.data);
-                _dataListKuesioner.sink.add(data.data);
+                _allListQuiz.addAll(data.data!);
+                _dataListKuesioner.sink.add(data.data!);
               }
             }
           }else{
@@ -93,7 +93,7 @@ class QuizBloc {
       _dataListKuesioner.sink.add(allListQuiz);
     }else{
       _isSearch.sink.add(true);
-      var dataQuery = allListQuiz.where((element) => element.title.toLowerCase().contains(title.toLowerCase()));
+      var dataQuery = allListQuiz.where((element) => element.title!.toLowerCase().contains(title.toLowerCase()));
       if(dataQuery != null){
         _dataListKuesioner.sink.add(dataQuery.toList());
       }
@@ -101,7 +101,7 @@ class QuizBloc {
     typingSearch(false);
   }
 
-  IntroQuiz _dataIntro;
+  IntroQuiz _dataIntro = IntroQuiz();
   IntroQuiz get dataIntro => _dataIntro;
   quizIntro(BuildContext context, int id){
     Utils.progressDialog(context);
@@ -164,8 +164,8 @@ class QuizBloc {
             var json = result as Map<String, dynamic>;
             var data = ListGroupQuestion.fromJson(json);
             if(data != null){
-              _dataGroupQuestion.sink.add(data.data);
-              _dataGroup.addAll(data.data);
+              _dataGroupQuestion.sink.add(data.data!);
+              _dataGroup.addAll(data.data!);
             }
           }
         }else{
@@ -188,8 +188,8 @@ class QuizBloc {
           var json = result as Map<String, dynamic>;
           var data = AllItemFinding.fromJson(json);
           if(data != null){
-            _dataSearch.addAll(data.data);
-            _dataFinding.sink.add(data.data);
+            _dataSearch.addAll(data.data!);
+            _dataFinding.sink.add(data.data!);
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -214,7 +214,7 @@ class QuizBloc {
       groupSubmit.kuis_id = group.kuis_id;
       groupSubmit.header_id = group.header_id;
       groupSubmit.jenis = group.jenis;
-      groupSubmit.pertanyaan = getPertanyaan(group.pertanyaan);
+      groupSubmit.pertanyaan = getPertanyaan(group.pertanyaan!);
       dataGroup2.add(groupSubmit);
     }
     var user = await LocalData.getUser();
@@ -262,7 +262,7 @@ class QuizBloc {
         if(result['code'] == 200){
           var json = result as Map<String, dynamic>;
           var data = ResultSubmit.fromJson(json['data']);
-          _quizCode = data.header.kuis_code;
+          _quizCode = data.header!.kuis_code!;
           _resultSubmit.sink.add(data);
         }else{
           _messageError.sink.add(result['message']);

@@ -1,15 +1,15 @@
 part of 'item_result.dart';
 ItemResult _$fromJson(Map<String, dynamic> json) {
   return ItemResult()
-    ..kuis_id = json['kuis_id'] as int ?? -1
-    ..result_id = json['result_id'] as int ?? -1
-    ..kuis_title = json['kuis_title'] as String ?? ''
-    ..rating = json['rating'] as String ?? ''
-    ..rating_color = json['rating_color'] as String ?? ''
-    ..member_kuis_nilai = json['member_kuis_nilai'] as String ?? ''
-    ..kuis_max_nilai = json['kuis_max_nilai'] as String ?? ''
-    ..label = json['label'] as String ?? ''
-    ..tgl_kuis = json['tgl_kuis'] as String ?? ''
+    ..kuis_id = json['kuis_id'] as int
+    ..result_id = json['result_id'] as int
+    ..kuis_title = json['kuis_title'] as String
+    ..rating = json['rating'] as String
+    ..rating_color = json['rating_color'] as String
+    ..member_kuis_nilai = json['member_kuis_nilai'] as String
+    ..kuis_max_nilai = json['kuis_max_nilai'] as String
+    ..label = json['label'] as String
+    ..tgl_kuis = json['tgl_kuis'] as String
   ;
 }
 

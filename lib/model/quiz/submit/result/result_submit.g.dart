@@ -3,8 +3,8 @@ ResultSubmit _$fromJson(Map<String, dynamic> json) {
   return ResultSubmit()
     ..header = json["header"] == null ? null : HeaderSubmit.fromJson(json["header"] as Map<String, dynamic>)
     ..detail = (json['detail'] as List)
-        ?.map((e) => e == null ? null : DetailSubmit.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+        .map((e) => e == null ? null : DetailSubmit.fromJson(e as Map<String, dynamic>)).cast<DetailSubmit>()
+        .toList()
     ..ulasan = json["ulasan"] == null ? null : Ulasan.fromJson(json["ulasan"] as Map<String, dynamic>)
   ;
 }

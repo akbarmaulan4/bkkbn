@@ -15,8 +15,8 @@ class UbahPassword extends StatefulWidget {
 class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderStateMixin{
 
   AkunBloc bloc = AkunBloc();
-  double _scale;
-  AnimationController _controller;
+  double _scale = 0.0;
+  AnimationController? _controller;
 
   @override
   void initState() {
@@ -89,7 +89,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
                     builder: (context, snapshot) {
                       var type = false;
                       if(snapshot.data != null){
-                        type = snapshot.data;
+                        type = snapshot.data as bool;
                       }
                       return BoxBorderDefault(
                           child: StreamBuilder(
@@ -97,7 +97,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
                               builder: (context, snapshot) {
                                 var showPass = false;
                                 if(snapshot.data != null){
-                                  showPass = snapshot.data;
+                                  showPass = snapshot.data as bool;
                                 }
                                 return TextField(
                                   controller: bloc.edtOldPass,
@@ -136,7 +136,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
                     builder: (context, snapshot) {
                       var type = false;
                       if(snapshot.data != null){
-                        type = snapshot.data;
+                        type = snapshot.data as bool;
                       }
                       return BoxBorderDefault(
                           child: StreamBuilder(
@@ -144,7 +144,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
                               builder: (context, snapshot) {
                                 var showPass = false;
                                 if(snapshot.data != null){
-                                  showPass = snapshot.data;
+                                  showPass = snapshot.data as bool;
                                 }
                                 return TextField(
                                   controller: bloc.edtNewPass,
@@ -183,7 +183,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
                     builder: (context, snapshot) {
                       var type = false;
                       if(snapshot.data != null){
-                        type = snapshot.data;
+                        type = snapshot.data as bool;
                       }
                       return BoxBorderDefault(
                           child: StreamBuilder(
@@ -191,7 +191,7 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
                               builder: (context, snapshot) {
                                 var showPass = false;
                                 if(snapshot.data != null){
-                                  showPass = snapshot.data;
+                                  showPass = snapshot.data as bool;
                                 }
                                 return TextField(
                                   controller: bloc.edtRePass,
@@ -268,9 +268,9 @@ class _UbahPasswordState extends State<UbahPassword> with SingleTickerProviderSt
   }
 
   void _tapDown(TapDownDetails details) {
-    _controller.forward();
+    _controller!.forward();
   }
   void _tapUp(TapUpDetails details) {
-    _controller.reverse();
+    _controller!.reverse();
   }
 }

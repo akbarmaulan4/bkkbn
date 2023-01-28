@@ -50,7 +50,7 @@ class _RiwayatState extends State<Riwayat> {
           builder: (context, snapshot) {
             List<RiwayatItem> data = [];
             if(snapshot.data != null){
-              data = snapshot.data;
+              data = snapshot.data as List<RiwayatItem>;
             }
             return data.isNotEmpty ? ListView.separated(
               itemCount: data.length,
@@ -102,7 +102,7 @@ class _RiwayatState extends State<Riwayat> {
               padding: const EdgeInsets.only(bottom: 10),
               child: Container(
                   decoration: BoxDecoration(
-                    color:  data.rating_color != '' ? Utils.colorFromHex(data.rating_color):Utils.colorFromHex(ColorCode.greyElsimil),
+                    color:  data.rating_color != '' ? Utils.colorFromHex(data.rating_color!):Utils.colorFromHex(ColorCode.greyElsimil),
                     borderRadius: BorderRadius.all(Radius.circular(3)),
                   ),
                   height: size.height * 0.025,
@@ -115,9 +115,9 @@ class _RiwayatState extends State<Riwayat> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextAvenir(data.kuis_title, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                    TextAvenir(data.kuis_title!, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                     SizedBox(height: 5),
-                    TextAvenirBook(data.created_at, size: 12, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                    TextAvenirBook(data.created_at!, size: 12, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                   ],
                 )
             ),

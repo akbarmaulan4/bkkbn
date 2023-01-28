@@ -1,11 +1,11 @@
 part of 'couple_item.dart';
 CoupleItem _$fromJson(Map<String, dynamic> json) {
   return CoupleItem()
-    ..id = json['id'] as int ?? -1
-    ..pic = json['pic'] as String ?? ''
-    ..name = json['name'] as String ?? ''
-    ..tgl_lahir = json['tgl_lahir'] as String ?? ''
-    ..kota = json['kota'] as String ?? ''
+    ..id = json['id'] as int
+    ..pic = json['pic'] as String
+    ..name = json['name'] as String
+    ..tgl_lahir = json['tgl_lahir'] as String
+    ..kota = json['kota'] as String
   ;
 }
 

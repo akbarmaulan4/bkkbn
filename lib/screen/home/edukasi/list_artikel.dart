@@ -10,7 +10,7 @@ import 'package:kua/widgets/pull_refresh_widget.dart';
 import '../../../widgets/font/avenir_text.dart';
 
 class ListArtikel extends StatefulWidget {
-  EdukasiItem data;
+  EdukasiItem? data;
   ListArtikel({this.data});
   @override
   _ListArtikelState createState() => _ListArtikelState();
@@ -24,7 +24,7 @@ class _ListArtikelState extends State<ListArtikel> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      bloc.listArtikel(context, widget.data.id.toString());
+      bloc.listArtikel(context, widget.data!.id.toString());
     });
 
     bloc.messageError.listen((event) {
@@ -39,7 +39,7 @@ class _ListArtikelState extends State<ListArtikel> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: TextAvenir(widget.data.kategori, color: Utils.colorFromHex(ColorCode.bluePrimary),),
+        title: TextAvenir(widget.data!.kategori!, color: Utils.colorFromHex(ColorCode.bluePrimary),),
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.white,
@@ -63,7 +63,7 @@ class _ListArtikelState extends State<ListArtikel> {
               builder: (context, snapshot) {
                 List<ArtikelItem> data = [];
                 if(snapshot.data != null){
-                  data = snapshot.data;
+                  data = snapshot.data as List<ArtikelItem>;
                 }
                 return data.isNotEmpty ? ListView.separated(
                     itemCount: data.length,
@@ -97,7 +97,7 @@ class _ListArtikelState extends State<ListArtikel> {
           ),
         ),
         onRefresh: (){
-          bloc.listArtikel(context, widget.data.id.toString());
+          bloc.listArtikel(context, widget.data!.id.toString());
         },
       ),
     );

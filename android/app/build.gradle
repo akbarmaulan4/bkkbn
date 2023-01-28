@@ -15,10 +15,9 @@ buildscript {
     dependencies {
         // ...
         // OneSignal-Gradle-Plugin
-        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.6, 0.99.99]'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.8, 0.99.99]'
     }
 }
-apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 
 def localProperties = new Properties()
@@ -53,9 +52,10 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -63,6 +63,7 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        checkReleaseBuilds false
     }
 
     defaultConfig {
@@ -114,23 +115,20 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-//    testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'androidx.test:runner:1.1.1'
-//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
+//    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
-    implementation 'com.onesignal:OneSignal:[3.15.3, 3.99.99]'
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
-    implementation 'com.google.firebase:firebase-iid:18.0.0'
-    implementation 'com.google.code.gson:gson:2.8.6'
-//    implementation platform('com.google.firebase:firebase-bom:28.3.0')
-//    implementation 'com.google.firebase:firebase-analytics'
-//    implementation 'com.google.android.gms:play-services-auth:19.2.0'
-//    implementation 'com.google.android.gms:play-services-auth:19.2.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.4.1'
-    implementation("com.google.android.gms:play-services-base:17.0.0"){ force = true }
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//
+//    implementation 'com.onesignal:OneSignal:[3.15.3, 3.99.99]'
+//    implementation 'com.google.firebase:firebase-messaging:19.0.0'
+//    implementation 'com.google.firebase:firebase-iid:18.0.0'
+//    implementation 'com.google.code.gson:gson:2.8.6'
+//    implementation 'com.squareup.okhttp3:okhttp:4.7.2'
+//    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
+//    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.4.1'
+//    implementation("com.google.android.gms:play-services-base:17.0.0"){ force = true }
 }
 
 

@@ -20,8 +20,8 @@ class ItemResultQuiz extends StatefulWidget {
 
 class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStateMixin{
 
-  AnimationController _arrowAnimationController;
-  Animation _arrowAnimation;
+  AnimationController? _arrowAnimationController;
+  Animation? _arrowAnimation;
 
   blocItem bloc = new blocItem();
 
@@ -31,7 +31,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
     // TODO: implement initState
     super.initState();
     _arrowAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _arrowAnimation = Tween(begin: 0.0, end: 3.1).animate(_arrowAnimationController);
+    _arrowAnimation = Tween(begin: 0.0, end: 3.1).animate(_arrowAnimationController!);
   }
 
   @override
@@ -39,7 +39,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
     var size = MediaQuery.of(context).size;
     var color =  Utils.colorFromHex(ColorCode.greyElsimil);
     if(widget.detail.rating_color != null && widget.detail.rating_color != ''){
-      color =  Utils.colorFromHex(widget.detail.rating_color);
+      color =  Utils.colorFromHex(widget.detail.rating_color!);
     }
 
     return Container(
@@ -72,20 +72,20 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.ideographic,
                     children: [
-                      TextAvenir(widget.detail.value == ''? widget.detail.label : '${widget.detail.value} - ${widget.detail.label}', size: size.width < 430 ? 13:15, color: Utils.colorFromHex(ColorCode.bluePrimary)),
-                      TextAvenirBook(widget.detail.caption, size: size.width < 430 ? 12:14, color: Utils.colorFromHex(ColorCode.greyElsimil))
+                      TextAvenir(widget.detail.value == ''? widget.detail.label! : '${widget.detail.value} - ${widget.detail.label}', size: size.width < 430 ? 13:15, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                      TextAvenirBook(widget.detail.caption!, size: size.width < 430 ? 12:14, color: Utils.colorFromHex(ColorCode.greyElsimil))
                     ],
                   ),
                 )),
-                widget.detail.file.isNotEmpty ? AnimatedBuilder(
-                  animation: _arrowAnimationController,
+                widget.detail.file!.isNotEmpty ? AnimatedBuilder(
+                  animation: _arrowAnimationController!,
                   builder: (context, child) => Transform.rotate(
-                    angle: _arrowAnimation.value,
+                    angle: _arrowAnimation!.value,
                     child: InkWell(
                       onTap: (){
-                        _arrowAnimationController.isCompleted
-                            ? _arrowAnimationController.reverse()
-                            : _arrowAnimationController.forward();
+                        _arrowAnimationController!.isCompleted
+                            ? _arrowAnimationController!.reverse()
+                            : _arrowAnimationController!.forward();
                         bloc.changeOpen(!bloc.isOpen);
                       },
                       child: Icon(
@@ -105,7 +105,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
             builder: (context, snapshot) {
               var show = false;
               if(snapshot.data != null){
-                show = snapshot.data;
+                show = snapshot.data as bool;
               }
               return show ? Container(
                 child: Column(
@@ -116,7 +116,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                       padding: EdgeInsets.symmetric(horizontal: 15),
                       margin: EdgeInsets.only(bottom: 10),
                       child: Column(
-                        children: loadFile(widget.detail.file),
+                        children: loadFile(widget.detail.file!),
                       ),
                     )
                   ],
@@ -151,7 +151,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextAvenirBook('Unduh file berikut ini.', size: size.width < 430 ? 12:13, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
-                  TextAvenirBook(submit.name, size: size.width < 430 ?12:13, weight: FontWeight.bold, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                  TextAvenirBook(submit.name!, size: size.width < 430 ?12:13, weight: FontWeight.bold, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                 ],
               )
             ],
@@ -166,7 +166,7 @@ class _ItemResultQuizState extends State<ItemResultQuiz> with TickerProviderStat
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _arrowAnimationController.dispose();
+    _arrowAnimationController!.dispose();
   }
 }
 

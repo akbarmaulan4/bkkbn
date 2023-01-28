@@ -6,8 +6,8 @@ import 'package:kua/util/color_code.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class PullRefreshWidget extends StatefulWidget {
-  Widget child;
-  Function onRefresh;
+  Widget? child;
+  Function? onRefresh;
   PullRefreshWidget({
     this.child,
     this.onRefresh
@@ -39,7 +39,7 @@ class _PullRefreshWidgetState extends State<PullRefreshWidget> {
     completer.complete();
     // });
     return completer.future.then<void>((_) {
-      return widget.onRefresh();
+      return widget.onRefresh!();
     });
   }
 
@@ -52,7 +52,7 @@ class _PullRefreshWidgetState extends State<PullRefreshWidget> {
         showChildOpacityTransition: true,
         color: Utils.colorFromHex(ColorCode.lightBlueDark),
         backgroundColor: Utils.colorFromHex(ColorCode.blueSecondary),
-        child: widget.child,
+        child: widget.child!,
       ),
     );
   }

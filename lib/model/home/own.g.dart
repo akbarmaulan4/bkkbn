@@ -1,13 +1,13 @@
 part of 'own.dart';
 Own _$fromJson(Map<String, dynamic> json) {
   return Own()
-    ..id = json['id'] as int ?? -1
-    ..name = json['name'] as String ?? ''
-    ..tgl_lahir = json['tgl_lahir'] as String ?? ''
-    ..gender = json['gender'] as String ?? ''
-    ..profile_id = json['profile_id'] as String ?? ''
-    ..pic = json['pic'] as String ?? ''
-    ..kota = json['kota'] as String ?? ''
+    ..id = json['id'] as int
+    ..name = json['name'] as String
+    ..tgl_lahir = json['tgl_lahir'] as String
+    ..gender = json['gender'] as String
+    ..profile_id = json['profile_id'] as String
+    ..pic = json['pic'] as String
+    ..kota = json['kota'] as String
   ;
 }
 

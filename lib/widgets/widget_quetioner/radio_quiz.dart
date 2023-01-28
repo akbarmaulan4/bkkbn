@@ -6,13 +6,13 @@ import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:rxdart/rxdart.dart';
 
 class RadioQuiz extends StatefulWidget {
-  int id;
+  int? id;
   // String headerId;
   // String jenis;
   // String tipe;
-  Function changeValue;
-  List<ListAnswer> questions;
-  ListAnswer answer;
+  Function? changeValue;
+  List<ListAnswer>? questions;
+  ListAnswer? answer;
 
   RadioQuiz({
     this.id,
@@ -33,7 +33,7 @@ class _RadioQuizState extends State<RadioQuiz> {
 
   setAnswer(ListAnswer val){
     widget.answer = val;
-    widget.changeValue(val.id.toString());
+    widget.changeValue!(val.id.toString());
   }
 
   @override
@@ -50,20 +50,20 @@ class _RadioQuizState extends State<RadioQuiz> {
 
   loadRadio(){
     List<Widget> dataRadio = [];
-    for(ListAnswer str in widget.questions){
+    for(ListAnswer str in widget.questions!){
       dataRadio.add(StreamBuilder(
         stream: choise,
         builder: (context, snapshot) {
           int selectedId = -1;
           ListAnswer data = str;
           if(snapshot.data != null){
-            data = snapshot.data;
-            selectedId = data.id;
+            data = snapshot.data as ListAnswer;
+            selectedId = data.id as int;
           }
           return Row(
             children: [
               Radio(
-                  value: str.id,
+                  value: str.id!,
                   groupValue: selectedId,
                   activeColor: Utils.colorFromHex(ColorCode.bluePrimary),
                   onChanged: (val){
@@ -71,7 +71,7 @@ class _RadioQuizState extends State<RadioQuiz> {
                     setAnswer(str);
                   }
               ),
-              TextAvenir(str.option,  size: 14, color: Colors.grey,)
+              TextAvenir(str.option!,  size: 14, color: Colors.grey,)
             ],
           );
         }

@@ -3,8 +3,8 @@ import 'package:kua/util/Utils.dart';
 import 'package:kua/util/constant_style.dart';
 
 class BoxBorderDefault extends StatelessWidget {
-  final Widget child;
-  final Color backgroundColor;
+  final Widget? child;
+  final Color? backgroundColor;
   BoxBorderDefault({
     @required this.child,
     this.backgroundColor

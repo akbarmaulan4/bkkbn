@@ -24,9 +24,9 @@ class _BiodataViewState extends State<BiodataView> {
   AuthBloc bloc = AuthBloc();
   MapBloc mapBloc = MapBloc();
   List<String> dataGender = [];
-  String genderSelected;
+  String? genderSelected;
 
-  File _image;
+  File _image = File('');
   final picker = ImagePicker();
 
   @override
@@ -55,7 +55,7 @@ class _BiodataViewState extends State<BiodataView> {
   }
 
   _imgFromCamera() async {
-    final pickedFile = await picker.getImage(
+    final pickedFile = await picker.pickImage(
         source: ImageSource.camera,
         imageQuality: 100,
         maxWidth: 1024,
@@ -77,7 +77,7 @@ class _BiodataViewState extends State<BiodataView> {
   }
 
   _imgFromGallery() async {
-    final pickedFile = await picker.getImage(
+    final pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 100,
         maxWidth: 1024,
@@ -139,9 +139,9 @@ class _BiodataViewState extends State<BiodataView> {
                               builder: (context, snapshot) {
                                 File img = bloc.imgFotoKtp;
                                 if (snapshot.data != null) {
-                                  img = snapshot.data;
+                                  img = snapshot.data as File;
                                 }
-                                return img != null ? Container(
+                                return img.path != '' ? Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(color: Utils.colorFromHex(ColorCode.bluePrimary), width: 1.5)
@@ -153,7 +153,7 @@ class _BiodataViewState extends State<BiodataView> {
                                       builder: (context, snapshot) {
                                         String urlImg = '';
                                         if (snapshot.data != null) {
-                                          urlImg = snapshot.data;
+                                          urlImg = snapshot.data.toString();
                                         }
                                         return Container(
                                           height: 100,
@@ -226,8 +226,9 @@ class _BiodataViewState extends State<BiodataView> {
                                   keyboardType: TextInputType.phone,
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(12),
-                                    new BlacklistingTextInputFormatter(
-                                        new RegExp('[\\-|\\,|\\.]')),
+                                    FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.]'))
+                                    // new BlacklistingTextInputFormatter(
+                                    //     new RegExp('[\\-|\\,|\\.]')),
                                   ],
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -278,8 +279,9 @@ class _BiodataViewState extends State<BiodataView> {
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(16),
-                              new BlacklistingTextInputFormatter(
-                                  new RegExp('[\\-|\\,|\\.]')),
+                              FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.]'))
+                              // new BlacklistingTextInputFormatter(
+                              //     new RegExp('[\\-|\\,|\\.]')),
                             ],
                             decoration: ConstantStyle.decorTextField,
                             style: TextStyle(color: Utils.colorFromHex('#CCCCCC')),
@@ -368,7 +370,7 @@ class _BiodataViewState extends State<BiodataView> {
                                     builder: (context, snapshot) {
                                       String data = bloc.strGender;
                                       if (snapshot.data != null) {
-                                        data = snapshot.data;
+                                        data = snapshot.data.toString();
                                       }
                                       return BoxBorderDefault(
                                         child: TextField(
@@ -489,7 +491,7 @@ class _BiodataViewState extends State<BiodataView> {
                           builder: (context, snapshot) {
                             var load = false;
                             if (snapshot.data != null) {
-                              load = snapshot.data;
+                              load = snapshot.data as bool;
                             }
                             return BoxBorderDefault(
                                 child: InkWell(
@@ -538,7 +540,7 @@ class _BiodataViewState extends State<BiodataView> {
                                     builder: (context, snapshot) {
                                       var load = false;
                                       if (snapshot.data != null) {
-                                        load = snapshot.data;
+                                        load = snapshot.data as bool;
                                       }
                                       return BoxBorderDefault(
                                           child: InkWell(
@@ -591,7 +593,7 @@ class _BiodataViewState extends State<BiodataView> {
                                     builder: (context, snapshot) {
                                       var load = false;
                                       if (snapshot.data != null) {
-                                        load = snapshot.data;
+                                        load = snapshot.data as bool;
                                       }
                                       return BoxBorderDefault(
                                           child: InkWell(
@@ -658,8 +660,9 @@ class _BiodataViewState extends State<BiodataView> {
                                             ConstantStyle.decorTextField,
                                             inputFormatters: [
                                               LengthLimitingTextInputFormatter(3),
-                                              new BlacklistingTextInputFormatter(
-                                                  new RegExp('[\\-|\\,|\\.]')),
+                                              FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.]'))
+                                              // new BlacklistingTextInputFormatter(
+                                              //     new RegExp('[\\-|\\,|\\.]')),
                                             ],
                                             style: TextStyle(
                                                 color:
@@ -693,8 +696,9 @@ class _BiodataViewState extends State<BiodataView> {
                                             ConstantStyle.decorTextField,
                                             inputFormatters: [
                                               LengthLimitingTextInputFormatter(3),
-                                              new BlacklistingTextInputFormatter(
-                                                  new RegExp('[\\-|\\,|\\.]')),
+                                              FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.]'))
+                                              // new BlacklistingTextInputFormatter(
+                                              //     new RegExp('[\\-|\\,|\\.]')),
                                             ],
                                             style: TextStyle(
                                                 color:
@@ -728,8 +732,9 @@ class _BiodataViewState extends State<BiodataView> {
                                       decoration: ConstantStyle.decorTextField,
                                       inputFormatters: [
                                         LengthLimitingTextInputFormatter(5),
-                                        new BlacklistingTextInputFormatter(
-                                            new RegExp('[\\-|\\,|\\.]')),
+                                        FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.]'))
+                                        // new BlacklistingTextInputFormatter(
+                                        //     new RegExp('[\\-|\\,|\\.]')),
                                       ],
                                       style: TextStyle(
                                           color: Utils.colorFromHex('#CCCCCC')),
@@ -750,15 +755,15 @@ class _BiodataViewState extends State<BiodataView> {
                       InkWell(
                         onTap: ()=>Navigator.pushNamed(context, '/maps').
                         then((value){
-                          ModelLocation model = value;
-                          bloc.changeLatLon(double.parse(model.latitude), double.parse(model.longitude));
+                          ModelLocation model = value as ModelLocation;
+                          bloc.changeLatLon(double.parse(model.latitude!), double.parse(model.longitude!));
                         }),
                         child: StreamBuilder(
                             stream: bloc.finishPinLoc,
                             builder: (context, snapshot) {
                               bool pinLoc = false;
                               if(snapshot.data != null){
-                                pinLoc = snapshot.data;
+                                pinLoc = snapshot.data as bool;
                               }
                               return Container(
                                 height: 85,
@@ -913,7 +918,7 @@ class _BiodataViewState extends State<BiodataView> {
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(color: Colors.grey[300])),
+                            border: Border.all(color: Colors.grey.shade300)),
                         padding: EdgeInsets.only(right: 25),
                         margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                         height: 45,
@@ -937,7 +942,7 @@ class _BiodataViewState extends State<BiodataView> {
                           builder: (context, snapshot) {
                             List<dynamic> data = [];
                             if (snapshot.data != null) {
-                              data = snapshot.data;
+                              data = snapshot.data as List;
                             }
                             return Expanded(
                               child: ListView.builder(

@@ -2,9 +2,9 @@ part of 'all_artikel.dart';
 AllArtikel _$fromJson(Map<String, dynamic> json) {
   return AllArtikel()
     ..data =  (json['data'] as List)
-        ?.map((e) =>
-    e == null ? null : ArtikelItem.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+        .map((e) =>
+    e == null ? null : ArtikelItem.fromJson(e as Map<String, dynamic>)).cast<ArtikelItem>()
+        .toList()
   ;
 }
 

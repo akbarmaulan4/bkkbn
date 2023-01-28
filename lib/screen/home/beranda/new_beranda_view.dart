@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ext_storage/ext_storage.dart';
+import 'package:external_path/external_path.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:kua/bloc/baduta/baduta_controller.dart';
 import 'package:kua/bloc/hamil/hamil_controller.dart';
 import 'package:kua/bloc/home/home_bloc.dart';
@@ -81,8 +81,15 @@ class _NewBerandaViewState extends State<NewBerandaView> {
       }
     });
 
-    OneSignal.shared.setNotificationReceivedHandler((notification) {
-      if (notification != null) {
+    // OneSignal.shared.setNotificationReceivedHandler((notification) {
+    //   if (notification != null) {
+    //     LocalData.haveNotif(true);
+    //     bloc.setIndicatorNotif(true);
+    //   }
+    // });
+
+    OneSignal.shared.setNotificationWillShowInForegroundHandler((event) {
+      if (event != null) {
         LocalData.haveNotif(true);
         bloc.setIndicatorNotif(true);
       }
@@ -112,9 +119,9 @@ class _NewBerandaViewState extends State<NewBerandaView> {
       body: StreamBuilder(
         stream: bloc.dataHome,
         builder: (context, snapshot) {
-          DataHome data;
+          DataHome data = DataHome();
           if(snapshot.data != null){
-            data = snapshot.data;
+            data = snapshot.data as DataHome;
           }
           return Container(
             child: SingleChildScrollView(
@@ -124,9 +131,9 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                   StreamBuilder(
                     stream: bloc.dataUser,
                     builder: (context, snapshot) {
-                      UserModel userModel;
+                      UserModel userModel = UserModel();
                       if(snapshot.data != null){
-                        userModel = snapshot.data;
+                        userModel = snapshot.data as UserModel;
                       }
                       return Column(
                         children: [
@@ -139,7 +146,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                               textBaseline: TextBaseline.alphabetic,
                               children: [
                                 SizedBox(height: size.height * 0.05),
-                                titleNotif(userModel != null ? userModel.name:'', data),
+                                titleNotif(userModel.name != null ? userModel.name!:'', data),
                               ],
                             ),
                           ),
@@ -149,7 +156,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                               builder: (context, snapshot) {
                                 bool verify = bloc.verifikasi;
                                 if(snapshot.data != null){
-                                  verify = snapshot.data;
+                                  verify = snapshot.data as bool;
                                 }
                                 return !verify ? Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -216,14 +223,14 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                     }
                   ),
                   SizedBox(height: 20),
-                  data != null ? StreamBuilder(
+                  data.summarykuis != null ? StreamBuilder(
                     stream: selected,
                     builder: (context, snapshot) {
                       int pos = 0;
                       if(snapshot.data != null){
-                        pos = snapshot.data;
+                        pos = snapshot.data as int;
                       }
-                      return data.summarykuis.length > 0 ? Container(
+                      return data.summarykuis!.length > 0 ? Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: info(data, pos),
                       ):SizedBox();
@@ -235,14 +242,14 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                     child: TextAvenir('Artikel', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                   ),
                   SizedBox(height: 10),
-                  data != null ? Container(
+                  data.edukasi != null ? Container(
                     padding: EdgeInsets.only(left: 15),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: loadItemEdukasi(data.edukasi),
+                        children: loadItemEdukasi(data.edukasi!),
                       ),
                     ),
                   ):Container(
@@ -282,7 +289,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                   children: [
                     TextAvenir('Profile ID', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                     SizedBox(height: 3),
-                    TextAvenir(data.profile_id, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                    TextAvenir(data.profile_id!, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                     SizedBox(height: 10),
                     Container(
                       width: 200.0,
@@ -295,7 +302,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                     ),
                     SizedBox(height: 10),
                     InkWell(
-                        onTap: ()=>captureQrcode(data.profile_id),
+                        onTap: ()=>captureQrcode(data.profile_id!),
                         child: TextAvenir('Simpan QR Code', size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
                     ),
                   ],
@@ -306,9 +313,9 @@ class _NewBerandaViewState extends State<NewBerandaView> {
         }
     );
   }
-  Future<String> _getPath() {
-    return ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_DOWNLOADS);
+  Future<String> _getPath() async {
+    return await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOADS);;
   }
 
   GlobalKey globalKey = new GlobalKey();
@@ -324,9 +331,9 @@ class _NewBerandaViewState extends State<NewBerandaView> {
       String tempPath = await _getPath();
       var filePath = tempPath + '/${param}.png';
 
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       var image = await boundary.toImage();
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png) as ByteData;
       Uint8List pngBytes = byteData.buffer.asUint8List();
 
       // final tempDir = await getTemporaryDirectory();
@@ -395,7 +402,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                 placeholder: (context, url) => Center(
                   child: Image.asset(ImageConstant.placeHolderElsimil),
                 ),
-                imageUrl: data.image,
+                imageUrl: data.image!,
                 imageBuilder: (context, imageProvider) => Container(
                   // width: size.height * 0.10,
                   height: size.height * 0.16,
@@ -419,9 +426,9 @@ class _NewBerandaViewState extends State<NewBerandaView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(data.kategori, size: 11, color: Colors.grey),
+                  TextAvenir(data.kategori!, size: 11, color: Colors.grey),
                   SizedBox(height: 3),
-                  TextAvenir(data.title, size: 13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                  TextAvenir(data.title!, size: 13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                 ],
               ),
             )
@@ -475,7 +482,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
                           ),
                           SizedBox(width: 10),
                           InkWell(
-                            onTap: ()=> dialogBarcode(data.own),
+                            onTap: ()=> dialogBarcode(data.own!),
                             child: Stack(
                               children: [
                                 Icon(Icons.qr_code, color: Colors.grey.shade400, size: Utils.is5Inc(context) ? 20:22),
@@ -518,16 +525,16 @@ class _NewBerandaViewState extends State<NewBerandaView> {
   }
 
   cardCategory({
-    String label,
-    String type,
-    bool male, 
-    Function onClick}){
+    String? label,
+    String? type,
+    bool? male,
+    Function? onClick}){
     final size = MediaQuery.of(context).size;
     return InkWell(
-      onTap: ()=>onClick(),
+      onTap: ()=>onClick!(),
       child: Container(
         decoration: ConstantStyle.boxButton(radius: 10,
-            color: getBgImgPlaceHolder(type, male)),
+            color: getBgImgPlaceHolder(type!, male!)),
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         // height: size.height * 0.16,
         height: size.height * 0.18,
@@ -540,7 +547,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
             // Image.asset(getImgPlaceHolder(type, male), height: size.height * 0.13,),
             SizedBox(height: 8),
             Center(
-              child: TextAvenir(label, textAlign: TextAlign.center, size: 11,),
+              child: TextAvenir(label!, textAlign: TextAlign.center, size: 11,),
               // child: TextAvenir(label, textAlign: TextAlign.center, size: 12,),
             ),
           ],
@@ -604,13 +611,13 @@ class _NewBerandaViewState extends State<NewBerandaView> {
               width: double.infinity,
               child: PageView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: data.summarykuis.length,
+                  itemCount: data.summarykuis!.length,
                   controller: _pageController,
                   // onPageChanged: _onPageChanged,
                   itemBuilder: (context, index){
-                    ItemSummaryQuiz info = data.summarykuis[index];
+                    ItemSummaryQuiz info = data.summarykuis![index];
                     return Center(
-                      child: TextAvenir(info.message),
+                      child: TextAvenir(info.message!),
                     );
                   }
               ),
@@ -618,7 +625,7 @@ class _NewBerandaViewState extends State<NewBerandaView> {
           ),
           InkWell(
             onTap: (){
-              if(data.summarykuis.length > pos)
+              if(data.summarykuis!.length > pos)
               _pageController.animateToPage(
                 pos+1,
                 duration: const Duration(milliseconds: 400),

@@ -1,8 +1,8 @@
 part of 'item_finding.dart';
 ItemFinding _$fromJson(Map<String, dynamic> json) {
   return ItemFinding()
-    ..id = json['id'] as int ?? -1
-    ..nama = json['nama'] as String ?? ''
+    ..id = json['id'] as int
+    ..nama = json['nama'] as String
   ;
 }
 

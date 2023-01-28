@@ -279,7 +279,7 @@ class _OTPScreenState extends State<OTPPasswordScreen> {
       // padding: EdgeInsets.only(left: 15),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
-          border: Border.all(color: Colors.grey[300])
+          border: Border.all(color: Colors.grey.shade300)
       ),
       child: child,
     );

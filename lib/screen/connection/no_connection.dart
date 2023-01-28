@@ -3,7 +3,7 @@ import 'package:kua/util/constant_style.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class NoConnectionScreen extends StatefulWidget {
-  Function onConnect;
+  Function? onConnect;
   NoConnectionScreen({this.onConnect});
   @override
   _NoConnectionScreenState createState() => _NoConnectionScreenState();
@@ -25,7 +25,7 @@ class _NoConnectionScreenState extends State<NoConnectionScreen> {
           TextAvenir('Mohon check kembali koneksi anda', size: 14),
           SizedBox(height: size.height * 0.05),
           InkWell(
-            onTap: ()=>widget.onConnect(),
+            onTap: ()=>widget.onConnect!(),
             child: Container(
               decoration: ConstantStyle.box_fill_blue_nd,
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),

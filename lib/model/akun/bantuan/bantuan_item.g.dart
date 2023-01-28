@@ -1,8 +1,8 @@
 part of 'bantuan_item.dart';
 BantuanItem _$fromJson(Map<String, dynamic> json) {
   return BantuanItem()
-    ..id = json['id'] as int ?? -1
-    ..title = json['title'] as String ?? ''
+    ..id = json['id'] as int
+    ..title = json['title'] as String
   ;
 }
 

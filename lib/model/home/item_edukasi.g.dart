@@ -1,10 +1,10 @@
 part of 'item_edukasi.dart';
 ItemEdukasi _$fromJson(Map<String, dynamic> json) {
   return ItemEdukasi()
-    ..id = json['id'] as int ?? -1
-    ..title = json['title'] as String ?? ''
-    ..image = json['image'] as String ?? ''
-    ..kategori = json['kategori'] as String ?? ''
+    ..id = json['id'] as int
+    ..title = json['title'] as String
+    ..image = json['image'] as String
+    ..kategori = json['kategori'] as String
   ;
 }
 

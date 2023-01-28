@@ -27,15 +27,15 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
     _open.sink.add(val);
   }
 
-  AnimationController _arrowAnimationController;
-  Animation _arrowAnimation;
+  AnimationController? _arrowAnimationController;
+  Animation? _arrowAnimation;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _arrowAnimationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _arrowAnimation = Tween(begin: 0.0, end: 1.5).animate(_arrowAnimationController);
+    _arrowAnimation = Tween(begin: 0.0, end: 1.5).animate(_arrowAnimationController!);
   }
 
   @override
@@ -46,7 +46,7 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
       builder: (context, snapshot) {
         bool status = false;
         if(snapshot.data != null){
-          status = snapshot.data;
+          status = snapshot.data as bool;
         }
         return Container(
           decoration: ConstantStyle.boxButton(radius: 0, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
@@ -56,9 +56,9 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
             children: [
               InkWell(
                 onTap: (){
-                  _arrowAnimationController.isCompleted
-                      ? _arrowAnimationController.reverse()
-                      : _arrowAnimationController.forward();
+                  _arrowAnimationController!.isCompleted
+                      ? _arrowAnimationController!.reverse()
+                      : _arrowAnimationController!.forward();
                   openCard(statusOpen);
                 },
                 child: Row(
@@ -74,14 +74,14 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
                     ),
                     SizedBox(width: 10),
                     Expanded(child: Container(
-                      child: TextAvenir(widget.data.label),
+                      child: TextAvenir(widget.data.label!),
                     )),
                     Container(
                       padding: EdgeInsets.only(right: 5),
                       child: AnimatedBuilder(
-                        animation: _arrowAnimationController,
+                        animation: _arrowAnimationController!,
                         builder: (context, child) => Transform.rotate(
-                          angle: _arrowAnimation.value,
+                          angle: _arrowAnimation!.value,
                           child: Icon(
                             Icons.chevron_right_rounded,
                             size: 30,
@@ -99,7 +99,7 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
                     // padding: EdgeInsets.all(10),
                     color: Colors.white,
                     child: Column(
-                      children: loadItemCart(widget.data.details),
+                      children: loadItemCart(widget.data.details!),
                     ),
                   )
                 ],
@@ -129,7 +129,7 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
                       flex: 4,
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 15),
-                        child: Text(model.label),
+                        child: Text(model.label != null ? model.label!:''),
                       )
                   ),
                   i.isOdd ? SizedBox():Container(
@@ -151,7 +151,7 @@ class _ItemDetailRiwayatWidgetState extends State<ItemDetailRiwayatWidget> with 
                         // ),
 
                         alignment: Alignment.center,
-                        child: Center(child: Text(model.value, textAlign: TextAlign.center,)),
+                        child: Center(child: Text(model.value != null ? model.value!:'', textAlign: TextAlign.center,)),
                       )
                   )
                 ],

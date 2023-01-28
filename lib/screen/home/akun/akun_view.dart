@@ -71,11 +71,11 @@ class _AkunScreenState extends State<AkunView> {
       body: StreamBuilder<Object>(
         stream: bloc.dataUser,
         builder: (context, snapshot) {
-          Map user;
+          Map user = Map();
           if(snapshot.data != null){
-            user = snapshot.data;
+            user = snapshot.data as Map;
           }
-          return user != null ? Container(
+          return user['nama'] != null ? Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             color: Utils.colorFromHex(ColorCode.softGreyElsimil),
             height: double.infinity,

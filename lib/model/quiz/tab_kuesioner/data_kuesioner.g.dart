@@ -1,17 +1,17 @@
 part of 'data_kuesioner.dart';
 DataKuesioner _$fromJson(Map<String, dynamic> json) {
   return DataKuesioner()
-    ..id = json['id'] as int ?? -1
-    ..title = json['title'] as String ?? ''
-    ..created_at = json['created_at'] as String ?? ''
-    ..thumbnail = json['thumbnail'] as String ?? ''
-    ..rating = json['rating'] as String ?? ''
-    ..background = json['background'] as String ?? ''
-    ..action = json['action'] as String ?? ''
-    ..total_pertanyaan = json['total_pertanyaan'] as int ?? 0
-    ..answered = json['answered'] as int ?? 0
-    ..ulasan = json['ulasan'] as int ?? 0
-    ..result_id = json['result_id'] as int ?? -1
+    ..id = json['id'] as int
+    ..title = json['title'] as String
+    ..created_at = json['created_at'] as String
+    ..thumbnail = json['thumbnail'] as String
+    ..rating = json['rating'] as String
+    ..background = json['background'] as String
+    ..action = json['action'] as String
+    ..total_pertanyaan = json['total_pertanyaan'] as int
+    ..answered = json['answered'] as int
+    ..ulasan = json['ulasan'] as int
+    ..result_id = json['result_id'] as int
   ;
 }
 

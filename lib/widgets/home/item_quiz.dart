@@ -9,7 +9,7 @@ import '../font/avenir_text.dart';
 
 class ItemQuiz extends StatefulWidget {
   List<ItemResult> result;
-  ItemQuiz({this.result});
+  ItemQuiz({required this.result});
   @override
   _ItemQuizState createState() => _ItemQuizState();
 }
@@ -57,7 +57,7 @@ class _ItemQuizState extends State<ItemQuiz> {
           builder: (context, snapshot) {
             int index = 0;
             if(snapshot.data != null){
-              index = snapshot.data;
+              index = snapshot.data as int;
             }
             return Positioned(
               // bottom: 0.0,
@@ -81,11 +81,11 @@ class _ItemQuizState extends State<ItemQuiz> {
     );
   }
 
-  item(ItemResult data){
+  item(ItemResult? data){
     final size = MediaQuery.of(context).size;
     return InkWell(
       onTap: (){
-        if(data.result_id < 1){
+        if(data!.result_id! < 1){
           Navigator.pushNamed(context, '/landing_quiz', arguments: {'id': data.kuis_id, 'result_id': data.result_id});
         }else{
           Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id':data.result_id});
@@ -111,7 +111,7 @@ class _ItemQuizState extends State<ItemQuiz> {
                   SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      color: (data != null && data.rating_color != '') ? Utils.colorFromHex(data.rating_color):Utils.colorFromHex(ColorCode.darkGreyElsimil),
+                      color: (data != null && data.rating_color != '') ? Utils.colorFromHex(data.rating_color!):Utils.colorFromHex(ColorCode.darkGreyElsimil),
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                         boxShadow: [
                           BoxShadow(
@@ -130,14 +130,14 @@ class _ItemQuizState extends State<ItemQuiz> {
                     child: Column(
                       children: [
                         SizedBox(height: is5Inc() ? size.height * 0.04 : size.height * 0.05),
-                        TextAvenir((data != null && data.rating_color != '') ? data.label:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:14, textAlign: TextAlign.center),
+                        TextAvenir((data != null && data.rating_color != '') ? data.label!:'Belum ada hasil',  color: Colors.white, size: is5Inc() ? 12:14, textAlign: TextAlign.center),
                         TextAvenir((data != null && data.rating_color != '') ? '${data.member_kuis_nilai}/${data.kuis_max_nilai}':'-', color: Colors.white, size: is5Inc() ? 11:13),
                       ],
                     ),
                   ),
                   SizedBox(height: 10),
                   // SizedBox(height: is5Inc() ? size.height * 0.14 : size.height * 0.148),
-                  TextAvenir(data != null ? data.kuis_title : '', size: is5Inc() ? 12:14,),
+                  TextAvenir(data != null ? data.kuis_title! : '', size: is5Inc() ? 12:14,),
                 ],
               ),
             ),

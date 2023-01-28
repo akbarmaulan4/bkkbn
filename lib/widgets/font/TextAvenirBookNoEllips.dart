@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TextAvenirBookNoEllips extends Text{
-  final double size;
-  final Color color;
+  final double? size;
+  final Color? color;
   final TextAlign textAlign;
   final FontWeight weight;
   final double height;

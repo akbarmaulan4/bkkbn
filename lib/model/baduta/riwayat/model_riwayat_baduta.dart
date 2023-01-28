@@ -4,8 +4,9 @@ import 'package:kua/model/baduta/detail/model_header_baduta.dart';
 part 'model_riwayat_baduta.g.dart';
 class ModelRiwayatBaduta{
   ModelRiwayatBaduta(){}
-  ModelHeaderBaduta header;
-  List<ModelDetailBaduta> details;
+  ModelHeaderBaduta? header;
+  List<ModelDetailBaduta>? details;
+  String? data_legends;
 
   factory ModelRiwayatBaduta.fromJson(Map<String, dynamic> json) => _$fromJson(json);
   Map<String, dynamic> toJson() => _$toJson(this);

@@ -9,16 +9,16 @@ import '../font/avenir_text.dart';
 import '../box_border.dart';
 
 class InputQuiz extends StatefulWidget {
-  String question;
-  int id;
-  String tipe;
-  String satuan;
-  Function changeValue;
+  String? question;
+  int? id;
+  String? tipe;
+  String? satuan;
+  Function? changeValue;
 
-  String tile;
-  TextDirection txtDirection;
+  String? tile;
+  TextDirection? txtDirection;
   double width = 230;
-  String answerTxt;
+  String? answerTxt;
 
   InputQuiz({
     this.id,
@@ -41,7 +41,7 @@ class _InputQuizState extends State<InputQuiz> {
 
   setAnswer(String val){
     widget.answerTxt = val;
-    widget.changeValue(val);
+    widget.changeValue!(val);
   }
   berbobot(){
 
@@ -62,7 +62,7 @@ class _InputQuizState extends State<InputQuiz> {
             //   size: 14,
             //   color: Colors.grey,
             // ),
-            Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+            Text(widget.question!, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
             SizedBox(height: 5),
             Container(
               width: 230,
@@ -78,9 +78,10 @@ class _InputQuizState extends State<InputQuiz> {
                             keyboardType: widget.tipe == 'angka' ? TextInputType.number : TextInputType.text,
                             inputFormatters: [
                               // LengthLimitingTextInputFormatter(16),
-                              new BlacklistingTextInputFormatter(
-                                  widget.tipe == 'angka' ? RegExp('[\\,]') : RegExp('')
-                              ),
+                              widget.tipe == 'angka' ? FilteringTextInputFormatter.deny(RegExp('[\\,]')):FilteringTextInputFormatter.deny(RegExp(''))
+                              // new BlacklistingTextInputFormatter(
+                              //     widget.tipe == 'angka' ? RegExp('[\\,]') : RegExp('')
+                              // ),
                                   // new RegExp('[\\-|\\,|\\.]')),
                             ],
                             // textAlign:  widget.tipe == 'angka' ? TextAlign.right:TextAlign.left,
@@ -98,7 +99,7 @@ class _InputQuizState extends State<InputQuiz> {
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: TextAvenir(widget.satuan, size: 16,)
+                        child: TextAvenir(widget.satuan != null ? widget.satuan!:'' , size: 16,)
                       )
                     ],
                   )

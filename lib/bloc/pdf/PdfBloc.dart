@@ -19,7 +19,7 @@ class PdfBloc{
   final _fileDoc = PublishSubject<File>();
   Stream<File> get fileDoc => _fileDoc.stream;
 
-  File _dataFile;
+  File _dataFile = File('');
   File get dataFile => _dataFile;
 
   changeDoc(File val){
@@ -27,8 +27,8 @@ class PdfBloc{
       _dataFile = val;
       _fileDoc.sink.add(val);
     }else{
-      _dataFile = null;
-      _fileDoc.sink.add(null);
+      _dataFile = File('');
+      _fileDoc.sink.add(File(''));
     }
   }
 
@@ -41,7 +41,7 @@ class PdfBloc{
     Utils.progressDialog(context);
 
     _loadFetcher.sink.add(true);
-      String dir = (await getExternalStorageDirectory()).path;
+      String dir = (await getExternalStorageDirectory())!.path;
       print(dir);
 
       /// if `filename` File exists in local system then return that file.

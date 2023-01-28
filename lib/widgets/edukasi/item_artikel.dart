@@ -9,7 +9,7 @@ import '../font/avenir_book.dart';
 import '../font/avenir_text.dart';
 
 class ItemArtikelWidget extends StatefulWidget {
-  ArtikelItem item;
+  ArtikelItem? item;
   ItemArtikelWidget({this.item});
   @override
   _ItemArtikelWidgetState createState() => _ItemArtikelWidgetState();
@@ -28,9 +28,9 @@ class _ItemArtikelWidgetState extends State<ItemArtikelWidget> {
           Expanded(child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextAvenir(widget.item.judul, color: Utils.colorFromHex(ColorCode.bluePrimary), size: 16),
+              TextAvenir(widget.item!.judul!, color: Utils.colorFromHex(ColorCode.bluePrimary), size: 16),
               SizedBox(height: 7),
-              TextAvenirBook(widget.item.deskripsi, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
+              TextAvenirBook(widget.item!.deskripsi!, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14, lines: 3,)
             ],
           )),
           SizedBox(width: 15),
@@ -44,7 +44,7 @@ class _ItemArtikelWidgetState extends State<ItemArtikelWidget> {
               placeholder: (context, url) => Center(
                 child: Image.asset(ImageConstant.placeHolderElsimil),
               ),
-              imageUrl: widget.item.image, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+              imageUrl: widget.item!.image!, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
               imageBuilder: (context, imageProvider) => Container(
                 width: size.height * 0.10,
                 height: size.height * 0.10,

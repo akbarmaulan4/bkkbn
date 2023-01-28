@@ -9,7 +9,7 @@ import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class DetailBantuan extends StatefulWidget {
-  BantuanItem data;
+  BantuanItem? data;
   DetailBantuan({this.data});
 
   @override
@@ -24,7 +24,7 @@ class _DetailBantuanState extends State<DetailBantuan> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      bloc.getDetailBantuan(context, widget.data.id.toString());
+      bloc.getDetailBantuan(context, widget.data!.id.toString());
     });
 
     bloc.messageError.listen((event) {
@@ -39,7 +39,7 @@ class _DetailBantuanState extends State<DetailBantuan> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: TextAvenir(widget.data.title, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+        title: TextAvenir(widget.data!.title!, color: Utils.colorFromHex(ColorCode.bluePrimary)),
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.white,
@@ -71,7 +71,7 @@ class _DetailBantuanState extends State<DetailBantuan> {
                 builder: (context, snapshot){
                 DetailBantuanModel data = new DetailBantuanModel();
                 if(snapshot.data != null){
-                  data = snapshot.data;
+                  data = snapshot.data as DetailBantuanModel;
                 }
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -80,10 +80,13 @@ class _DetailBantuanState extends State<DetailBantuan> {
                     children: [
                       Html(
                         data: data.content != null ? data.content : '',
-                        onLinkTap: (url, _, __, ___) {
-                          print("Opening $url...");
+                        onLinkTap: (url){
                           Navigator.pushNamed(context, '/web_screen', arguments: {'title':'Data Referensi', 'url':url});
                         },
+                        // onLinkTap: (url, _, __, ___) {
+                        //   print("Opening $url...");
+                        //   Navigator.pushNamed(context, '/web_screen', arguments: {'title':'Data Referensi', 'url':url});
+                        // },
                       )
                     ],
                   ),

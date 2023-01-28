@@ -14,21 +14,23 @@ class HamilController{
 
   final _messageError = PublishSubject<String>();
   final _hamil = PublishSubject<bool>();
-  final _dataJanin = PublishSubject<List<ModelJanin>>();
-  final _dataRiwayatJanin = PublishSubject<List<ModelRiwayatJanin>>();
-  final _dataDetailRiwayatJanin = PublishSubject<List<ModelDetailRiwayatJanin>>();
+  final _dataJanin = PublishSubject<List<ModelJanin?>>();
+  final _dataRiwayatJanin = PublishSubject<List<ModelRiwayatJanin?>>();
+  final _dataDetailRiwayatJanin = PublishSubject<List<ModelDetailRiwayatJanin?>>();
+  final _dataLegend = PublishSubject<String>();
 
   Stream<String> get messageError => _messageError.stream;
   Stream<bool> get hamil => _hamil.stream;
-  Stream<List<ModelJanin>> get dataJanin => _dataJanin.stream;
-  Stream<List<ModelRiwayatJanin>> get dataRiwayatJanin => _dataRiwayatJanin.stream;
-  Stream<List<ModelDetailRiwayatJanin>> get dataDetailRiwayatJanin => _dataDetailRiwayatJanin.stream;
+  Stream<List<ModelJanin?>> get dataJanin => _dataJanin.stream;
+  Stream<List<ModelRiwayatJanin?>> get dataRiwayatJanin => _dataRiwayatJanin.stream;
+  Stream<List<ModelDetailRiwayatJanin?>> get dataDetailRiwayatJanin => _dataDetailRiwayatJanin.stream;
+  Stream<String> get dataLegend => _dataLegend.stream;
 
   getStatusHamil(BuildContext context) async {
     Utils.progressDialog(context);
     var user = await LocalData.getUser();
     if(user != null){
-      API.getStatusHamil(user.id, (result, error) {
+      API.getStatusHamil(user.id!, (result, error) {
         Navigator.of(context).pop();
         if(result != null){
           if(result['code'] == 200 && !result['error']){
@@ -76,8 +78,8 @@ class HamilController{
         if(result != null){
           var das = jsonEncode(result);
           if(result['code'] == 200 && !result['error']){
-            List<ModelJanin> dataJanin = (result['data'] as List)?.map((e) => e == null ? null : ModelJanin.fromJson(e as Map<String, dynamic>))?.toList();
-            if(dataJanin.length > 0){
+            List<ModelJanin?>? dataJanin = (result['data'] as List).map((e) => e == null ? null : ModelJanin.fromJson(e as Map<String, dynamic>)).toList();
+            if(dataJanin .length > 0){
               _dataJanin.sink.add(dataJanin);
             }else{
               _dataJanin.sink.add(dataJanin);
@@ -95,11 +97,12 @@ class HamilController{
         if(result != null){
           var das = jsonEncode(result);
           if(result['code'] == 200 && !result['error']){
-            List<ModelRiwayatJanin> riwayat = (result['data'] as List)?.map((e) => e == null ? null : ModelRiwayatJanin.fromJson(e as Map<String, dynamic>))?.toList();
+            List<ModelRiwayatJanin?>? riwayat = (result['data'] as List).map((e) => e == null ? null : ModelRiwayatJanin.fromJson(e as Map<String, dynamic>)).toList();
             if(riwayat.length > 0){
               _dataRiwayatJanin.sink.add(riwayat);
             }
           }
+          _dataLegend.sink.add(result['data_legends']);
         }
       });
     }
@@ -112,7 +115,7 @@ class HamilController{
         if (result != null) {
           var das = jsonEncode(result);
           if(result['code'] == 200 && !result['error']){
-            List<ModelDetailRiwayatJanin> riwayat = (result['data'] as List)?.map((e) => e == null ? null : ModelDetailRiwayatJanin.fromJson(e as Map<String, dynamic>))?.toList();
+            List<ModelDetailRiwayatJanin?>? riwayat = (result['data'] as List).map((e) => e == null ? null : ModelDetailRiwayatJanin.fromJson(e as Map<String, dynamic>)).toList();
             if(riwayat.length > 0){
               _dataDetailRiwayatJanin.sink.add(riwayat);
             }

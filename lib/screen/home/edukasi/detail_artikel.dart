@@ -13,7 +13,7 @@ import 'package:kua/widgets/font/avenir_text.dart';
 
 class DetailArtikel extends StatefulWidget {
   // ArtikelItem data;
-  String id;
+  String? id;
   DetailArtikel({this.id});
 
   @override
@@ -29,7 +29,7 @@ class _DetailArtikelState extends State<DetailArtikel> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      bloc.getDetailArtikel(context, widget.id);
+      bloc.getDetailArtikel(context, widget.id!);
       bloc.getRelatedlArtikel();
     });
 
@@ -47,11 +47,11 @@ class _DetailArtikelState extends State<DetailArtikel> {
       body: StreamBuilder(
         stream: bloc.detailEdukasi,
         builder: (context, snapshot) {
-          DetailEdukasi detail;
+          DetailEdukasi detail = DetailEdukasi();
           if(snapshot.data != null){
-            detail = snapshot.data;
+            detail = snapshot.data as DetailEdukasi;
           }
-          return detail != null ?  Container(
+          return detail.id != null ?  Container(
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -65,7 +65,7 @@ class _DetailArtikelState extends State<DetailArtikel> {
                           placeholder: (context, url) => Center(
                             child: Image.asset(ImageConstant.placeHolderElsimil),
                           ),
-                          imageUrl: detail.image,
+                          imageUrl: detail.image!,
                           errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
                           fit: BoxFit.cover,
                         ),
@@ -77,11 +77,11 @@ class _DetailArtikelState extends State<DetailArtikel> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 10),
-                            TextAvenir(detail.kategori, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                            TextAvenir(detail.kategori!, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                             SizedBox(height: 10),
-                            TextAvenir(detail.judul, size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                            TextAvenir(detail.judul!, size: 20, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                             SizedBox(height: 7),
-                            TextAvenirBook(detail.tgl_publish, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 12,),
+                            TextAvenirBook(detail.tgl_publish!, color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 12,),
                             SizedBox(height: 10),
                             Html(
                               data: detail.content != null ? detail.content : '',
@@ -107,26 +107,26 @@ class _DetailArtikelState extends State<DetailArtikel> {
     // <tr><td>fData</td><td>fData</td><td>fData</td></tr>
     // </tfoot>
     // </table>""",
-                                style: {
-                                  // tables will have the below background color
-                                  "table": Style(
-                                    backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
-                                  ),
-                                  // some other granular customizations are also possible
-                                  "tr": Style(
-                                    border: Border(bottom: BorderSide(color: Colors.grey)),
-                                  ),
-                                  "th": Style(
-                                    padding: EdgeInsets.all(6),
-                                    backgroundColor: Colors.grey,
-                                  ),
-                                  "td": Style(
-                                    padding: EdgeInsets.all(6),
-                                    alignment: Alignment.topLeft,
-                                  ),
-                                  // text that renders h1 elements will be red
-                                  "h1": Style(color: Colors.red),
-                                }
+    //                             style: {
+    //                               // tables will have the below background color
+    //                               "table": Style(
+    //                                 backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee),
+    //                               ),
+    //                               // some other granular customizations are also possible
+    //                               "tr": Style(
+    //                                 border: Border(bottom: BorderSide(color: Colors.grey)),
+    //                               ),
+    //                               "th": Style(
+    //                                 padding: EdgeInsets.all(6),
+    //                                 backgroundColor: Colors.grey,
+    //                               ),
+    //                               "td": Style(
+    //                                 padding: EdgeInsets.all(6),
+    //                                 alignment: Alignment.topLeft,
+    //                               ),
+    //                               // text that renders h1 elements will be red
+    //                               "h1": Style(color: Colors.red),
+    //                             }
 //                               defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                             )
                           ],
@@ -145,7 +145,7 @@ class _DetailArtikelState extends State<DetailArtikel> {
                                 builder: (context, snapshot) {
                                   List<ArtikelItem> data = bloc.allRelatedArticle;
                                   if(snapshot.data != null){
-                                    data = snapshot.data;
+                                    data = snapshot.data as List<ArtikelItem>;
                                   }
                                   return data.isNotEmpty ? Container(
                                     child: Column(

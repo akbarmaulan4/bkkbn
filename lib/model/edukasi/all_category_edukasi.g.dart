@@ -3,9 +3,9 @@ part of 'all_category_edukasi.dart';
 AllCategoryEdukasi _$fromJson(Map<String, dynamic> json) {
   return AllCategoryEdukasi()
     ..data =  (json['data'] as List)
-        ?.map((e) =>
-    e == null ? null : EdukasiItem.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+        .map((e) =>
+    e == null ? null : EdukasiItem.fromJson(e as Map<String, dynamic>)).cast<EdukasiItem>()
+        .toList()
   ;
 }
 

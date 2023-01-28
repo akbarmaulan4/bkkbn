@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kua/util/color_code.dart';
-import 'package:image/image.dart' as img;
 import 'package:kua/widgets/font/avenir_text.dart';
 
 import 'constant_style.dart';
@@ -95,8 +94,8 @@ class Utils{
         });
   }
 
-  static dialogSignout({BuildContext context, String title, Function ok}){
-    var size = MediaQuery.of(context).size;
+  static dialogSignout({BuildContext? context, String? title, Function? ok}){
+    var size = MediaQuery.of(context!).size;
     FocusScope.of(context).requestFocus(FocusNode());
     bool kecil = false;
     if(size.height < 650){
@@ -117,7 +116,7 @@ class Utils{
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                      TextAvenir(title!, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
                       SizedBox(height: 8),
                       Divider(),
                       SizedBox(height: 8),
@@ -141,7 +140,7 @@ class Utils{
                           InkWell(
                             onTap: (){
                               Navigator.of(context).pop();
-                              ok();
+                              ok!();
                             },
                             child: Container(
                               decoration: ConstantStyle.box_fill_blue_nd,
@@ -276,8 +275,8 @@ class Utils{
   //   return fixedFile;
   // }
 
-  static dialogMessage({BuildContext context, String title, Function ok}){
-    var size = MediaQuery.of(context).size;
+  static dialogMessage({BuildContext? context, String? title, Function? ok}){
+    var size = MediaQuery.of(context!).size;
     FocusScope.of(context).requestFocus(FocusNode());
     bool kecil = false;
     if(size.height < 650){
@@ -297,7 +296,7 @@ class Utils{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                  TextAvenir(title!, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
                   SizedBox(height: 8),
                   Divider(),
                   SizedBox(height: 8),
@@ -321,7 +320,7 @@ class Utils{
                       InkWell(
                         onTap: (){
                           Navigator.of(context).pop();
-                          ok();
+                          ok!();
                         },
                         child: Container(
                           width: kecil ? size.width * 0.23:size.width * 0.20,
@@ -343,8 +342,8 @@ class Utils{
     );
   }
 
-  static dialogInfo({BuildContext context, String title, Function ok}){
-    var size = MediaQuery.of(context).size;
+  static dialogInfo({BuildContext? context, String? title, Function? ok}){
+    var size = MediaQuery.of(context!).size;
     bool kecil = false;
     if(size.height < 650){
       kecil = true;
@@ -364,7 +363,7 @@ class Utils{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                  TextAvenir(title!, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
                   SizedBox(height: 8),
                   Divider(),
                   SizedBox(height: 8),
@@ -374,7 +373,7 @@ class Utils{
                       InkWell(
                         onTap: (){
                           Navigator.of(context).pop();
-                          ok();
+                          ok!();
                         },
                         child: Container(
                           width: kecil ? size.width * 0.23:size.width * 0.20,
@@ -396,8 +395,8 @@ class Utils{
     );
   }
 
-  static dialogInfo2({BuildContext context, String title, Function lanjut}){
-    var size = MediaQuery.of(context).size;
+  static dialogInfo2({BuildContext? context, String? title, Function? lanjut}){
+    var size = MediaQuery.of(context!).size;
     bool kecil = false;
     if(size.height < 650){
       kecil = true;
@@ -417,7 +416,7 @@ class Utils{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
+                  TextAvenir(title!, color: Utils.colorFromHex(ColorCode.bluePrimary), size: kecil ? 13:14,),
                   SizedBox(height: 8),
                   Divider(),
                   SizedBox(height: 8),
@@ -441,7 +440,7 @@ class Utils{
                       InkWell(
                         onTap: (){
                           Navigator.of(context).pop();
-                          lanjut();
+                          lanjut!();
                         },
                         child: Container(
                           width: kecil ? size.width * 0.23:size.width * 0.20,
@@ -464,25 +463,25 @@ class Utils{
   }
 
   static void showDialogEmail({
-    BuildContext context,
-    String title,
-    String message,
-    Function onNext,
-    Function onBackCheck
+    BuildContext? context,
+    String? title,
+    String? message,
+    Function? onNext,
+    Function? onBackCheck
   }){
     showDialog(
-        context: context,
+        context: context!,
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(title),
-            content: new Text(message),
+            title: Text(title!),
+            content: new Text(message!),
             actions: <Widget>[
               new FlatButton(
                 child: new Text("Periksa Kembali", style: TextStyle(color: colorFromHex(ColorCode.colorPrimary))),
                 onPressed: (){
                   Navigator.of(context).pop();
-                  onBackCheck();
+                  onBackCheck!();
                 },
               ),
               new FlatButton(
@@ -491,7 +490,7 @@ class Utils{
                         color: colorFromHex(ColorCode.colorPrimary))),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  onNext();
+                  onNext!();
                 },
               )
             ],
@@ -534,7 +533,7 @@ class Utils{
 
 
   static formatFileSize(double size) {
-    String hrSize = null;
+    String hrSize = '';
 
     double b = size;
     double k = size/1024.0;

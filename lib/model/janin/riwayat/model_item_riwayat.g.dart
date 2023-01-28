@@ -1,10 +1,10 @@
 part of 'model_item_riwayat.dart';
 ModelItemRiwayat _$fromJson(Map<String, dynamic> json) {
   return ModelItemRiwayat()
-    ..label = json['label'] as String ?? ''
+    ..label = json['label'] as String
     ..value = json['value'].toString()
-    ..color = json['color'] as String ?? ''
-    ..label_color = json['label_color'] as String ?? ''
+    ..color = json['color'] as String
+    ..label_color = json['label_color'] as String
   ;
 }
 

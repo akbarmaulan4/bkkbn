@@ -41,7 +41,7 @@ class LocalData{
     if (data != null && data.isNotEmpty) {
       return UserModel.fromJson(json.decode(data));
     }
-    return null;
+    return UserModel();
   }
 
   static Future<bool> removeUser() async {
@@ -60,7 +60,7 @@ class LocalData{
     if (data != null && data.isNotEmpty) {
       return data;
     }
-    return null;
+    return '';
   }
 
   static Future<bool> removePlayerId() async {
@@ -79,7 +79,7 @@ class LocalData{
     if (data != null) {
       return data;
     }
-    return null;
+    return false;
   }
 
   static Future<bool> removeNotif() async {
@@ -98,7 +98,7 @@ class LocalData{
     if (data != null) {
       return data;
     }
-    return null;
+    return false;
   }
 
   static Future<bool> removeChat() async {

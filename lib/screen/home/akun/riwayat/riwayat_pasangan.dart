@@ -62,7 +62,7 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
           builder: (context, snapshot) {
             List<PasanganItem> data = [];
             if(snapshot.data != null){
-              data = snapshot.data;
+              data = snapshot.data as List<PasanganItem>;
             }
             return data.isNotEmpty ? ListView.separated(
                 itemBuilder: (context, index){
@@ -76,9 +76,9 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 10),
-                            TextAvenir(item.title, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                            TextAvenir(item.title!, size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                             SizedBox(height: 3),
-                            TextAvenirBook(item.created_at, size: 12, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
+                            TextAvenirBook(item.created_at!, size: 12, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
                           ],
                         ),
                       ),
@@ -100,7 +100,7 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                               children: [
                                 Container(
                                   decoration: ConstantStyle.boxButton(
-                                      color: (item != null && item.background != '' )? Utils.colorFromHex(item.background):Utils.colorFromHex(ColorCode.blueSecondary),
+                                      color: (item != null && item.background != '' )? Utils.colorFromHex(item.background!):Utils.colorFromHex(ColorCode.blueSecondary),
                                       radius: 10
                                   ),
                                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -114,7 +114,7 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                                         crossAxisAlignment: CrossAxisAlignment.baseline,
                                         textBaseline: TextBaseline.ideographic,
                                         children: [
-                                          TextAvenir(item != null ? item.label:'', size: 16, color: Colors.white,),
+                                          TextAvenir(item != null ? item.label!:'', size: 16, color: Colors.white,),
                                           TextAvenir(item != null ? '${item.point}/${item.max_point}':'', size: 15, color: Colors.white,),
                                         ],
                                       ))
@@ -129,9 +129,9 @@ class _RiwayatPasanganState extends State<RiwayatPasangan> {
                               ],
                             ),
                             SizedBox(height: 10),
-                            TextAvenir(item != null ? item.label:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 12,),
+                            TextAvenir(item != null ? item.label!:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 12,),
                             SizedBox(height: 3),
-                            Text(item != null ? item.deskripsi:'',
+                            Text(item != null ? item.deskripsi!:'',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Avenir-book',

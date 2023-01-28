@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:kua/bloc/hamil/hamil_controller.dart';
 import 'package:kua/model/janin/riwayat/model_item_riwayat.dart';
 import 'package:kua/util/Utils.dart';
@@ -9,7 +10,7 @@ import 'package:kua/model/janin/riwayat/model_riwayat_janin.dart';
 
 class RiwayatJaninScreen extends StatefulWidget {
 
-  int idJanin;
+  int? idJanin;
   RiwayatJaninScreen({this.idJanin});
 
   @override
@@ -24,7 +25,7 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.riwayatJanin(widget.idJanin);
+    controller.riwayatJanin(widget.idJanin!);
   }
   @override
   Widget build(BuildContext context) {
@@ -43,15 +44,51 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
         builder: (context, snapshot) {
           List<ModelRiwayatJanin> data = [];
           if(snapshot.data != null){
-            data = snapshot.data;
+            data = snapshot.data as List<ModelRiwayatJanin>;
           }
-          return Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                children: loadRiwayat(data),
-              ),
-            ),
+          return StreamBuilder(
+            stream: controller.dataLegend,
+            builder: (context, snapshot) {
+              String strLegend = '';
+              if(snapshot.data != null){
+                strLegend = snapshot.data as String;
+              }
+              return Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: loadRiwayat(data),
+                      ),
+                      SizedBox(height: 25),
+                      TextAvenir('Keterangan'),
+                      SizedBox(height: 10),
+                      Container(
+                        decoration: ConstantStyle.box_border_grey,
+                        padding: EdgeInsets.all(15),
+                        child: Html(
+                            data: strLegend,
+                            // style: {
+                            //   // tables will have the below background color
+                            //   "table": Style(backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee)),
+                            //   // some other granular customizations are also possible
+                            //   "tr": Style(border: Border(bottom: BorderSide(color: Colors.grey)),
+                            //   ),
+                            //   "th": Style(padding: EdgeInsets.all(6), backgroundColor: Colors.grey),
+                            //   "td": Style(padding: EdgeInsets.all(6), alignment: Alignment.topLeft),
+                            //   // text that renders h1 elements will be red
+                            //   "h1": Style(color: Colors.red),
+                            // }
+    //                               defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }
           );
         }
       ),
@@ -67,20 +104,20 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
   }
 
   cardJanin(ModelRiwayatJanin data){
-    return data.details.length > 0 ? Container(
+    return data.details!.length > 0 ? Container(
       decoration: ConstantStyle.boxButton(radius: 10, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       margin: EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextAvenir(data.name),
+          TextAvenir(data.name!),
           SizedBox(height: 10),
-          data.details.length > 0 ? Container(
+          data.details!.length > 0 ? Container(
             decoration: ConstantStyle.boxButton(radius: 10, color: Colors.white),
             padding: EdgeInsets.all(10),
             child: Column(
-              children: loadItemDetail(data.details),
+              children: loadItemDetail(data.details!),
             ),
           ):SizedBox(),
           SizedBox(height: 20),
@@ -116,7 +153,7 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextAvenir(data.name, color: Utils.colorFromHex(ColorCode.bluePrimary),),
+          TextAvenir(data.name!, color: Utils.colorFromHex(ColorCode.bluePrimary),),
           SizedBox(height: 7),
           Text('Data belum tersedia')
         ],
@@ -141,15 +178,15 @@ class _RiwayatJaninScreenState extends State<RiwayatJaninScreen> {
           Row(
             children: [
               Expanded(child: Container(
-                child: Text(data.label, style: TextStyle(fontSize: 15, color: Utils.colorFromHex(ColorCode.bluePrimary)),),
+                child: Text(data.label!, style: TextStyle(fontSize: 15, color: Utils.colorFromHex(ColorCode.bluePrimary)),),
               )),
               Container(
-                decoration: ConstantStyle.boxButton(radius: 20, color: Utils.colorFromHex(data.color)),
+                decoration: ConstantStyle.boxButton(radius: 20, color: Utils.colorFromHex(data.color!)),
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
                 width: size.width * 0.27,
                 child: Center(
                   // child: Text(getLabel(data.color), style: TextStyle(color: Utils.colorFromHex(data.color)),),
-                  child: Text(data.label_color, style: TextStyle(color: Colors.white),),
+                  child: Text(data.label_color!, style: TextStyle(color: Colors.white),),
                 ),
               )
             ],

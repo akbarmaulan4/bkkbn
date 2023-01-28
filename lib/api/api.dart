@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 // import 'package:http/http.dart' as http;
-import 'package:imei_plugin/imei_plugin.dart';
+import 'package:device_imei/device_imei.dart';
 import 'package:kua/model/home/additional.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
@@ -28,14 +28,16 @@ class API{
     try{
       final response = await http.post(Uri.parse(BASE_URL + module),
           // ignore: missing_return
-          headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30), onTimeout: (){
-        // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
-        callback(null, mapError);
-      });
+          headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30),
+          // onTimeout: (){
+          //   mapError.putIfAbsent('message', () => 'Koneksi timout, gagal terhubung dengan service');
+          //   recallback(null, mapError);
+          // }
+      );
       if(response != null){
         int responseCode = response.statusCode;
         var mapJson = json.decode(response.body);
+        var dads = jsonEncode(mapJson);
         Utils.log("POST RESULT ${json.encode(mapJson)}");
         if (mapJson['code'] == 200) {
           callback(mapJson, null);
@@ -77,11 +79,13 @@ class API{
 
       final response = await http.post( Uri.parse(url),
           // ignore: missing_return
-          headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30), onTimeout: (){
-        // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi timout, Gagal memuat data.');
-        callback(null, mapError);
-      });
+          headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30),
+        //   onTimeout: (){
+        // // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
+        //     mapError.putIfAbsent('message', () => 'Koneksi timout, Gagal memuat data.');
+        //     callback(null, mapError);
+        //   }
+      );
       if(response != null){
         int responseCode = response.statusCode;
         var mapJson = json.decode(response.body);
@@ -116,7 +120,7 @@ class API{
     post['username'] = username;
     post['password'] = pas;
     var playerId = await LocalData.getPlayerId();
-    var imei = await ImeiPlugin.getImei();
+    var imei = '';//await DeviceImei.getImei();
     if(playerId != null){
       post['player_id'] = playerId;
     }
@@ -178,13 +182,15 @@ class API{
     post['lat'] = lat;
     post['lon'] = lon;
     var playerId = await LocalData.getPlayerId();
-    var imei = await ImeiPlugin.getImei();
+    var imei = '';//await DeviceImei.getImei();
     if(playerId != null){
       post['player_id'] = playerId;
     }
     if(playerId != null){
       post['imei'] = imei;
     }
+    // var dsad = jsonEncode(post);
+    // var dasad = dsad;
     basePost('/register', post, header, true, (result, error){
       callback(result, error);
     });
@@ -716,7 +722,7 @@ class API{
     header['Content-Type'] = 'application/json';
     if(params.isNotEmpty){
       for(Additional add in params){
-        post[add.params] = add.value;
+        post[add.params!] = add.value;
       }
     }
     basePost2(url, post, header, true, (result, error){
@@ -744,7 +750,7 @@ class API{
     try {
       final response = await http.get(Uri.parse(BASE_URL + module), headers: headers);
       if (response.contentLength == 0){
-        return callback(null);
+        return callback(File(''));
       }
       Directory tempDir = await getTemporaryDirectory();
       String tempPath = tempDir.path;
@@ -763,11 +769,13 @@ class API{
     var mapError = new Map();
     try {
       // ignore: missing_return
-      final response = await http.get(Uri.parse(BASE_URL + module), headers: headers ).timeout(Duration(seconds: 30), onTimeout: (){
-        // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi timout, Gagal memuat data.');
-        callback(null, mapError);
-      });
+      final response = await http.get(Uri.parse(BASE_URL + module), headers: headers ).timeout(Duration(seconds: 30),
+        //   onTimeout: (){
+        // // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
+        //   mapError.putIfAbsent('message', () => 'Koneksi timout, Gagal memuat data.');
+        //   callback(null, mapError);
+        // }
+      );
       int responseCode = response.statusCode;
       var mapJson = json.decode(response.body);
 
@@ -894,11 +902,13 @@ class API{
     try{
           final response = await http.put(Uri.parse(BASE_URL+module),
           // ignore: missing_return
-          headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30), onTimeout: (){
-        // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
-        mapError.putIfAbsent('message', () => 'Koneksi terputus, silahkan coba lagi');
-        callback(null, mapError);
-      });
+        //   headers: headers, body: encode ? json.encode(post) : post).timeout(Duration(seconds: 30),
+        //       onTimeout: (){
+        // // callback(null, HTTPStatusFailedException('Koneksi terputus, silahkan coba lagi'));
+        //     mapError.putIfAbsent('message', () => 'Koneksi terputus, silahkan coba lagi');
+        //     callback(null, mapError);
+        //   }
+      );
       if(response != null){
         int responseCode = response.statusCode;
         var mapJson = json.decode(response.body);

@@ -4,9 +4,9 @@ part of 'all_kecamatan.dart';
 AllKecamatan _$fromJson(Map<String, dynamic> json) {
   return AllKecamatan()
     ..data =  (json['data'] as List)
-        ?.map((e) =>
-    e == null ? null : DataKecamatan.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+        .map((e) =>
+    e == null ? null : DataKecamatan.fromJson(e as Map<String, dynamic>)).cast<DataKecamatan>()
+        .toList()
   ;
 }
 

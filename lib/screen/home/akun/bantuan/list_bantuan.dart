@@ -53,7 +53,7 @@ class _ListBantuanState extends State<ListBantuan> {
           builder: (context, snapshot) {
             List<BantuanItem> data = [];
             if(snapshot.data != null){
-              data = snapshot.data;
+              data = snapshot.data as List<BantuanItem>;
             }
             return Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -91,7 +91,7 @@ class _ListBantuanState extends State<ListBantuan> {
         child: Row(
           children: [
             Expanded(
-                child: TextAvenir(data.title, size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
+                child: TextAvenir(data.title!, size: 14, color: Utils.colorFromHex(ColorCode.blueSecondary))
             ),
             Icon(Icons.arrow_forward_ios_rounded, size: 20, color: Utils.colorFromHex(ColorCode.blueSecondary))
           ],

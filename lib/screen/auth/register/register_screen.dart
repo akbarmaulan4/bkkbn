@@ -30,13 +30,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // }
 
   //new
-  Future<bool> onWillPop() {
+  onWillPop() {
     if(bloc.registViewAt < 1){
       Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false);
     }else{
       bloc.changeViewRegist(bloc.registViewAt-1);
-      return Future.value(false);
     }
+    return Future.value(false);
   }
 
   is5Inc(){
@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final size = MediaQuery.of(context).size;
     final scaleFactor = MediaQuery.of(context).copyWith(textScaleFactor: 1.0);
     return WillPopScope(
-      onWillPop: onWillPop,
+      onWillPop: ()=>onWillPop(),
       child: Scaffold(
         body: MediaQuery(
           data: scaleFactor,
@@ -69,7 +69,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: InkWell(
-                      onTap: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false),
+                      onTap: ()=>onWillPop(),
+                      // onTap: ()=>Navigator.of(context).pushNamedAndRemoveUntil('/gateway', (Route<dynamic> route) => false),
                       child: Align(
                         alignment: Alignment.centerLeft,
                           child: Icon(Icons.arrow_back_ios_rounded, color: Utils.colorFromHex(ColorCode.bluePrimary), size: 20,)),
@@ -87,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     builder: (context, snapshot) {
                       int screenAt = bloc.registViewAt;
                       if(snapshot.data != null){
-                        screenAt = snapshot.data;
+                        screenAt = snapshot.data as int;
                       }
                       return Column(
                         children: [
@@ -141,9 +142,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // return RegisterDataDiri(bloc: bloc);
         return RegisterData(bloc: bloc);
       case 1:
-        return RegisterFoto(bloc: bloc);
-      case 2:
         return RegisterDataDiri(bloc: bloc);
+        // return RegisterFoto(bloc: bloc);
+      case 2:
+        // return RegisterDataDiri(bloc: bloc);
       default:
         return RegisterData(bloc: bloc);
     }

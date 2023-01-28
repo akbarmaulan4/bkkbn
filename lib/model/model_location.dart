@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class ModelLocation{
   ModelLocation(){}
-  String latitude;
-  String longitude;
+  String? latitude;
+  String? longitude;
 
   factory ModelLocation.fromJson(Map<String, dynamic> json) => _$fromJson(json);
   Map<String, dynamic> toJson() => _$toJson(this);
@@ -11,8 +11,8 @@ class ModelLocation{
 
 ModelLocation _$fromJson(Map<String, dynamic> json) {
   return ModelLocation()
-    ..latitude = json['latitude'] as String ?? ''
-    ..longitude = json['longitude'] as String ?? ''
+    ..latitude = json['latitude'] as String
+    ..longitude = json['longitude'] as String
   ;
 }
 

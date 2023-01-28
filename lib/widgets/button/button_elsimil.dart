@@ -6,12 +6,12 @@ import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BtnElsimi extends StatefulWidget {
-  BoxDecoration decorActive;
-  BoxDecoration decoInActive;
-  double padding;
-  String title;
-  Color textColor;
-  double textSize;
+  BoxDecoration? decorActive;
+  BoxDecoration? decoInActive;
+  double? padding;
+  String? title;
+  Color? textColor;
+  double? textSize;
   BtnElsimi();
 
   @override
@@ -53,7 +53,7 @@ class _BtnElsimiState extends State<BtnElsimi> {
                 offset: Offset(0, 0)
             );
             if(snapshot.data != null){
-              decoration = snapshot.data;
+              decoration = snapshot.data as BoxDecoration;
             }
             return Container(
                 decoration: decoration,

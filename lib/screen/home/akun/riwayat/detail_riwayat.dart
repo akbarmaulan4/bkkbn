@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:ext_storage/ext_storage.dart';
+import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:kua/bloc/quiz/quiz_bloc.dart';
@@ -21,8 +21,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class DetailRiwayat extends StatefulWidget {
-  int id;
-  String title;
+  int? id;
+  String? title;
   DetailRiwayat({this.id, this.title});
 
   @override
@@ -85,11 +85,11 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
         child: StreamBuilder(
           stream: bloc.resultSubmit,
           builder: (context, snapshot) {
-            ResultSubmit data;
+            ResultSubmit data = ResultSubmit();
             if(snapshot.data != null){
-              data = snapshot.data;
+              data = snapshot.data as ResultSubmit;
             }
-            return data != null ? SingleChildScrollView(
+            return data.header != null ? SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -99,7 +99,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextAvenir(widget.title, size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                        TextAvenir(widget.title!, size: is5Inc() ? 18:24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                         SizedBox(height: 10),
                         RichText(
                           textScaleFactor: 1.0,
@@ -107,9 +107,9 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                             text: 'Berdasarkan jawaban kuesioner yang diberikan pada tanggal ',
                             style: TextStyle(height: 1.5, fontSize: is5Inc() ? 13:14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                             children: <TextSpan>[
-                              TextSpan(text: data != null ? data.header.tanggal_kuis:'', style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
+                              TextSpan(text: data.header != null ? data.header!.tanggal_kuis:'', style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
                               TextSpan(text: ' dengan ID '),
-                              TextSpan(text: data != null ? data.header.kuis_code:'', style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
+                              TextSpan(text: data.header != null ? data.header!.kuis_code:'', style: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir', color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
                               TextSpan(text: ', Sebagai berikut:'),
                             ],
                           ),
@@ -134,7 +134,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                 children: [
                                   Container(
                                     decoration: ConstantStyle.boxButton(
-                                        color: data != null ? Utils.colorFromHex(data.header.rating_color):Utils.colorFromHex(ColorCode.blueSecondary),
+                                        color: data.header != null ? Utils.colorFromHex(data.header!.rating_color!):Utils.colorFromHex(ColorCode.blueSecondary),
                                         radius: 10
                                     ),
                                     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
@@ -149,9 +149,9 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                           textBaseline: TextBaseline.ideographic,
                                           children: [
                                             // SizedBox(height: 5),
-                                            TextAvenir(data != null ? data.header.label:'', size: 16, color: Colors.white,),
+                                            TextAvenir(data.header != null ? data.header!.label!:'', size: 16, color: Colors.white,),
                                             // SizedBox(height: 2),
-                                            TextAvenir(data != null ? '${data.header.member_kuis_nilai}/${data.header.kuis_max_nilai}':'', size: 14, color: Colors.white,),
+                                            TextAvenir(data.header != null ? '${data.header!.member_kuis_nilai}/${data.header!.kuis_max_nilai}':'', size: 14, color: Colors.white,),
                                           ],
                                         ))
                                       ],
@@ -165,9 +165,9 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                 ],
                               ),
                               SizedBox(height: 10),
-                              TextAvenir(data != null ? data.header.label:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,),
+                              TextAvenir(data.header != null ? data.header!.label!:'', color: Utils.colorFromHex(ColorCode.darkGreyElsimil), size: 14,),
                               SizedBox(height: 3),
-                              Text(data != null ? data.header.deskripsi:'',
+                              Text(data.header != null ? data.header!.deskripsi!:'',
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'Avenir-book',
@@ -181,11 +181,11 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                         SizedBox(height: 20),
                         Center(
                           child: InkWell(
-                            onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':data.header.url, 'code':data.header.kuis_code}),
+                            onTap: ()=>Navigator.pushNamed(context, '/pdf', arguments: {'url':data.header!.url, 'code':data.header!.kuis_code}),
                             child: Container(
                               width: is5Inc() ? 200:180,
                               decoration: BoxDecoration(
-                                color: data.header.url != '' ? Utils.colorFromHex(ColorCode.bluePrimary):Utils.colorFromHex(ColorCode.greyElsimil),
+                                color: data.header != null ? data.header!.url != '' ? Utils.colorFromHex(ColorCode.bluePrimary):Utils.colorFromHex(ColorCode.greyElsimil):Utils.colorFromHex(ColorCode.greyElsimil),
                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                               ),
                               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
@@ -194,7 +194,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                 children: [
                                   Image.asset(ImageConstant.icPdf3, height: 25,),
                                   SizedBox(width: 10),
-                                  TextAvenir('Unduh Sertifikat', size: 13, color: data.header.url != '' ? Utils.colorFromHex(ColorCode.lightBlueDark):Utils.colorFromHex(ColorCode.darkGreyElsimil))
+                                  TextAvenir('Unduh Sertifikat', size: 13, color: data.header!.url != '' ? Utils.colorFromHex(ColorCode.lightBlueDark):Utils.colorFromHex(ColorCode.darkGreyElsimil))
                                 ],
                               ),
                             ),
@@ -204,7 +204,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                         TextAvenir('Detail Hasil', size: is5Inc() ? 14:16, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                         SizedBox(height: 10),
                         Column(
-                          children: loadHasilQuiz(data != null ? data.detail:[]),
+                          children: loadHasilQuiz(data.detail != null ? data.detail!:[]),
                         ),
                       ],
                     ),
@@ -215,7 +215,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        (data != null && data.ulasan != null) ? Column(
+                        (data.ulasan != null) ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextAvenir('Ulasan Petugas', size: 16, color: Utils.colorFromHex(ColorCode.bluePrimary)),
@@ -231,13 +231,13 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                                 children: [
                                   Row(
                                     children: [
-                                      Expanded(child: TextAvenir((data != null && data.ulasan != null) ? data.ulasan.name :'', size: 16, color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
-                                      TextAvenirBook((data != null && data.ulasan != null) ? data.ulasan.tanggal_ulasan:'', size: 10, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                                      Expanded(child: TextAvenir((data.ulasan != null) ? data.ulasan!.name! :'', size: 16, color: Utils.colorFromHex(ColorCode.darkGreyElsimil))),
+                                      TextAvenirBook((data.ulasan != null) ? data.ulasan!.tanggal_ulasan!:'', size: 10, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                                     ],
                                   ),
-                                  TextAvenirBook((data != null && data.ulasan != null) ? data.ulasan.jabatan:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                                  TextAvenirBook((data.ulasan != null) ? data.ulasan!.jabatan!:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                                   SizedBox(height: 10),
-                                  TextAvenirBookNoEllips((data != null && data.ulasan != null) ? data.ulasan.komentar:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                                  TextAvenirBookNoEllips((data.ulasan != null) ? data.ulasan!.komentar!:'', size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                                 ],
                               ),
                             ),
@@ -245,7 +245,7 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
                         ):SizedBox(),
                         SizedBox(height: 35),
                         InkWell(
-                          onTap: ()=> Navigator.pushNamed(context, '/edit_quiz', arguments: {'id': data.header.kuis_id, 'title':widget.title}),
+                          onTap: ()=> Navigator.pushNamed(context, '/edit_quiz', arguments: {'id': data.header!.kuis_id, 'title':widget.title}),
                           child: Container(
                             decoration: ConstantStyle.boxShadowButon(
                               color: Utils.colorFromHex(ColorCode.blueSecondary),
@@ -325,9 +325,9 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
     );
   }
 
-  Future<String> _getPath() {
-    return ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_DOWNLOADS);
+  Future<String> _getPath() async{
+    return await ExternalPath.getExternalStoragePublicDirectory(
+        ExternalPath.DIRECTORY_DOWNLOADS);
   }
 
   GlobalKey globalKey = new GlobalKey();
@@ -343,9 +343,9 @@ class _DetailRiwayatState extends State<DetailRiwayat> {
       String tempPath = await _getPath();
       var filePath = tempPath + '/${param}.png';
 
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       var image = await boundary.toImage();
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png) as ByteData;
       Uint8List pngBytes = byteData.buffer.asUint8List();
 
       // final tempDir = await getTemporaryDirectory();

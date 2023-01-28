@@ -1,8 +1,8 @@
 part of 'file_detail_submit.dart';
 FileDetailSubmit _$fromJson(Map<String, dynamic> json) {
   return FileDetailSubmit()
-    ..name = json['name'] as String ?? ''
-    ..file = json['file'] as String ?? ''
+    ..name = json['name'] as String
+    ..file = json['file'] as String
       ;
 }
 

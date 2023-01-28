@@ -28,7 +28,7 @@ class _PdfviewState extends State<Pdfview> {
   // PDFDocument document;
   String url = ''; //"http://conorlastowka.com/book/CitationNeededBook-Sample.pdf";
   PdfBloc bloc = new PdfBloc();
-  Directory rootPath;
+  Directory? rootPath;
 
 
   @override
@@ -120,11 +120,11 @@ class _PdfviewState extends State<Pdfview> {
               child: StreamBuilder(
                   stream: bloc.fileDoc,
                   builder: (context, snapshot) {
-                    File data;
+                    File data = File('');
                     if(snapshot.data != null){
-                      data = snapshot.data;
+                      data = snapshot.data as File;
                     }
-                    return data != null ? Stack(
+                    return data.existsSync() ? Stack(
                       children: [
                         Container(
                           color: Colors.white,
@@ -149,7 +149,7 @@ class _PdfviewState extends State<Pdfview> {
                               //   _pdfViewController = vc;
                               // });
                             },
-                            onPageChanged: (int page, int total) {
+                            onPageChanged: (int? page, int? total) {
                               // setState(() {
                               //   _currentPage = page;
                               // });

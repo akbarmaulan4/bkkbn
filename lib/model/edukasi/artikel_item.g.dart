@@ -1,14 +1,14 @@
 part of 'artikel_item.dart';
 ArtikelItem _$fromJson(Map<String, dynamic> json) {
   return ArtikelItem()
-    ..id = json['id'] as int ?? -1
-    ..kategori = json['kategori'] as String ?? ''
-    ..judul = json['judul'] as String ?? ''
-    ..deskripsi = json['deskripsi'] as String ?? ''
-    ..tgl_publish = json['tgl_publish'] as String ?? ''
-    ..url = json['url'] as String ?? ''
-    ..image = json['image'] as String ?? ''
-    ..creator = json['creator'] as String ?? ''
+    ..id = json['id'] as int
+    ..kategori = json['kategori'] as String
+    ..judul = json['judul'] as String
+    ..deskripsi = json['deskripsi'] as String
+    ..tgl_publish = json['tgl_publish'] as String
+    ..url = json['url'] as String
+    ..image = json['image'] as String
+    ..creator = json['creator'] as String
   ;
 }
 

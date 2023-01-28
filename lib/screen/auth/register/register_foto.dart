@@ -15,7 +15,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class RegisterFoto extends StatefulWidget {
-  AuthBloc bloc;
+  AuthBloc? bloc;
   RegisterFoto({this.bloc});
 
   @override
@@ -23,7 +23,7 @@ class RegisterFoto extends StatefulWidget {
 }
 
 class _RegisterFotoState extends State<RegisterFoto> {
-  File _image;
+  File _image = File('');
   final picker = ImagePicker();
   var debouncher = new Debouncer(milliseconds: 500);
 
@@ -32,7 +32,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
-        widget.bloc.changeImage(image);
+        widget.bloc!.changeImage(image);
         setState(() {
           _image = image;
         });
@@ -47,7 +47,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
-        widget.bloc.changeImage(image);
+        widget.bloc!.changeImage(image);
         setState(() {
           _image = image;
         });
@@ -58,12 +58,12 @@ class _RegisterFotoState extends State<RegisterFoto> {
   }
 
   _selectFile() async {
-    FilePickerResult result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       if(file.existsSync()){
-        widget.bloc.changeImage(file);
-        widget.bloc.changePdf(file);
+        widget.bloc!.changeImage(file);
+        widget.bloc!.changePdf(file);
       }
     } else {
       // User canceled the picker
@@ -74,22 +74,22 @@ class _RegisterFotoState extends State<RegisterFoto> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _image = widget.bloc.imgFotoKtp;
-    widget.bloc.messageError.listen((event) {
+    _image = widget.bloc!.imgFotoKtp;
+    widget.bloc!.messageError.listen((event) {
       if(event != null){
         Utils.alertError(context, event, () { });
       }
     });
 
-    widget.bloc.allowFotoKtpUser.listen((event) {
+    widget.bloc!.allowFotoKtpUser.listen((event) {
       if(event != null){
         if(event){
-          widget.bloc.changeViewRegist(2);
+          widget.bloc!.changeViewRegist(2);
         }
       }
     });
 
-    widget.bloc.messageKTP.listen((event) {
+    widget.bloc!.messageKTP.listen((event) {
       if(event != null){
         Utils.dialogInfo(context: context, title: event, ok: ()=>Navigator.pushNamed(context, '/forgot_password'));
         // showTopSnackBar(context, CustomSnackBar.error(message: event));
@@ -134,12 +134,13 @@ class _RegisterFotoState extends State<RegisterFoto> {
             SizedBox(height: 5),
             BoxBorderDefault(
                 child: TextField(
-                  controller: widget.bloc.edtKtp,
+                  controller: widget.bloc!.edtKtp,
                   textAlignVertical: TextAlignVertical.center,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
                     LengthLimitingTextInputFormatter(16),
-                    WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                    // WhitelistingTextInputFormatter(RegExp("[0-9]")),
                     // new BlacklistingTextInputFormatter(
                     //     new RegExp('[\\-|\\,|\\.]')),
                   ],
@@ -152,7 +153,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
                   onChanged: (val){
                     if(val.length > 15){
                       debouncher.run(() {
-                        widget.bloc.checkNIK();
+                        widget.bloc!.checkNIK();
                       });
                     }
                   },//ConstantStyle.decorTextField,
@@ -175,17 +176,17 @@ class _RegisterFotoState extends State<RegisterFoto> {
                       fit: BoxFit.cover,
                     ),
                   ) : StreamBuilder(
-                    stream: widget.bloc.fileDoc,
+                    stream: widget.bloc!.fileDoc,
                     builder: (context, snapshot) {
-                      File exist;
+                      File exist = File('');
                       String fileName = 'Foto KTP';
                       if(snapshot.data != null){
-                        exist = snapshot.data;
+                        exist = snapshot.data as File;
                         fileName = exist.path.split('/').last;
                       }
                       return Row(
                         children: [
-                          Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
+                          Image.asset(exist.existsSync()? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
                           SizedBox(width: 10),
                           Expanded(child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +214,7 @@ class _RegisterFotoState extends State<RegisterFoto> {
             SizedBox(height: _image != null ? is5Inc() ? size.height * 0.23 : size.height * 0.33 : is5Inc() ? size.height * 0.37:size.height * 0.49),
             InkWell(
               onTap: (){
-                widget.bloc.validasiFotoKtp();
+                widget.bloc!.validasiFotoKtp();
                 // widget.bloc.changeViewRegist(2);
               },
               child: Container(

@@ -51,7 +51,7 @@ class _LandingScreenState extends State<LandingScreen> {
         builder: (context, snapshot) {
           List<TypeChatModel> data = [];
           if(snapshot.data != null){
-            data = snapshot.data;
+            data = snapshot.data as List<TypeChatModel>;
           }
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
@@ -118,9 +118,9 @@ class _LandingScreenState extends State<LandingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextAvenirBook(value.name, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), weight: FontWeight.w600,),
+                TextAvenirBook(value.name!, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), weight: FontWeight.w600,),
                 SizedBox(height: 5),
-                TextAvenir(value.officer_name, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                TextAvenir(value.officer_name!, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
               ],
             ),
           )
@@ -159,7 +159,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 width: size.height * 0.12,
                 decoration: ConstantStyle.boxCircle(color: Colors.grey.shade200),
                 child: value.
-                name.contains('Bidan') ? Image.asset(ImageConstant.nurse2):Image.asset(index == 1 ? ImageConstant.nurse:ImageConstant.petugas_kb),
+                name!.contains('Bidan') ? Image.asset(ImageConstant.nurse2):Image.asset(index == 1 ? ImageConstant.nurse:ImageConstant.petugas_kb),
               ),
               Container(
                   height: size.height * 0.12,
@@ -169,7 +169,7 @@ class _LandingScreenState extends State<LandingScreen> {
             ],
           ),
           SizedBox(height: 10),
-          TextAvenir(value.name, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+          TextAvenir(value.name!, size: 14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
         ],
       ),
     );

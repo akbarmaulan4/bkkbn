@@ -9,12 +9,12 @@ import '../font/avenir_text.dart';
 import '../box_border.dart';
 
 class AutoCompleteQuiz extends StatefulWidget {
-  int id;
-  String question;
-  String url;
-  String param;
-  String answerTxt;
-  Function changeValue;
+  int? id;
+  String? question;
+  String? url;
+  String? param;
+  String? answerTxt;
+  Function? changeValue;
 
   AutoCompleteQuiz({
     this.id,
@@ -40,7 +40,7 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
   String answer = '';
   setAnswer(String val){
     widget.answerTxt = val;
-    widget.changeValue(val);
+    widget.changeValue!(val);
   }
 
   @override
@@ -58,11 +58,11 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
             //   size: 14,
             //   color: Colors.grey,
             // ),
-            Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+            Text(widget.question!, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
             SizedBox(height: 5),
             InkWell(
               onTap: (){
-                showFinder(widget.question, widget.url, widget.param);
+                showFinder(widget.question!, widget.url!, widget.param!);
               },
               child: BoxBorderDefault(
                   child: TextField(
@@ -107,7 +107,7 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(color: Colors.grey[300])
+                            border: Border.all(color: Colors.grey.shade300)
                         ),
                         padding: EdgeInsets.only(right: 25),
                         margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -139,7 +139,7 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                         builder: (context, snapshot) {
                           bool show = true;
                           if(snapshot.data != null){
-                            show = snapshot.data;
+                            show = snapshot.data as bool;
                           }
                           return show ? Padding(
                             padding: EdgeInsets.symmetric(horizontal: 25),
@@ -152,7 +152,7 @@ class _AutoCompleteQuizState extends State<AutoCompleteQuiz> {
                           builder: (context, snapshot) {
                             List<dynamic> data = bloc.dataSearch;
                             if(snapshot.data != null){
-                              data = snapshot.data;
+                              data = snapshot.data as List;
                             }
                             if(data.isNotEmpty){
                               bloc.showInfoMaxLeght(false);

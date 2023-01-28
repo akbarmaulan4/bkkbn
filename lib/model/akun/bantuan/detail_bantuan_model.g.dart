@@ -1,10 +1,10 @@
 part of 'detail_bantuan_model.dart';
 DetailBantuanModel _$fromJson(Map<String, dynamic> json) {
   return DetailBantuanModel()
-    ..id = json['id'] as int ?? -1
-    ..title = json['title'] as String ?? ''
-    ..content = json['content'] as String ?? ''
-    ..image = json['image'] as String ?? ''
+    ..id = json['id'] as int
+    ..title = json['title'] as String
+    ..content = json['content'] as String
+    ..image = json['image'] as String
   ;
 }
 

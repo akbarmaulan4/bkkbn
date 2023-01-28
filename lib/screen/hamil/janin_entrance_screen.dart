@@ -39,7 +39,7 @@ class _JaninEntranceScreenState extends State<JaninEntranceScreen> {
         builder: (context, snapshot) {
           List<ModelJanin> dataJanin = [];
           if(snapshot.data != null){
-            dataJanin = snapshot.data;
+            dataJanin = snapshot.data as List<ModelJanin>;
           }
           return Container(
             width: double.infinity,
@@ -92,7 +92,7 @@ class _JaninEntranceScreenState extends State<JaninEntranceScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(data.name, color: Utils.colorFromHex(ColorCode.bluePrimary),),
+                  TextAvenir(data.name!, color: Utils.colorFromHex(ColorCode.bluePrimary),),
                   SizedBox(height: 2,),
                   TextAvenir('HPL : ${data.hpl ?? '-'}', size: 10,),
                 ],

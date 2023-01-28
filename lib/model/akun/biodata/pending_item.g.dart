@@ -2,11 +2,11 @@
 part of 'pending_item.dart';
 PendingItem _$fromJson(Map<String, dynamic> json) {
   return PendingItem()
-    ..request_id = json['request_id'] as int ?? -1
-    ..pic = json['pic'] as String ?? ''
-    ..name = json['name'] as String ?? ''
-    ..tgl_lahir = json['tgl_lahir'] as String ?? ''
-    ..kota = json['kota'] as String ?? ''
+    ..request_id = json['request_id'] as int
+    ..pic = json['pic'] as String
+    ..name = json['name'] as String
+    ..tgl_lahir = json['tgl_lahir'] as String
+    ..kota = json['kota'] as String
   ;
 }
 

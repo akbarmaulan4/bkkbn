@@ -8,11 +8,11 @@ import 'package:rxdart/rxdart.dart';
 class NotifBloc{
 
   final _messageError = PublishSubject<String>();
-  final _dataNotif = PublishSubject<List<ItemNotif>>();
+  final _dataNotif = PublishSubject<List<ItemNotif?>>();
   final _delete = PublishSubject<bool>();
 
   Stream<String> get messageError => _messageError.stream;
-  Stream<List<ItemNotif>> get dataNotif => _dataNotif.stream;
+  Stream<List<ItemNotif?>> get dataNotif => _dataNotif.stream;
   Stream<bool> get delete => _delete.stream;
 
   listNotif() async {
@@ -21,7 +21,7 @@ class NotifBloc{
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
-          var data = (json['data'] as List)?.map((e) => e == null ? null : ItemNotif.fromJson(e as Map<String, dynamic>))?.toList();
+          var data = (json['data'] as List).map((e) => e == null ? null : ItemNotif.fromJson(e as Map<String, dynamic>)).toList();
           if(data != null){
             _dataNotif.sink.add(data);
           }

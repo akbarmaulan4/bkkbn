@@ -1,8 +1,8 @@
 part of 'list_answers.dart';
 ListAnswer _$fromJson(Map<String, dynamic> json) {
   return ListAnswer()
-    ..id = json['id'] as int ?? -1
-    ..option = json['option'] as String ?? ''
+    ..id = json['id'] as int
+    ..option = json['option'] as String
   ;
 }
 

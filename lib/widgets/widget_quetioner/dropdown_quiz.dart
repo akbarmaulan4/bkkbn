@@ -4,7 +4,7 @@ import 'package:kua/util/constant_style.dart';
 import '../font/avenir_text.dart';
 
 class DropDownQuiz extends StatefulWidget {
-  String question;
+  String? question;
   DropDownQuiz({this.question});
   @override
   _DropDownQuizState createState() => _DropDownQuizState();
@@ -36,7 +36,7 @@ class _DropDownQuizState extends State<DropDownQuiz> {
           //   color: Colors.grey,
           // ),
 
-          Text(widget.question, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
+          Text(widget.question!, style: TextStyle(fontSize: 14, fontFamily: 'Avenir', color: Colors.grey)),
           SizedBox(height: 5),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -55,9 +55,9 @@ class _DropDownQuizState extends State<DropDownQuiz> {
                     value: value,
                   );
                 }).toList(),
-                onChanged: (value) {
+                onChanged: (String? value) {
                   setState(() {
-                    answerSelected = value;
+                    answerSelected = value!;
                   });
                 },
               ),

@@ -1,13 +1,13 @@
 part of 'chat_message.dart';
 ChatMessage _$fromJson(Map<String, dynamic> json) {
   return ChatMessage()
-    ..member_id = json['member_id'] as String ?? ''
-    ..message = json['message'] as String ?? ''
-    ..pic = json['pic'] as String ?? ''
-    ..jabatan = json['jabatan'] as String ?? ''
-    ..tanggal = json['tanggal'] as String ?? ''
-    ..jam = json['jam'] as String ?? ''
-    ..action = json['action'] as String ?? ''
+    ..member_id = json['member_id'] as String
+    ..message = json['message'] as String
+    ..pic = json['pic'] as String
+    ..jabatan = json['jabatan'] as String
+    ..tanggal = json['tanggal'] as String
+    ..jam = json['jam'] as String
+    ..action = json['action'] as String
   ;
 }
 

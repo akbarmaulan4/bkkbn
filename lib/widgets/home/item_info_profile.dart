@@ -9,8 +9,8 @@ import '../font/avenir_book.dart';
 import '../font/avenir_text.dart';
 
 class ItemInfoProfile extends StatefulWidget {
-  Own dataOwn;
-  List<Own> dataCouple;
+  Own? dataOwn;
+  List<Own>? dataCouple;
   ItemInfoProfile({this.dataOwn, this.dataCouple});
   @override
   _ItemInfoProfileState createState() => _ItemInfoProfileState();
@@ -59,7 +59,8 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                       placeholder: (context, url) => Center(
                         child: Image.asset(ImageConstant.logoElsimil),
                       ),
-                      imageUrl: (widget.dataOwn != null && widget.dataOwn.pic != null) ? widget.dataOwn.pic:'',//'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+                      errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
+                      imageUrl: (widget.dataOwn != null && widget.dataOwn!.pic != null) ? widget.dataOwn!.pic!:'',//'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -69,8 +70,8 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextAvenir(widget.dataOwn != null ? widget.dataOwn.name:'', size: is5Inc() ? 10 : 12, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
-                      TextAvenirBook(widget.dataOwn != null ? '${widget.dataOwn.kota}, ${widget.dataOwn.tgl_lahir}' : '', size: is5Inc() ? 9 : 11, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
+                      TextAvenir(widget.dataOwn != null ? widget.dataOwn!.name!:'', size: is5Inc() ? 10 : 12, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
+                      TextAvenirBook(widget.dataOwn != null ? '${widget.dataOwn!.kota}, ${widget.dataOwn!.tgl_lahir}' : '', size: is5Inc() ? 9 : 11, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
                     ],
                   ),
                 )
@@ -80,7 +81,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
           SizedBox(height: 10),
           TextAvenir('Pasangan Kamu', size: is5Inc() ? 12:14, color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
           SizedBox(height: 5),
-          widget.dataCouple.isNotEmpty ? Container(
+          widget.dataCouple!.isNotEmpty ? Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
@@ -92,9 +93,9 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
               height: size.height * 0.08,
               child: PageView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.dataCouple.length,
+                  itemCount: widget.dataCouple!.length,
                   itemBuilder: (context, index){
-                    Own data = widget.dataCouple[index];
+                    Own data = widget.dataCouple![index];
                     return InkWell(
                       onTap: (){
                         Navigator.pushNamed(context, '/riwayat_pasangan', arguments: {'id': data.id.toString()});
@@ -116,7 +117,8 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                                   placeholder: (context, url) => Center(
                                     child: Image.asset(ImageConstant.logoElsimil),
                                   ),
-                                  imageUrl: data.pic,
+                                  errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
+                                  imageUrl: data.pic!,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -127,7 +129,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextAvenir(data.name, size: is5Inc() ? 10:12, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                                  TextAvenir(data.name!, size: is5Inc() ? 10:12, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                                   TextAvenirBook('${data.kota}, ${data.tgl_lahir}', size: is5Inc() ? 9:11, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                                 ],
                               ),
@@ -142,7 +144,7 @@ class _ItemInfoProfileState extends State<ItemInfoProfile> {
           ):
           InkWell(
             onTap: (){
-              if(widget.dataOwn.gender == '1'){
+              if(widget.dataOwn!.gender == '1'){
                 Navigator.pushNamed(context, '/tambah_pasangan');
               }else{
                 Navigator.pushNamed(context, '/biodata_pasangan');

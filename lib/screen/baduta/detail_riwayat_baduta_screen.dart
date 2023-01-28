@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:kua/bloc/baduta/baduta_controller.dart';
 import 'package:kua/model/baduta/detail/model_detail_baduta.dart';
 import 'package:kua/model/baduta/detail/model_header_baduta.dart';
@@ -41,19 +42,43 @@ class _DetailRiwayatBadutaScreenState extends State<DetailRiwayatBadutaScreen> {
       body: StreamBuilder(
         stream: controller.detailRiwayat,
         builder: (context, snapshot) {
-          ModelRiwayatBaduta data;
+          ModelRiwayatBaduta data = ModelRiwayatBaduta();
           if(snapshot.data != null){
-            data = snapshot.data;
+            data = snapshot.data as ModelRiwayatBaduta;
           }
-          return data != null ? Container(
+          return data.header != null ? Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  cardHeader(data.header),
+                  data.header != null ? cardHeader(data.header!):SizedBox(),
                   SizedBox(height: 20),
-                  Column(
-                    children: loadItemRiwayat(data.details),
+                  data.details != null ? Column(
+                    children: loadItemRiwayat(data.details!),
+                  ):SizedBox(),
+                  SizedBox(height: 25),
+                  TextAvenir('Keterangan'),
+                  SizedBox(height: 10),
+                  Container(
+                    decoration: ConstantStyle.box_border_grey,
+                    padding: EdgeInsets.all(15),
+                    // child: Text('fsydgbansiofasihdaihdaidhcanhuahdcwahciahicamiawrecairipriawhtuivagtobgjastioawraohioawheiawhtetewtwedfsabdsgaudgaudgnaudsauidnhusainhduahduisahnduinashdihasudhasnhdashdhasidhashdasidasasdsad'),
+                    child: Html(
+                        data: data.data_legends != null ? data.data_legends : '',
+                        // style: {
+                        //   // tables will have the below background color
+                        //   "table": Style(backgroundColor: Color.fromARGB(0x50, 0xee, 0xee, 0xee)),
+                        //   // some other granular customizations are also possible
+                        //   "tr": Style(border: Border(bottom: BorderSide(color: Colors.grey)),
+                        //   ),
+                        //   "th": Style(padding: EdgeInsets.all(6), backgroundColor: Colors.grey),
+                        //   "td": Style(padding: EdgeInsets.all(6), alignment: Alignment.topLeft),
+                        //   // text that renders h1 elements will be red
+                        //   "h1": Style(color: Colors.red),
+                        // }
+//                               defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
+                    ),
                   )
                 ],
               ),
@@ -75,24 +100,24 @@ class _DetailRiwayatBadutaScreenState extends State<DetailRiwayatBadutaScreen> {
   }
 
   cardHeader(ModelHeaderBaduta data){
-    return Container(
+    return data.nama_baduta != null ?  Container(
       decoration: ConstantStyle.boxButton(radius: 10, color: Utils.colorFromHex(ColorCode.lightBlueDark)),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextAvenir(data.nama_baduta),
+          TextAvenir(data.nama_baduta!),
           SizedBox(height: 10),
           Container(
             decoration: ConstantStyle.boxButton(radius: 0, color: Colors.white),
             // padding: EdgeInsets.all(10),
             child: Column(
               children: [
-                itemHeader('Tanggal Lahir', data.tanggal_lahir),
+                itemHeader('Tanggal Lahir', data.tanggal_lahir!),
                 itemHeader('Jenis Kelamin', data.gender == '1' ? "Laki-laki":'Perempuan'),
-                itemHeader('Nama Ibu', data.nama_ibu_baduta),
-                itemHeader('Anak Ke', data.anak_ke),
-                itemHeader('Tgl Kunjungan Petugas', data.tanggal_kunjungan_petugas)
+                itemHeader('Nama Ibu', data.nama_ibu_baduta!),
+                itemHeader('Anak Ke', data.anak_ke!),
+                itemHeader('Tgl Kunjungan Petugas', data.tanggal_kunjungan_petugas!)
                 // itemCard('Lorem Ipsum Dolor Sit Amet Dolor Sit Amet')
               ],
             ),
@@ -100,7 +125,7 @@ class _DetailRiwayatBadutaScreenState extends State<DetailRiwayatBadutaScreen> {
           SizedBox(height: 20,)
         ],
       ),
-    );
+    ):SizedBox();
   }
   
   itemHeader(String data, String value){

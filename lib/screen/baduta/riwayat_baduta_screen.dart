@@ -40,7 +40,7 @@ class _RiwayatBadutaScreenState extends State<RiwayatBadutaScreen> {
         builder: (context, snapshot) {
           List<ModelItemAnak> data = [];
           if(snapshot.data != null){
-            data = snapshot.data;
+            data = snapshot.data as List<ModelItemAnak>;
           }
           return data.length > 0 ? Container(
             width: double.infinity,
@@ -60,7 +60,7 @@ class _RiwayatBadutaScreenState extends State<RiwayatBadutaScreen> {
   loadAnak(List<ModelItemAnak> data){
     List<Widget> widgets = [];
     for(ModelItemAnak itemAnak in data){
-      widgets.add(card(itemAnak.nama, ()=>Navigator.of(context).pushNamed('/detail_riwayat_baduta_screen', arguments: {'badutaID':itemAnak.id.toString()})));
+      widgets.add(card(itemAnak.nama!, ()=>Navigator.of(context).pushNamed('/detail_riwayat_baduta_screen', arguments: {'badutaID':itemAnak.id.toString()})));
     }
     return widgets;
   }

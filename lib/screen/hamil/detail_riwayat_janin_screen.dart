@@ -10,8 +10,8 @@ import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:kua/widgets/item_detail_riwayat_widget.dart';
 
 class DetailRiwayatJaninScreen extends StatefulWidget {
-  int idJanin;
-  int quizHamilId;
+  int? idJanin;
+  int? quizHamilId;
   DetailRiwayatJaninScreen({this.idJanin, this.quizHamilId});
   @override
   _DetailRiwayatJaninScreenState createState() => _DetailRiwayatJaninScreenState();
@@ -27,7 +27,7 @@ class _DetailRiwayatJaninScreenState extends State<DetailRiwayatJaninScreen> {
     // TODO: implement initState
     super.initState();
     // bloc.detailRiwayatJanin(idJanin);
-    bloc.getDetailRiwayatJanin(widget.idJanin, widget.quizHamilId);
+    bloc.getDetailRiwayatJanin(widget.idJanin!, widget.quizHamilId!);
 
   }
   @override
@@ -47,7 +47,7 @@ class _DetailRiwayatJaninScreenState extends State<DetailRiwayatJaninScreen> {
         builder: (context, snapshot) {
           List<ModelDetailRiwayatJanin> data = [];
           if(snapshot.data != null){
-            data = snapshot.data;
+            data = snapshot.data as List<ModelDetailRiwayatJanin>;
           }
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),

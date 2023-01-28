@@ -16,7 +16,7 @@ import 'package:kua/widgets/font/avenir_book.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class ChatScreen extends StatefulWidget {
-  TypeChatModel data;
+  TypeChatModel? data;
   ChatScreen({this.data});
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -33,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement initState
     super.initState();
     _focus.addListener(_onFocusChange);
-    bloc.getAllChat(widget.data.type);
+    bloc.getAllChat(widget.data!.type!);
     removeIndicatorChat();
 
     bloc.finishCat.listen((event) {
@@ -63,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: TextAvenir('ELSIMIL Care (${widget.data.name})', color: Utils.colorFromHex(ColorCode.bluePrimary)),
+          title: TextAvenir('ELSIMIL Care (${widget.data!.name})', color: Utils.colorFromHex(ColorCode.bluePrimary)),
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -88,7 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     builder: (context, snapshot) {
                       List<ChatItem> data = [];
                       if(snapshot.data != null){
-                        data = snapshot.data;
+                        data = snapshot.data as List<ChatItem>;
                       }
                       return data.isNotEmpty ? Container(
                         // child: SingleChildScrollView(
@@ -148,12 +148,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       builder: (context, snapshot) {
                         var load = false;
                         if(snapshot.data != null){
-                          load = snapshot.data;
+                          load = snapshot.data as bool;
                         }
                         return InkWell(
                           onTap: (){
                             if(bloc.edtMessage.text != '' && load){
-                              bloc.postMessage(bloc.edtMessage.text, widget.data.type);
+                              bloc.postMessage(bloc.edtMessage.text, widget.data!.type!);
                             }
                           },
                           child: Container(
@@ -185,7 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
     List<Widget> widgets = [];
     for(ChatItem item in  data){
       //chat petugas
-      for(ChatMessage message in item.child){
+      for(ChatMessage message in item.child!){
         if(message.jabatan == ''){
           widgets.add(rightBuble(message));
         }else{
@@ -198,8 +198,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   getChat(ChatItem data){
     List<Widget> widgets = [];
-    widgets.add(tanggal(data.header));
-    for(ChatMessage message in data.child){
+    widgets.add(tanggal(data.header!));
+    for(ChatMessage message in data.child!){
       if(message.jabatan == ''){
         widgets.add(rightBuble(message));
       }else{
@@ -224,7 +224,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         mainAxisAlignment:  MainAxisAlignment.end,
         children: [
-          msg.message.length > 35 ? Expanded(
+          msg.message!.length > 35 ? Expanded(
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -238,13 +238,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   Wrap(
                     children: [
                       // TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary))
-                      Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                      Text(msg.message!, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
 
                     ],
                   ),
                   Align(
                     alignment: (Alignment.topRight),
-                    child: TextAvenirBook(msg.jam, size: 9, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                    child: TextAvenirBook(msg.jam!, size: 9, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                   ),
                 ],
               ),
@@ -261,14 +261,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 Wrap(
                   children: [
                     // TextAvenirBook(msg.message, size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary))
-                    Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
+                    Text(msg.message!, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.bluePrimary), fontFamily: 'Avenir-Book')),
                   ],
                 ),
                 SizedBox(width: 10),
                 Column(
                   children: [
                     SizedBox(height: 10),
-                    TextAvenirBook(msg.jam, size: 9, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                    TextAvenirBook(msg.jam!, size: 9, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                   ],
                 )
                 // ,
@@ -289,7 +289,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   placeholder: (context, url) => Center(
                     child: Image.asset(ImageConstant.placeHolderElsimil),
                   ),
-                  imageUrl: msg.pic, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+                  errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
+                  imageUrl: msg.pic!, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
                   fit: BoxFit.cover,
                 ):Image.asset(ImageConstant.icAccount, fit: BoxFit.cover),
               ),
@@ -319,14 +320,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   placeholder: (context, url) => Center(
                     child: Image.asset(ImageConstant.placeHolderElsimil),
                   ),
-                  imageUrl: msg.pic, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
+                  imageUrl: msg.pic!, //'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2U_L6KJsOv1ZX5v-JScbk8ZO_ZEe5CwOvmA&usqp=CAU',
                   fit: BoxFit.cover,
                 ):Image.asset(ImageConstant.icAccount, fit: BoxFit.cover),
               ),
             ),
           ),
           SizedBox(width: 10),
-          msg.message.length > 50 ? Expanded(
+          msg.message!.length > 50 ? Expanded(
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -337,19 +338,19 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(msg.jabatan, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
+                  TextAvenir(msg.jabatan!, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
                   SizedBox(height: 5),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // TextAvenirBook(msg.message, size: 14, color: Colors.white),
                       Wrap(
-                        children: [Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.colorWhite), fontFamily: 'Avenir-Book'))],
+                        children: [Text(msg.message!, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.colorWhite), fontFamily: 'Avenir-Book'))],
                       ),
                       SizedBox(width: 10),
                       Align(
                         alignment: (Alignment.topRight),
-                        child: TextAvenirBook(msg.jam, size: 9, color: Colors.white),
+                        child: TextAvenirBook(msg.jam!, size: 9, color: Colors.white),
                       ),
                     ],
                   ) ,
@@ -366,13 +367,13 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextAvenir(msg.jabatan, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
+                TextAvenir(msg.jabatan!, size: 13, color: Utils.colorFromHex(ColorCode.lightGreyElsimil)),
                 SizedBox(height: 5),
                 Row(
                   children: [
                     Wrap(
                       children: [
-                        Text(msg.message, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.colorWhite), fontFamily: 'Avenir-Book')),
+                        Text(msg.message!, style: TextStyle(fontSize: 14, color: Utils.colorFromHex(ColorCode.colorWhite), fontFamily: 'Avenir-Book')),
                         // TextAvenirBook(msg.message, size: 14, color: Colors.white)
                       ],
                     ),
@@ -380,7 +381,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     Column(
                       children: [
                         SizedBox(height: 10),
-                        TextAvenirBook(msg.jam, size: 9, color: Colors.white),
+                        TextAvenirBook(msg.jam!, size: 9, color: Colors.white),
                       ],
                     )
                   ],

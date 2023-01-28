@@ -43,29 +43,29 @@ class ConstantStyle {
   }
 
   static boxShadowButon({
-    double radius,
-    Color color,
-    Color colorShadow,
-    double spreadRadius,
-    double blurRadius,
-    Offset offset,
+    double? radius,
+    Color? color,
+    Color? colorShadow,
+    double? spreadRadius,
+    double? blurRadius,
+    Offset? offset,
   }){
     return BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(radius)),
+      borderRadius: BorderRadius.all(Radius.circular(radius!)),
       color: color,
       boxShadow: [
         BoxShadow(
-          color: colorShadow,
-          spreadRadius: spreadRadius,
-          blurRadius: blurRadius,
-          offset: offset,
+          color: colorShadow!,
+          spreadRadius: spreadRadius!,
+          blurRadius: blurRadius!,
+          offset: offset!,
         ),
       ],
     );
   }
 
   static boxCircle({
-    Color color,
+    Color? color,
   }){
     return BoxDecoration(
       shape: BoxShape.circle,
@@ -74,11 +74,11 @@ class ConstantStyle {
   }
 
   static boxButton({
-    double radius,
-    Color color,
+    double? radius,
+    Color? color,
   }){
     return BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        borderRadius: BorderRadius.all(Radius.circular(radius!)),
         color: color
     );
   }
@@ -88,7 +88,7 @@ class ConstantStyle {
     double topRight = 0.0,
     double bottomLeft = 0.0,
     double bottomRight= 0.0,
-    Color color,
+    Color? color,
   }){
     return BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -102,54 +102,54 @@ class ConstantStyle {
   }
 
   static boxButtonBorder({
-    double radius,
-    Color color,
-    Color colorBorder,
-    double widthBorder
+    double? radius,
+    Color? color,
+    Color? colorBorder,
+    double? widthBorder
   }){
     return BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(radius)),
+      borderRadius: BorderRadius.all(Radius.circular(radius!)),
       color: color,
-      border: Border.all(color: colorBorder, width: widthBorder)
+      border: Border.all(color: colorBorder!, width: widthBorder!)
     );
   }
 
   static boxButtonBorderOnly({
     // double radius,
-    Color color,
-    Color colorBorder,
-    double widthBorder
+    Color? color,
+    Color? colorBorder,
+    double? widthBorder
   }){
     return BoxDecoration(
         // borderRadius: BorderRadius.all(Radius.circular(radius)),
         color: color,
         border: Border(
-          left: BorderSide(width: widthBorder, color: colorBorder),
+          left: BorderSide(width: widthBorder!, color: colorBorder!),
           // bottom: BorderSide(width: widthBorder, color: colorBorder),
         ),
     );
   }
 
   static boxShadowButtonBorder({
-    double radius,
-    Color color,
-    Color colorBorder,
-    double widthBorder,
-    Color colorShadow,
-    double spreadRadius,
-    double blurRadius,
-    Offset offset,
+    double? radius,
+    Color? color,
+    Color? colorBorder,
+    double? widthBorder,
+    Color? colorShadow,
+    double? spreadRadius,
+    double? blurRadius,
+    Offset? offset,
   }){
     return BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        borderRadius: BorderRadius.all(Radius.circular(radius!)),
         color: color,
-        border: Border.all(color: colorBorder, width: widthBorder),
+        border: Border.all(color: colorBorder!, width: widthBorder!),
         boxShadow: [
           BoxShadow(
-            color: colorShadow,
-            spreadRadius: spreadRadius,
-            blurRadius: blurRadius,
-            offset: offset,
+            color: colorShadow!,
+            spreadRadius: spreadRadius!,
+            blurRadius: blurRadius!,
+            offset: offset!,
           ),
         ],
     );
@@ -163,7 +163,7 @@ class ConstantStyle {
   static var box_light_blue_dark = BoxDecoration(
       color: Utils.colorFromHex(ColorCode.lightBlueDark),
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      border: Border.all(color: Colors.grey[300])
+      border: Border.all(color: Colors.grey.shade300)
   );
 
   static var box_fill_blu = BoxDecoration(
@@ -204,11 +204,11 @@ class ConstantStyle {
   static var box_border_grey = BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      border: Border.all(color: Colors.grey[300])
+      border: Border.all(color: Colors.grey.shade300)
   );
 
   static var box_border_field = BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(5)),
-      border: Border.all(color: Colors.grey[300])
+      border: Border.all(color: Colors.grey.shade300)
   );
 }

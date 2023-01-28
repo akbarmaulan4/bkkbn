@@ -20,7 +20,7 @@ import '../../../widgets/font/avenir_text.dart';
 
 class RegisterDataDiri extends StatefulWidget {
 
-  AuthBloc bloc;
+  AuthBloc? bloc;
   RegisterDataDiri({this.bloc});
 
   @override
@@ -30,18 +30,18 @@ class RegisterDataDiri extends StatefulWidget {
 class _RegisterDataDiriState extends State<RegisterDataDiri> {
 
   List<String> dataGender = [];
-  String genderSelected;
+  String genderSelected = '';
   var debouncher = new Debouncer(milliseconds: 500);
 
-  File _image;
+  File _image = File('');
   final picker = ImagePicker();
 
   _imgFromCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 88);
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
-        widget.bloc.changeImage(image);
+        widget.bloc!.changeImage(image);
         setState(() {
           _image = image;
         });
@@ -52,11 +52,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   }
 
   _imgFromGallery() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 88);
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
-        widget.bloc.changeImage(image);
+        widget.bloc!.changeImage(image);
         setState(() {
           _image = image;
         });
@@ -76,17 +76,17 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
     dataGender.add('Laki-laki');
     dataGender.add('Perempuan');
 
-    if(widget.bloc.allProvinsi.length < 1){
-      widget.bloc.getProvinsi();
+    if(widget.bloc!.allProvinsi.length < 1){
+      widget.bloc!.getProvinsi();
     }
 
-    widget.bloc.messageError.listen((event) {
+    widget.bloc!.messageError.listen((event) {
       if(event != null){
         Utils.alertError(context, event, () { });
       }
     });
 
-    widget.bloc.allowDataDiri.listen((event) {
+    widget.bloc!.allowDataDiri.listen((event) {
       if(event != null){
         Utils.infoDialog(context, 'Informasi', event, () {
           Navigator.popAndPushNamed(context, '/login');
@@ -107,9 +107,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   void setupPlayerId() async {
     var hasPlayerId = await LocalData.getPlayerId();
     if (hasPlayerId == null) {
-      var status = await OneSignal.shared.getPermissionSubscriptionState();
-      var playerId = status.subscriptionStatus.userId;
-      widget.bloc.setPlayerId(playerId);
+      // var status = await OneSignal.shared.getPermissionSubscriptionState();
+      // var playerId = status.subscriptionStatus.userId;
+      var status = await OneSignal. shared.getDeviceState();
+      var playerId = status!.userId;
+      widget.bloc!.setPlayerId(playerId.toString());
     }
   }
 
@@ -151,10 +153,12 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         SizedBox(height: 5),
                         BoxBorderDefault(
                             child: TextField(
-                              controller: widget.bloc.edtTmptLahir,
+                              controller: widget.bloc!.edtTmptLahir,
                               textAlignVertical: TextAlignVertical.center,
                               inputFormatters: [
-                                WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),
+                                FilteringTextInputFormatter.allow(RegExp("[a-zA-Z ]")),
+                                // WhitelistingTextInputFormatter(RegExp("[a-zA-Z ]")),
+                                // FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.|\\#|\\*]'))
                               ],
                               decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -181,11 +185,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         SizedBox(height: 5),
                         InkWell(
                           onTap: (){
-                            widget.bloc.openDatePicker(context);
+                            widget.bloc!.openDatePicker(context);
                           },
                           child: BoxBorderDefault(
                               child: TextField(
-                                controller: widget.bloc.edtTglLahir,
+                                controller: widget.bloc!.edtTglLahir,
                                 textAlignVertical: TextAlignVertical.center,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -215,17 +219,17 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         Container(
                           width: double.infinity,
                           child: StreamBuilder(
-                            stream: widget.bloc.jenisKelamin,
+                            stream: widget.bloc!.jenisKelamin,
                             builder: (context, snapshot) {
-                              String data = widget.bloc.strGender;
+                              String data = widget.bloc!.strGender;
                               if(snapshot.data != null){
-                                data = snapshot.data;
+                                data = snapshot.data as String;
                               }
                               return BoxBorderDefault(
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton(
                                       hint: TextAvenir('Jenis Kelamin', size: 12),
-                                      value: data,
+                                      value: data != '' ? data : null,
                                       items: dataGender.map((value) {
                                         return DropdownMenuItem(
                                           child: Container(
@@ -234,8 +238,8 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                           value: value,
                                         );
                                       }).toList(),
-                                      onChanged: (value) {
-                                        widget.bloc.pilihJenisKelamin(value);
+                                      onChanged: (String? value) {
+                                        widget.bloc!.pilihJenisKelamin(value!);
                                       },
                                     )
                                   )
@@ -260,32 +264,26 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         SizedBox(height: 5),
                         Container(
                           width: double.infinity,
-                          child: StreamBuilder(
-                              stream: widget.bloc.dataStatusNikah,
+                          child:  StreamBuilder(
+                              stream: widget.bloc!.dataStatusNikah,
                               builder: (context, snapshot) {
-                                String data = widget.bloc.strStatusNikah;
+                                String data = widget.bloc!.strStatusNikah;
                                 if (snapshot.data != null) {
-                                  data = snapshot.data;
+                                  data = snapshot.data.toString();
                                 }
                                 return BoxBorderDefault(
                                     child: DropdownButtonHideUnderline(
                                         child: DropdownButton(
-                                          hint: TextAvenir(
-                                            'Status Pernikahan',
-                                            size: 12,
-                                          ),
-                                          value: data,
+                                          hint: TextAvenir('Status Pernikahan', size: 12),
+                                          value: data != '' ? data : null,
                                           items: dataNikah.map((value) {
                                             return DropdownMenuItem(
-                                              child: Container(
-                                                  margin:
-                                                  EdgeInsets.symmetric(horizontal: 10),
-                                                  child: Text(value)),
+                                              child: Container(margin: EdgeInsets.symmetric(horizontal: 10), child: Text(value)),
                                               value: value,
                                             );
                                           }).toList(),
-                                          onChanged: (value) {
-                                            widget.bloc.statusNikah(value);
+                                          onChanged: (String? value) {
+                                            widget.bloc!.statusNikah(value!);
                                           },
                                         )));
                               }),
@@ -304,12 +302,13 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               SizedBox(height: 5),
               BoxBorderDefault(
                   child: TextField(
-                    controller: widget.bloc.edtKtp,
+                    controller: widget.bloc!.edtKtp,
                     textAlignVertical: TextAlignVertical.center,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(16),
-                      WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                      // WhitelistingTextInputFormatter(RegExp("[0-9]")),
                     ],
                     decoration: InputDecoration(
                         border: InputBorder.none,
@@ -320,7 +319,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                     onChanged: (val){
                       if(val.length > 15){
                         debouncher.run(() {
-                          widget.bloc.checkNIK();
+                          widget.bloc!.checkNIK();
                         });
                       }
                     },//ConstantStyle.decorTextField,
@@ -328,18 +327,23 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               ),
               SizedBox(height: 25),
               StreamBuilder(
-                stream: widget.bloc.imageKtp,
+                stream: widget.bloc!.imageKtp,
                 builder: (context, snapshot) {
-                  File img;
+                  File img = File('');
                   if(snapshot.data != null){
-                    img = snapshot.data;
+                    img = snapshot.data as File;
                   }
-                  return img != null ? Container(
-                    child: Image.file(
-                      img,
-                      width: size.width * 0.88,
-                      height: 220,
-                      fit: BoxFit.cover,
+                  return img.existsSync() ? InkWell(
+                    onTap: (){
+                      showPicker();
+                    },
+                    child: Container(
+                      child: Image.file(
+                        img,
+                        width: size.width * 0.88,
+                        height: 220,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ) : DottedBorder(
                     color: Utils.colorFromHex(ColorCode.lightBlueDark),
@@ -350,17 +354,17 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                           showPicker();
                         },
                         child: StreamBuilder(
-                            stream: widget.bloc.fileDoc,
+                            stream: widget.bloc!.fileDoc,
                             builder: (context, snapshot) {
-                              File exist;
+                              File exist = File('');
                               String fileName = 'Foto KTP';
                               if(snapshot.data != null){
-                                exist = snapshot.data;
+                                exist = snapshot.data as File;
                                 fileName = exist.path.split('/').last;
                               }
                               return Row(
                                 children: [
-                                  Image.asset(exist != null ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
+                                  Image.asset(exist.existsSync() ? ImageConstant.icPdf : ImageConstant.noImages, height: size.height * 0.10,),
                                   SizedBox(width: 10),
                                   Expanded(child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +400,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               SizedBox(height: 5),
               BoxBorderDefault(
                   child: TextField(
-                    controller: widget.bloc.edtAlamatKtp,
+                    controller: widget.bloc!.edtAlamatKtp,
                     textAlignVertical: TextAlignVertical.center,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(150)
@@ -420,7 +424,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                 child: InkWell(
                   onTap: ()=>showFinder('provinsi'),
                   child: TextField(
-                    controller: widget.bloc.edtProvinsi,
+                    controller: widget.bloc!.edtProvinsi,
                     textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                         border: InputBorder.none,
@@ -440,11 +444,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               ),
               SizedBox(height: 5),
               StreamBuilder(
-                stream: widget.bloc.downloadKab,
+                stream: widget.bloc!.downloadKab,
                 builder: (context, snapshot) {
                   var load = false;
                   if(snapshot.data != null){
-                    load = snapshot.data;
+                    load = snapshot.data as bool;
                   }
                   return BoxBorderDefault(
                       child: InkWell(
@@ -453,7 +457,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                           children: [
                             Expanded(
                               child: TextField(
-                                controller: widget.bloc.edtKotaKab,
+                                controller: widget.bloc!.edtKotaKab,
                                 textAlignVertical: TextAlignVertical.center,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -491,11 +495,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         ),
                         SizedBox(height: 5),
                         StreamBuilder(
-                          stream: widget.bloc.downloadKec,
+                          stream: widget.bloc!.downloadKec,
                           builder: (context, snapshot) {
                             var load = false;
                             if(snapshot.data != null){
-                              load = snapshot.data;
+                              load = snapshot.data as bool;
                             }
                             return BoxBorderDefault(
                                 child: InkWell(
@@ -504,7 +508,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                     children: [
                                       Expanded(
                                         child: TextField(
-                                          controller: widget.bloc.edtKecamatan,
+                                          controller: widget.bloc!.edtKecamatan,
                                           textAlignVertical: TextAlignVertical.center,
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -543,11 +547,11 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         ),
                         SizedBox(height: 5),
                         StreamBuilder(
-                          stream: widget.bloc.downloadKel,
+                          stream: widget.bloc!.downloadKel,
                           builder: (context, snapshot) {
                             var load = false;
                             if(snapshot.data != null){
-                              load = snapshot.data;
+                              load = snapshot.data as bool;
                             }
                             return BoxBorderDefault(
                                 child: InkWell(
@@ -556,7 +560,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                     children: [
                                       Expanded(
                                         child: TextField(
-                                          controller: widget.bloc.edtDesa,
+                                          controller: widget.bloc!.edtDesa,
                                           textAlignVertical: TextAlignVertical.center,
                                           decoration: InputDecoration(
                                               border: InputBorder.none,
@@ -604,7 +608,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                               SizedBox(height: 5),
                               BoxBorderDefault(
                                   child: TextField(
-                                    controller: widget.bloc.edtRT,
+                                    controller: widget.bloc!.edtRT,
                                     textAlignVertical: TextAlignVertical.center,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
@@ -615,7 +619,8 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                     ),
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(3),
-                                      WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                      // WhitelistingTextInputFormatter(RegExp("[0-9]")),
                                     ],
                                   )
                               ),
@@ -636,7 +641,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                               SizedBox(height: 5),
                               BoxBorderDefault(
                                   child: TextField(
-                                    controller: widget.bloc.edtRW,
+                                    controller: widget.bloc!.edtRW,
                                     textAlignVertical: TextAlignVertical.center,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
@@ -647,7 +652,8 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                                     ),
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(3),
-                                      WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                      FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                      // WhitelistingTextInputFormatter(RegExp("[0-9]")),
                                     ],
                                   )
                               ),
@@ -671,7 +677,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         SizedBox(height: 5),
                         BoxBorderDefault(
                             child: TextField(
-                              controller: widget.bloc.edtKodePos,
+                              controller: widget.bloc!.edtKodePos,
                               textAlignVertical: TextAlignVertical.center,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -682,7 +688,8 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                               ),
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(5),
-                                WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                                FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                // WhitelistingTextInputFormatter(RegExp("[0-9]")),
                               ],
                             )
                         ),
@@ -701,15 +708,15 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               InkWell(
                 onTap: ()=>Navigator.pushNamed(context, '/maps').
                 then((value){
-                  ModelLocation model = value;
-                  widget.bloc.changeLatLon(double.parse(model.latitude), double.parse(model.longitude));
+                  ModelLocation model = value as ModelLocation;
+                  widget.bloc!.changeLatLon(double.parse(model.latitude!), double.parse(model.longitude!));
                 }),
                 child: StreamBuilder(
-                  stream: widget.bloc.finishPinLoc,
+                  stream: widget.bloc!.finishPinLoc,
                   builder: (context, snapshot) {
                     bool pinLoc = false;
                     if(snapshot.data != null){
-                      pinLoc = snapshot.data;
+                      pinLoc = snapshot.data as bool;
                     }
                     return Container(
                         height: 85,
@@ -736,7 +743,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
               SizedBox(height: size.height * 0.04),
               InkWell(
                 onTap: (){
-                  widget.bloc.validasiDataDiri(context);
+                  widget.bloc!.validasiDataDiri(context);
                 },
                 child: Container(
                   alignment: Alignment.bottomCenter,
@@ -773,42 +780,42 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   getStreamFinder(String type){
     switch(type){
       case 'provinsi':
-        return widget.bloc.dataProvinsi;
+        return widget.bloc!.dataProvinsi;
       case 'kota':
-        return widget.bloc.dataKotaKab;
+        return widget.bloc!.dataKotaKab;
       case 'kecamatan':
-        return widget.bloc.dataKecamatan;
+        return widget.bloc!.dataKecamatan;
       case 'kelurahan':
-        return widget.bloc.dataKelurahan;
+        return widget.bloc!.dataKelurahan;
     }
   }
 
   getDataFinder(String type){
     switch(type){
       case 'provinsi':
-        return widget.bloc.allDataProvinsi;
+        return widget.bloc!.allDataProvinsi;
       case 'kota':
-        return widget.bloc.allDataKabupaten;
+        return widget.bloc!.allDataKabupaten;
       case 'kecamatan':
-        return widget.bloc.allDataKecamatan;
+        return widget.bloc!.allDataKecamatan;
       case 'kelurahan':
-        return widget.bloc.allDataKelurahan;
+        return widget.bloc!.allDataKelurahan;
     }
   }
 
   finding(String type, String param){
     switch(type){
       case 'provinsi':
-        widget.bloc.findProvinsi(param);
+        widget.bloc!.findProvinsi(param);
         break;
       case 'kota':
-        widget.bloc.findKabupaten(param);
+        widget.bloc!.findKabupaten(param);
         break;
       case 'kecamatan':
-        widget.bloc.findKecamatan(param);
+        widget.bloc!.findKecamatan(param);
         break;
       case 'kelurahan':
-        widget.bloc.findKelurahan(param);
+        widget.bloc!.findKelurahan(param);
         break;
     }
   }
@@ -816,16 +823,16 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   loadFindingFirst(String type, String param){
     switch(type){
       case 'provinsi':
-        widget.bloc.findProvinsi(param);
+        widget.bloc!.findProvinsi(param);
         break;
       case 'kota':
-        widget.bloc.findKabupaten(param);
+        widget.bloc!.findKabupaten(param);
         break;
       case 'kecamatan':
-        widget.bloc.findKecamatan(param);
+        widget.bloc!.findKecamatan(param);
         break;
       case 'kelurahan':
-        widget.bloc.findKelurahan(param);
+        widget.bloc!.findKelurahan(param);
         break;
     }
   }
@@ -833,16 +840,16 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
   setFindingValue(String type, dynamic data){
     switch(type){
       case 'provinsi':
-        widget.bloc.changeProvinsi(data);
+        widget.bloc!.changeProvinsi(data);
         break;
       case 'kota':
-        widget.bloc.changeKabupaten(data);
+        widget.bloc!.changeKabupaten(data);
         break;
       case 'kecamatan':
-        widget.bloc.changeKecamatan(data);
+        widget.bloc!.changeKecamatan(data);
         break;
       case 'kelurahan':
-        widget.bloc.changeKelurahan(data);
+        widget.bloc!.changeKelurahan(data);
         break;
     }
   }
@@ -877,7 +884,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
-                            border: Border.all(color: Colors.grey[300])
+                            border: Border.all(color: Colors.grey.shade300)
                         ),
                         padding: EdgeInsets.only(right: 25),
                         margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -903,7 +910,7 @@ class _RegisterDataDiriState extends State<RegisterDataDiri> {
                         builder: (context, snapshot) {
                           List<dynamic> data = dataSink;
                           if(snapshot.data != null){
-                            data = snapshot.data;
+                            data = snapshot.data as List;
                           }
                           return Expanded(
                             child: ListView.builder(

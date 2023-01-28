@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kua/util/image_constant.dart';
 import 'package:kua/util/local_data.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -14,13 +15,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    delay();
+  }
+
+  delay() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,
+      Permission.storage,
+      Permission.phone,
+    ].request();
+
     Future.delayed(Duration(milliseconds: 4000), () {
-      // Utility.saveFromLogin('N');
-      // if (firstTime && user == null) {
-      //   Navigator.popAndPushNamed(context, '/intro');
-      // } else {
-      //   goToMain();
-      // }
       checkUser();
     });
   }
@@ -28,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   checkUser() async{
     var user = await LocalData.getUser();
-    if(user != null){
+    if(user.id != null){
       Navigator.popAndPushNamed(context, '/home', arguments: {'loadFirstMenu':0});
     }else{
       Navigator.popAndPushNamed(context, '/gateway');

@@ -1,10 +1,10 @@
 part of 'model_janin.dart';
 ModelJanin _$fromJson(Map<String, dynamic> json) {
   return ModelJanin()
-    ..id = json['id'] as int ?? -1
-    ..name = json['name'] as String ?? ''
-    ..status = json['status'] as String ?? ''
-    ..hpl = json['hpl'] as String ?? ''
+    ..id = json['id'] as int
+    ..name = json['name'] as String
+    ..status = json['status'] as String
+    ..hpl = json['hpl'] as String
   ;
 }
 

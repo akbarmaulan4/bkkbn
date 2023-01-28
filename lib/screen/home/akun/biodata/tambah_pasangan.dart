@@ -74,8 +74,9 @@ class _TambahPasanganState extends State<TambahPasangan> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(16),
-                      new BlacklistingTextInputFormatter(
-                          new RegExp('[\\-|\\,|\\.]')),
+                      FilteringTextInputFormatter.deny(RegExp('[\\-|\\,|\\.]'))
+                      // new BlacklistingTextInputFormatter(
+                      //     new RegExp('[\\-|\\,|\\.]')),
                     ],
                     decoration: ConstantStyle.decorTextField,
                   )

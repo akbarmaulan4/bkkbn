@@ -83,16 +83,16 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
           StreamBuilder(
             stream: bloc.user,
             builder: (context, snapshot){
-              UserModel user;
+              UserModel user = UserModel();
               if(snapshot.data != null){
-                user = snapshot.data;
+                user = snapshot.data as UserModel;
               }
               return user != null ? StreamBuilder(
                   stream: bloc.canAddCouple,
                   builder: (context, snapshot) {
                     var canAdd = false;
                     if(snapshot.data != null){
-                      canAdd = snapshot.data;
+                      canAdd = snapshot.data as bool;
                     }
                     return user.gender == '1' ? canAdd ? Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -121,7 +121,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                 builder: (context, snapshot) {
                   List<CoupleItem> data = [];
                   if(snapshot.data != null){
-                    data = snapshot.data;
+                    data = snapshot.data as List<CoupleItem>;
                   }
                   return data.isNotEmpty ? Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -141,26 +141,26 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
               StreamBuilder(
                 stream: bloc.waitingCouple,
                 builder: (context, snapshot) {
-                  AllWaiting data;
+                  AllWaiting data = AllWaiting();
                   if(snapshot.data != null){
-                    data = snapshot.data;
+                    data = snapshot.data as AllWaiting;
                   }
                   return data != null ? Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        data.waiting.isNotEmpty && data.pending.isNotEmpty ? Column(
+                        data.waiting != null ? data.waiting!.isNotEmpty && data.pending!.isNotEmpty ? Column(
                           children: [
                             TextAvenir('Permintaan Tambah Pasangan', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                             SizedBox(height: 15),
                           ],
-                        ):SizedBox(),
+                        ):SizedBox():SizedBox(),
                         Column(
-                          children: loadWaitingCouple(data != null ? data.waiting : []),
+                          children: loadWaitingCouple(data.waiting != null ? data.waiting! : []),
                         ),
                         Column(
-                          children: loadPendingCouple(data != null ? data.pending : []),
+                          children: loadPendingCouple(data.pending != null ? data.pending! : []),
                         ),
                       ],
                     ),
@@ -172,7 +172,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                 builder: (context, snapshot) {
                   bool show = false;
                   if(snapshot.data != null){
-                    show = snapshot.data;
+                    show = snapshot.data as bool;
                   }
                   return show ? Column(
                     children: [
@@ -181,7 +181,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                         builder: (context, snapshot) {
                           List<CoupleItem> data = [];
                           if(snapshot.data != null){
-                            data = snapshot.data;
+                            data = snapshot.data as List<CoupleItem>;
                           }
                           return data.isNotEmpty ? Divider():SizedBox();
                         }
@@ -191,9 +191,9 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                         child: StreamBuilder(
                             stream: bloc.dataUser,
                             builder: (context, snapshot) {
-                              Map profile;
+                              Map profile = Map();
                               if(snapshot.data != null){
-                                profile = snapshot.data;
+                                profile = snapshot.data as Map;
                               }
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,7 +296,8 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                 placeholder: (context, url) => Center(
                   child: Image.asset(ImageConstant.placeHolderElsimil),
                 ),
-                imageUrl: data != null ? data.pic : '',
+                errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
+                imageUrl: data != null ? data.pic! : '',
                 fit: BoxFit.cover,
               ),
             ),
@@ -306,7 +307,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextAvenir(data != null ? data.name : '', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                TextAvenir(data != null ? data.name! : '', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                 TextAvenirBook(data != null ? '${data.kota}, ${data.tgl_lahir}':'', size: 13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
               ],
             ),
@@ -336,7 +337,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                 placeholder: (context, url) => Center(
                   child: Image.asset(ImageConstant.placeHolderElsimil),
                 ),
-                imageUrl: data != null ? data.pic : '',
+                imageUrl: data != null ? data.pic! : '',
                 fit: BoxFit.cover,
               ),
             ),
@@ -346,7 +347,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextAvenir(data != null ? data.name : '', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                TextAvenir(data != null ? data.name! : '', size: 14, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                 TextAvenirBook(data != null ? '${data.kota}, ${data.tgl_lahir}':'', size: 13, color: Utils.colorFromHex(ColorCode.bluePrimary)),
               ],
             ),
@@ -399,7 +400,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
                   placeholder: (context, url) => Center(
                     child: Image.asset(ImageConstant.placeHolderAccount),
                   ),
-                  imageUrl: data != null ? data.pic : '',
+                  imageUrl: data != null ? data.pic! : '',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -409,7 +410,7 @@ class _BiodataSpouseState extends State<BiodataSpouse> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextAvenir(data != null ? data.name : '', size: 14, color: Colors.white),
+                  TextAvenir(data != null ? data.name! : '', size: 14, color: Colors.white),
                   TextAvenirBook(data != null ? '${data.kota}, ${data.tgl_lahir}':'', size: 13, color: Colors.white),
                 ],
               ),

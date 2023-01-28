@@ -1,10 +1,10 @@
 part of 'type_chat_model.dart';
 TypeChatModel _$fromJson(Map<String, dynamic> json) {
   return TypeChatModel()
-    ..type = json['type'] as String ?? ''
-    ..name = json['name'] as String ?? ''
-    ..officer_name = json['officer_name'] as String ?? ''
-    ..status = json['status'] as String ?? ''
+    ..type = json['type'] as String
+    ..name = json['name'] as String
+    ..officer_name = json['officer_name'] as String
+    ..status = json['status'] as String
   ;
 }
 

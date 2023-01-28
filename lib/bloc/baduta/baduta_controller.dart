@@ -13,12 +13,12 @@ class BadutaController{
 
   final _messageError = PublishSubject<String>();
   final _baduta = PublishSubject<bool>();
-  final _dataAnak = PublishSubject<List<ModelItemAnak>>();
+  final _dataAnak = PublishSubject<List<ModelItemAnak?>>();
   final _detailRiwayat = PublishSubject<ModelRiwayatBaduta>();
 
   Stream<String> get messageError => _messageError.stream;
   Stream<bool> get baduta => _baduta.stream;
-  Stream<List<ModelItemAnak>> get dataAnak => _dataAnak.stream;
+  Stream<List<ModelItemAnak?>> get dataAnak => _dataAnak.stream;
   Stream<ModelRiwayatBaduta> get detailRiwayat => _detailRiwayat.stream;
 
 
@@ -27,7 +27,7 @@ class BadutaController{
     Utils.progressDialog(context);
     var user = await LocalData.getUser();
     if(user != null){
-      API.getStatusBaduta(user.id, (result, error) {
+      API.getStatusBaduta(user.id!, (result, error) {
         Navigator.of(context).pop();
         if(result != null){
           if(result['code'] == 200 && !result['error']){
@@ -69,9 +69,9 @@ class BadutaController{
     if(user != null){
       API.listAnak(user.id.toString(), (result, error) {
         if(result != null){
-          var das = jsonEncode(result);
           if(result['code'] == 200 && !result['error']){
-            List<ModelItemAnak> dataJanin = (result['data'] as List)?.map((e) => e == null ? null : ModelItemAnak.fromJson(e as Map<String, dynamic>))?.toList();
+            List<ModelItemAnak?>? dataJanin = (result['data'] as List).map((e) => e == null ? null : ModelItemAnak.fromJson(e as Map<String, dynamic>)).toList();
+            // List<ModelItemAnak> dataJanin = (result['data'] as List)?.map((e) => e == null ? null : ModelItemAnak.fromJson(e as Map<String, dynamic>))?.toList();
             if(dataJanin.length > 0){
               _dataAnak.sink.add(dataJanin);
             }else{

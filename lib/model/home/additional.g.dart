@@ -1,8 +1,8 @@
 part of 'additional.dart';
 Additional _$fromJson(Map<String, dynamic> json) {
   return Additional()
-    ..params = json['params'] as String ?? ''
-    ..value = json['value'] as String ?? ''
+    ..params = json['params'] as String
+    ..value = json['value'] as String
   ;
 }
 

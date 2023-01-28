@@ -6,8 +6,8 @@ import 'package:kua/widgets/font/avenir_text.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebScreen extends StatelessWidget {
-  String url;
-  String title;
+  String? url;
+  String? title;
   WebScreen({this.title, this.url});
 
   @override
@@ -15,7 +15,7 @@ class WebScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-          title: TextAvenir(title, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+          title: TextAvenir(title!, color: Utils.colorFromHex(ColorCode.bluePrimary)),
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,

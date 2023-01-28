@@ -11,8 +11,8 @@ import 'package:kua/util/image_constant.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class LandingQuiz extends StatefulWidget {
-  int id;
-  int result_id;
+  int? id;
+  int? result_id;
   LandingQuiz({
     this.id,
     this.result_id
@@ -30,7 +30,7 @@ class _LandingQuizState extends State<LandingQuiz> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      bloc.checkVerify(context, widget.id);
+      bloc.checkVerify(context, widget.id!);
     });
 
     // bloc.messageError.listen((error) {
@@ -70,9 +70,9 @@ class _LandingQuizState extends State<LandingQuiz> {
               StreamBuilder(
                 stream: bloc.introQuiz,
                 builder: (context, snapshot) {
-                  IntroQuiz data;
+                  IntroQuiz data = IntroQuiz();
                   if(snapshot.data != null){
-                    data = snapshot.data;
+                    data = snapshot.data as IntroQuiz;
                   }
                   return Container(
                     child: Column(
@@ -83,7 +83,10 @@ class _LandingQuizState extends State<LandingQuiz> {
                               placeholder: (context, url) => Center(
                                 child: Image.asset(ImageConstant.placeHolderElsimil),
                               ),
-                              imageUrl: data != null ? data.image:'',
+                              errorWidget: (context, url, error)=>Center(
+                                child: Image.asset(ImageConstant.placeHolderElsimil),
+                              ),
+                              imageUrl: data.image != null ? data.image!:'',
                               fit: BoxFit.cover,
                             )
                         ),
@@ -93,10 +96,10 @@ class _LandingQuizState extends State<LandingQuiz> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 20),
-                              TextAvenir(data != null ? data.title : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                              TextAvenir(data.title != null ? data.title! : "", size: 24, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                               SizedBox(height: 10),
                               Html(
-                                data: data != null ? data.deskripsi : '',
+                                data: data.deskripsi != null ? data.deskripsi : '',
                                 // defaultTextStyle: TextStyle(height: 1.5, fontSize: 14, fontFamily: 'Avenir-Book', color: Utils.colorFromHex(ColorCode.darkGreyElsimil)),
                               ),
                               SizedBox(height: size.height * 0.12),
@@ -116,7 +119,7 @@ class _LandingQuizState extends State<LandingQuiz> {
       floatingActionButton: InkWell(
         onTap: (){
           if(bloc.verifkasi){
-            if(widget.result_id < 1){
+            if(widget.result_id! < 1){
               Navigator.pushNamed(context, '/generate_quiz', arguments: {'id': widget.id, 'title':bloc.dataIntro.title});
             }else{
               Navigator.pushNamed(context, '/detail_riwayat', arguments: {'id': widget.result_id, 'title':bloc.dataIntro.title});

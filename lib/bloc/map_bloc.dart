@@ -43,6 +43,6 @@ class MapBloc{
     Placemark place = placemarks[0];
     changeLatLon(cameraPosition.target.latitude, cameraPosition.target.longitude);
     _currentAddress.sink.add('${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}');
-    _currentAddressName.sink.add(place.name);
+    _currentAddressName.sink.add(place.name!);
   }
 }

@@ -1,9 +1,9 @@
 part of 'model_item_detail_baduta.dart';
 ModelItemDetailBaduta _$fromJson(Map<String, dynamic> json) {
   return ModelItemDetailBaduta()
-    ..label = json['label'] as String ?? ''
-    ..value = json['value'] as String ?? ''
-    ..color = json['color'] as String ?? ''
+    ..label = json['label'] as String
+    ..value = json['value'] as String
+    ..color = json['color'] as String
   ;
 }
 

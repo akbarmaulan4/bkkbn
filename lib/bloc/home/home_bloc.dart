@@ -1,12 +1,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:kua/api/api.dart';
+import 'package:kua/main.dart';
 import 'package:kua/model/home/additional.dart';
 import 'package:kua/model/home/data_home.dart';
 import 'package:kua/model/user/user.dart';
 import 'package:kua/util/Utils.dart';
 import 'package:kua/util/local_data.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomeBloc{
@@ -162,6 +163,9 @@ class HomeBloc{
     String appName = packageInfo.appName;
     String packageName = packageInfo.packageName;
     String version = packageInfo.version;
+    if(EnvironmentConfig.environment == Environment.dev){
+      version = version.replaceAll('-dev', '');
+    }
     String buildNumber = packageInfo.buildNumber;  
     API.checkVersion((result, error) {
       // Navigator.of(context).pop();

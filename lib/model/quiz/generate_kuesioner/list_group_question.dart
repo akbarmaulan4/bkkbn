@@ -3,7 +3,7 @@ part 'list_group_question.g.dart';
 
 class ListGroupQuestion{
   ListGroupQuestion(){}
-  List<GroupQuestion> data;
+  List<GroupQuestion>? data;
 
   factory ListGroupQuestion.fromJson(Map<String, dynamic> json) => _$fromJson(json);
   Map<String, dynamic> toJson() => _$toJson(this);

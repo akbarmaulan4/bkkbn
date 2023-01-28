@@ -1,8 +1,8 @@
 part of 'model_item_anak.dart';
 ModelItemAnak _$fromJson(Map<String, dynamic> json) {
   return ModelItemAnak()
-    ..id = json['id'] as int ?? -1
-    ..nama = json['nama'] as String ?? ''
+    ..id = json['id'] as int
+    ..nama = json['nama'] as String
   ;
 }
 

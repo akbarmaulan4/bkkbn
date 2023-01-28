@@ -4,8 +4,8 @@ part of 'list_group_question.dart';
 ListGroupQuestion _$fromJson(Map<String, dynamic> json) {
   return ListGroupQuestion()
     ..data =  (json['data'] as List)
-        ?.map((e) =>
-    e == null ? null : GroupQuestion.fromJson(e as Map<String, dynamic>))?.toList()
+        .map((e) =>
+    e == null ? null : GroupQuestion.fromJson(e as Map<String, dynamic>)).cast<GroupQuestion>().toList()
   ;
 }
 

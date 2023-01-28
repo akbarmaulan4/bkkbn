@@ -70,7 +70,7 @@ class _EdukasiViewState extends State<EdukasiView> {
           builder: (context, snapshot) {
             List<EdukasiItem> data = [];
             if(snapshot.data != null){
-              data = snapshot.data;
+              data = snapshot.data as List<EdukasiItem>;
             }
             return Container(
               color: Colors.white,
@@ -134,7 +134,7 @@ class _EdukasiViewState extends State<EdukasiView> {
               onTap: ()=>Navigator.pushNamed(context, '/list_artikel', arguments: {'data':item}),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Utils.colorFromHex(item.background),//Colors.primaries[Random().nextInt(Colors.primaries.length)],
+                  color: Utils.colorFromHex(item.background!),//Colors.primaries[Random().nextInt(Colors.primaries.length)],
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
                 padding: EdgeInsets.symmetric(vertical: is5Inc()?10:10, horizontal: 13),
@@ -148,7 +148,7 @@ class _EdukasiViewState extends State<EdukasiView> {
                         placeholder: (context, url) => Center(
                           child: Image.asset(ImageConstant.placeHolderElsimil),
                         ),
-                        imageUrl: item != null ? item.image:'',
+                        imageUrl: item != null ? item.image!:'',
                         errorWidget: (context, url, error)=>Image.asset(ImageConstant.placeHolderElsimil),
                         fit: BoxFit.cover,
                       ),
@@ -159,7 +159,7 @@ class _EdukasiViewState extends State<EdukasiView> {
                       color: Utils.colorFromHex('#26000000'),
                       margin: EdgeInsets.symmetric(horizontal: 10),
                     ),
-                    Expanded(child: TextAvenir(item.kategori, size: 14, color: Colors.white,))
+                    Expanded(child: TextAvenir(item.kategori!, size: 14, color: Colors.white,))
                   ],
                 ),
               ),

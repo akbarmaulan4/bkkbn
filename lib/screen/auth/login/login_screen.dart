@@ -53,9 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void setupPlayerId() async {
     var hasPlayerId = await LocalData.getPlayerId();
     if (hasPlayerId == null) {
-      var status = await OneSignal.shared.getPermissionSubscriptionState();
-      var playerId = status.subscriptionStatus.userId;
-      bloc.setPlayerId(playerId);
+      // var status = await OneSignal.shared.getPermissionSubscriptionState();
+      // var playerId = status.subscriptionStatus.userId;
+      var status = await OneSignal. shared.getDeviceState();
+      var playerId = status!.userId;
+      bloc.setPlayerId(playerId.toString());
     }
   }
 
@@ -116,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     builder: (context, snapshot) {
                       var type = false;
                       if(snapshot.data != null){
-                        type = snapshot.data;
+                        type = snapshot.data as bool;
                       }
                       return BoxBorderDefault(
                           child: StreamBuilder(
@@ -124,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               builder: (context, snapshot) {
                                 var showPass = false;
                                 if(snapshot.data != null){
-                                  showPass = snapshot.data;
+                                  showPass = snapshot.data as bool;
                                 }
                                 return TextField(
                                   controller: bloc.edtPassword,

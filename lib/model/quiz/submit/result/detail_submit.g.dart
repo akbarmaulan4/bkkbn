@@ -1,14 +1,14 @@
 part of 'detail_submit.dart';
 DetailSubmit _$fromJson(Map<String, dynamic> json) {
   return DetailSubmit()
-    ..caption = json['caption'] as String ?? ''
-    ..label = json['label'] as String ?? ''
-    ..value = json['value'] as String ?? ''
-    ..rating = json['rating'] as String ?? ''
-    ..rating_color = json['rating_color'] as String ?? ''
+    ..caption = json['caption'] as String
+    ..label = json['label'] as String
+    ..value = json['value'] as String
+    ..rating = json['rating'] as String
+    ..rating_color = json['rating_color'] as String
     ..file = (json['file'] as List)
-        ?.map((e) => e == null ? null : FileDetailSubmit.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+        .map((e) => e == null ? null : FileDetailSubmit.fromJson(e as Map<String, dynamic>)).cast<FileDetailSubmit>()
+        .toList()
   ;
 }
 

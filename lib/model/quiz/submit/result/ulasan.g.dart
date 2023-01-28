@@ -1,10 +1,10 @@
 part of 'ulasan.dart';
 Ulasan _$fromJson(Map<String, dynamic> json) {
   return Ulasan()
-    ..komentar = json['komentar'] as String ?? ''
-    ..name = json['name'] as String ?? ''
-    ..jabatan = json['jabatan'] as String ?? ''
-    ..tanggal_ulasan = json['tanggal_ulasan'] as String ?? ''
+    ..komentar = json['komentar'] as String
+    ..name = json['name'] as String
+    ..jabatan = json['jabatan'] as String
+    ..tanggal_ulasan = json['tanggal_ulasan'] as String
   ;
 }
 

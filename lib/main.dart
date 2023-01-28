@@ -120,7 +120,7 @@ class MyApp extends StatelessWidget {
                 },
                 settings: RouteSettings());
           case '/home':
-            Map<String, dynamic> arguments = null;
+            Map<String, dynamic> arguments = Map();
             if (initial.arguments is Map<String, dynamic>) {
               arguments = initial.arguments as Map<String, dynamic>;
             }
@@ -131,7 +131,7 @@ class MyApp extends StatelessWidget {
                 },
                 settings: RouteSettings());
           case '/landing_quiz':
-            Map<String, dynamic> arguments = null;
+            Map<String, dynamic> arguments = Map();
             if (initial.arguments is Map<String, dynamic>) {
               arguments = initial.arguments as Map<String, dynamic>;
             }
@@ -141,7 +141,7 @@ class MyApp extends StatelessWidget {
                 },
                 settings: RouteSettings());
           case '/generate_quiz':
-            Map<String, dynamic> arguments = null;
+            Map<String, dynamic> arguments = Map();
             if (initial.arguments is Map<String, dynamic>) {
               arguments = initial.arguments as Map<String, dynamic>;
             }
@@ -153,7 +153,7 @@ class MyApp extends StatelessWidget {
           case '/result_quiz':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -163,7 +163,7 @@ class MyApp extends StatelessWidget {
           case '/pdf':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -174,7 +174,7 @@ class MyApp extends StatelessWidget {
           case '/list_notif':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -184,7 +184,7 @@ class MyApp extends StatelessWidget {
           case '/landing_chat':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -194,7 +194,7 @@ class MyApp extends StatelessWidget {
           case '/chat_screen':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -204,7 +204,7 @@ class MyApp extends StatelessWidget {
           case '/list_artikel':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -216,7 +216,7 @@ class MyApp extends StatelessWidget {
           case '/detail_artikel':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -229,7 +229,7 @@ class MyApp extends StatelessWidget {
           case '/biodata':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -239,7 +239,7 @@ class MyApp extends StatelessWidget {
           case '/biodata_pasangan':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -249,7 +249,7 @@ class MyApp extends StatelessWidget {
           case '/tambah_pasangan':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -259,7 +259,7 @@ class MyApp extends StatelessWidget {
           case '/bantuan':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -269,7 +269,7 @@ class MyApp extends StatelessWidget {
           case '/detail_bantuan':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -279,7 +279,7 @@ class MyApp extends StatelessWidget {
           case '/web_screen':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -289,7 +289,7 @@ class MyApp extends StatelessWidget {
           case '/riwayat':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -299,7 +299,7 @@ class MyApp extends StatelessWidget {
           case '/detail_riwayat':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -309,7 +309,7 @@ class MyApp extends StatelessWidget {
           case '/edit_quiz':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -319,7 +319,7 @@ class MyApp extends StatelessWidget {
           case '/riwayat_pasangan':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -329,7 +329,7 @@ class MyApp extends StatelessWidget {
           case '/ubah_password':
             return MaterialPageRoute(
                 builder: (context) {
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -351,7 +351,7 @@ class MyApp extends StatelessWidget {
           case '/riwayat_janin_screen':
             return MaterialPageRoute(
                 builder: (context){
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -361,7 +361,7 @@ class MyApp extends StatelessWidget {
           case '/detail_riwayat_janin_screen':
             return MaterialPageRoute(
                 builder: (context){
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -389,7 +389,7 @@ class MyApp extends StatelessWidget {
           case '/detail_riwayat_baduta_screen':
             return MaterialPageRoute(
                 builder: (context){
-                  Map<String, dynamic> arguments = null;
+                  Map<String, dynamic> arguments = Map();
                   if (initial.arguments is Map<String, dynamic>) {
                     arguments = initial.arguments as Map<String, dynamic>;
                   }
@@ -410,7 +410,7 @@ class MyApp extends StatelessWidget {
 }
 
 class EnvironmentConfig {
-  static Environment environment;
+  static Environment environment = Environment.dev;
 }
 
 enum Environment { dev, prod }

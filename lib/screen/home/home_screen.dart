@@ -15,7 +15,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'beranda/chat/landing_chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  int loadFirstMenu;
+  int? loadFirstMenu;
   HomeScreen({this.loadFirstMenu});
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -29,11 +29,16 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     initOneSignal();
-    OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
-      // will be called whenever a notification is received
-      if (notification != null) {
-        final data = notification.payload.additionalData;
-      }
+    // OneSignal.shared.setNotificationReceivedHandler((OSNotification notification) {
+    //   // will be called whenever a notification is received
+    //   if (notification != null) {
+    //     final data = notification.payload.additionalData;
+    //   }
+    // });
+
+    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      final data = result.notification.additionalData;
+      // will be called whenever a notification is opened/button pressed.
     });
 
     bloc.messageError.listen((event) {
@@ -44,22 +49,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   initOneSignal(){
+    // WidgetsFlutterBinding.ensureInitialized();
+    // OneSignal.shared.init("6d354bb7-68f2-436a-9fd0-24e003384003",
+    //     iOSSettings: {
+    //       OSiOSSettings.autoPrompt: false,
+    //       OSiOSSettings.inAppLaunchUrl: false
+    //     });
+    // OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
+
     WidgetsFlutterBinding.ensureInitialized();
-    OneSignal.shared.init("6d354bb7-68f2-436a-9fd0-24e003384003",
-        iOSSettings: {
-          OSiOSSettings.autoPrompt: false,
-          OSiOSSettings.inAppLaunchUrl: false
-        });
-    OneSignal.shared.setInFocusDisplayType(OSNotificationDisplayType.notification);
+    OneSignal.shared.setAppId('6d354bb7-68f2-436a-9fd0-24e003384003');
     setupPlayerId();
   }
 
   void setupPlayerId() async {
-    var status = await OneSignal.shared.getPermissionSubscriptionState();
-    var playerId = status.subscriptionStatus.userId;
-    if (playerId != null) {
+    var status = await OneSignal. shared.getDeviceState();
+    var playerId = status!.userId;
 
-    }
+    // if (playerId != null) {
+    //   bloc.postPlayerId(playerId);
+    // } else if(user.status_player_id == 0){
+    //   bloc.postPlayerId(playerId!);
+    // }else{
+    //   setupPlayerId();
+    // }
+
+    // var status = await OneSignal.shared.getPermissionSubscriptionState();
+    // var playerId = status.subscriptionStatus.userId;
+    // if (playerId != null) {
+    //
+    // }
     // var hasPlayerId = await LocalData.getPlayerId();
     // if (!hasPlayerId) {
     //   var status = await OneSignal.shared.getPermissionSubscriptionState();
@@ -91,14 +110,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: ()=> null,
+      onWillPop:(){
+        return Future.value(false);
+      },
       child: Scaffold(
         body: StreamBuilder(
           stream: bloc.viewScreen,
           builder: (context, snapshot) {
-            int view = widget.loadFirstMenu;
+            int view = widget.loadFirstMenu as int;
             if(snapshot.data != null){
-              view = snapshot.data;
+              view = snapshot.data  as int;
             }
             return Container(
               child: loadView(view),
@@ -110,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, snapshot) {
             int view = 0;
             if(snapshot.data != null){
-              view = snapshot.data;
+              view = snapshot.data as int;
             }
             return bottomMenu(view);
           }

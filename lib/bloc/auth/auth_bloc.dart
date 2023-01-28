@@ -165,7 +165,7 @@ class AuthBloc{
   // Position _currentLocation;
   // Position get currentLocation => _currentLocation;
   getCurrentLocation() async {
-    var newLocation = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var newLocation = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     // _currentLocation = newLocation;
     _currentLocation.sink.add(newLocation);
   }
@@ -178,13 +178,13 @@ class AuthBloc{
   int _gender = -1; // 0:register data, 1:register foto, 2:register alamat
   int get gender => _gender;
 
-  String _strGender;
+  String _strGender = '';
   String get strGender => _strGender;
 
   int _idStatusNikah = -1; // 0:register data, 1:register foto, 2:register alamat
   int get idStatusNikah => _idStatusNikah;
 
-  String _strStatusNikah;
+  String _strStatusNikah = '';
   String get strStatusNikah => _strStatusNikah;
 
   bool _isRemember = false;
@@ -258,14 +258,14 @@ class AuthBloc{
   statusNikah(String val) {
     _strStatusNikah = val;
     _dataStatusNikah.sink.add(val);
-    if (val == 'Sudah Menikah' || val == 'Belum Menikah') {
+    if (val == 'Sudah Menikah') {
       _idStatusNikah = 1;
     } else {
       _idStatusNikah = 0;
     }
   }
 
-  File _imgFotoKtp;
+  File _imgFotoKtp = File('');
   File get imgFotoKtp => _imgFotoKtp;
 
   changeImage(File val) async {
@@ -274,29 +274,29 @@ class AuthBloc{
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     File file = new File('$tempPath/$strPhotoName');
-    var image = await FlutterImageCompress.compressAndGetFile(
-      val.path, file.path,
-      quality: 88,
-      // rotate: 180,
-    );
-    var sizeFile = Utils.formatFileSize(image.lengthSync().toDouble());
-    if(sizeFile.toString().contains('MB')||sizeFile.toString().contains('KB')||sizeFile.toString().contains('Bytes')){
-
-    }
-    final bytes = image.readAsBytesSync();
+    // var image = await FlutterImageCompress.compressAndGetFile(
+    //   val.path, file.path,
+    //   quality: 88,
+    //   // rotate: 180,
+    // );
+    // var sizeFile = Utils.formatFileSize(image.lengthSync().toDouble());
+    // if(sizeFile.toString().contains('MB')||sizeFile.toString().contains('KB')||sizeFile.toString().contains('Bytes')){
+    //
+    // }
+    // final bytes = image.readAsBytesSync();
 
     // File fileFixed = await Utils.fixExifRotation(val.path);
     // final bytes = fileFixed.readAsBytesSync();
-    // final bytes = val.readAsBytesSync();
+    final bytes = file.readAsBytesSync();
     _img64 = base64Encode(bytes);
     _imgFotoKtp = val;
-    _imageKtp.sink.add(image);
+    _imageKtp.sink.add(file);
   }
   changePdf(File val){
     if(val.existsSync()){
       _fileDoc.sink.add(val);
     }else {
-      _fileDoc.sink.add(null);
+      _fileDoc.sink.add(File(''));
     }
   }
 
@@ -373,7 +373,7 @@ class AuthBloc{
   openDatePicker(BuildContext context) async {
     DateTime dateTime;
     dateTime = DateTime.now();
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now().subtract(Duration(days: 3652)),
       firstDate: new DateTime(1900),
@@ -438,7 +438,7 @@ class AuthBloc{
           var json = result as Map<String, dynamic>;
           var data = AllProvinsi.fromJson(json);
           if(data != null){
-            _allProvinsi = data.data;
+            _allProvinsi = data.data!;
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -455,7 +455,7 @@ class AuthBloc{
 
   findProvinsi(String val){
     _allDataProvinsi.clear();
-    var data = allProvinsi.where((element) => element.nama.toLowerCase().contains(val.toLowerCase()));
+    var data = allProvinsi.where((element) => element.nama!.toLowerCase().contains(val.toLowerCase()));
     if(data != null){
       _allDataProvinsi.addAll(data.toList());
       _dataProvinsi.sink.add(data.toList());
@@ -464,23 +464,23 @@ class AuthBloc{
     return data;
   }
 
-  DataProvinsi _provinsi;
+  DataProvinsi _provinsi = DataProvinsi();
   DataProvinsi get provinsi => _provinsi;
   changeProvinsi(DataProvinsi val){
     _provinsi = val;
-    _edtProvinsi.text = val.nama;
+    _edtProvinsi.text = val.nama!;
     _edtKotaKab.text ='';
     _edtKecamatan.text ='';
     _edtDesa.text ='';
     _edtRT.text ='';
     _edtRW.text ='';
     _edtKodePos.text ='';
-    getKabupaten(val.provinsi_kode);
+    getKabupaten(val.provinsi_kode!);
   }
 
   //=================== Kota Kabupaten ================
 
-  List<DataKabupaten> _allKabupaten = new List();
+  List<DataKabupaten> _allKabupaten = [];
   List<DataKabupaten> get allKabupaten => _allKabupaten;
 
   getKabupaten(String provinsiCode){
@@ -491,7 +491,7 @@ class AuthBloc{
           var json = result as Map<String, dynamic>;
           var data = AllKabupaten.fromJson(json);
           if(data != null){
-            _allKabupaten = data.data;
+            _allKabupaten = data.data!;
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -513,7 +513,7 @@ class AuthBloc{
       _allDataKabupaten.addAll(data);
       _dataKotaKab.sink.add(data);
     }else{
-      data = allKabupaten.where((element) => element.nama.toLowerCase().contains(val.toLowerCase())).toList();
+      data = allKabupaten.where((element) => element.nama!.toLowerCase().contains(val.toLowerCase())).toList();
       if (data != null) {
         _allDataKabupaten.addAll(data);
         _dataKotaKab.sink.add(data);
@@ -522,12 +522,12 @@ class AuthBloc{
     return data;
   }
 
-  DataKabupaten _kabupaten;
+  DataKabupaten _kabupaten = DataKabupaten();
   DataKabupaten get kabupaten => _kabupaten;
 
   changeKabupaten(DataKabupaten val){
     _kabupaten = val;
-    _edtKotaKab.text = val.nama;
+    _edtKotaKab.text = val.nama!;
     getKecamatan(val.kabupaten_kode.toString());
   }
 
@@ -544,7 +544,7 @@ class AuthBloc{
           var json = result as Map<String, dynamic>;
           var data = AllKecamatan.fromJson(json);
           if(data != null){
-            _allKecamatan = data.data;
+            _allKecamatan = data.data!;
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -566,7 +566,7 @@ class AuthBloc{
       _allDataKecamatan.addAll(data);
       _dataKecamatan.sink.add(data);
     }else{
-      data = allKecamatan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase())).toList();
+      data = allKecamatan.where((element) => element.nama!.toLowerCase().contains(val.toLowerCase())).toList();
       if(data != null){
         _allDataKecamatan.addAll(data.toList());
         _dataKecamatan.sink.add(data.toList());
@@ -575,18 +575,18 @@ class AuthBloc{
     return data;
   }
 
-  DataKecamatan _kecamatan;
+  DataKecamatan _kecamatan = DataKecamatan();
   DataKecamatan get kecamatan => _kecamatan;
 
   changeKecamatan(DataKecamatan val){
     _kecamatan = val;
-    _edtKecamatan.text = val.nama;
+    _edtKecamatan.text = val.nama!;
     getKelurahan(val.kecamatan_kode.toString());
   }
 
   //=================== keurahan ================
 
-  List<DataKelurahan> _allKelurahan = new List();
+  List<DataKelurahan> _allKelurahan = [];
   List<DataKelurahan> get allKelurahan => _allKelurahan;
 
   getKelurahan(String kecId){
@@ -597,7 +597,7 @@ class AuthBloc{
           var json = result as Map<String, dynamic>;
           var data = AllKelurahan.fromJson(json);
           if(data != null){
-            _allKelurahan = data.data;
+            _allKelurahan = data.data!;
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -619,7 +619,7 @@ class AuthBloc{
       _allDataKelurahan.addAll(data);
       _dataKelurahan.sink.add(data);
     }else{
-      data = allKelurahan.where((element) => element.nama.toLowerCase().contains(val.toLowerCase())).toList();
+      data = allKelurahan.where((element) => element.nama!.toLowerCase().contains(val.toLowerCase())).toList();
       if(data != null){
         _allDataKelurahan.addAll(data.toList());
         _dataKelurahan.sink.add(data.toList());
@@ -628,12 +628,12 @@ class AuthBloc{
     return data;
   }
 
-  DataKelurahan _kelurahan;
+  DataKelurahan _kelurahan = DataKelurahan();
   DataKelurahan get kelurahan => _kelurahan;
 
   changeKelurahan(DataKelurahan val){
     _kelurahan = val;
-    _edtDesa.text = val.nama;
+    _edtDesa.text = val.nama!;
   }
 
   postLogin(BuildContext context){
@@ -677,9 +677,9 @@ class AuthBloc{
       edtRW.text,
       edtKodePos.text,
       edtTglNikah.text,
+      idStatusNikah.toString(),
       posLat.toString(),
       posLon.toString(),
-      idStatusNikah.toString(),
         (result, error) {
           Navigator.of(context).pop();
       if(result != null){
@@ -709,7 +709,14 @@ class AuthBloc{
           _edtTmptLahir.text = data['tempat_lahir'];
           _edtTglLahir.text = data['tgl_lahir'];
           _edtAlamatKtp.text = data['alamat'];
-          edtNikah.text = data['status_pernikahan'] == '0' ? 'Belum Menikah':'Sudah Menikah';
+          if(data['status_pernikahan'] == '1'){
+            edtNikah.text = 'Sudah Menikah';
+          }else if(data['status_pernikahan'] == '0'){
+            edtNikah.text = 'Belum Menikah';
+          }else{
+            edtNikah.text = 'Belum Menikah';
+          }
+
           _picBiodata.sink.add(data['pic']);
 
           //provinsi
@@ -742,7 +749,7 @@ class AuthBloc{
           _edtTglNikah.text = data['rencana_pernikahan'];
           _edtGender.text = data['gender'] == '1' ? 'Laki-laki' : 'Perempuan';
           if(data['lat'] != null && data['lon'] != null){
-            Position pos = Position(latitude: data['lat'], longitude: data['lon']);
+            // Position pos = Position(latitude: data['lat'], longitude: data['lon']);
             _finishPinLoc.sink.add(true);
             // _currentLocation.sink.add(pos);
           }

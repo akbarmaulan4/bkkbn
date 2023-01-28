@@ -5,7 +5,7 @@ import 'package:kua/util/constant_style.dart';
 import 'package:kua/widgets/font/avenir_text.dart';
 
 class ButtonQuiz extends StatefulWidget {
-  String title;
+  String? title;
   ButtonQuiz({
     this.title
   });
@@ -18,7 +18,7 @@ class _ButtonQuizState extends State<ButtonQuiz> {
   Widget build(BuildContext context) {
     return Container(
       decoration: ConstantStyle.box_fill_blue_nd,
-      child: Center(child: TextAvenir(widget.title, color: Utils.colorFromHex(ColorCode.bluePrimary))),
+      child: Center(child: TextAvenir(widget.title!, color: Utils.colorFromHex(ColorCode.bluePrimary))),
     );
   }
 }

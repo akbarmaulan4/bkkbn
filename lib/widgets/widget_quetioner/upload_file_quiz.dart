@@ -16,10 +16,10 @@ import 'package:rxdart/rxdart.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UploadFileQuiz extends StatefulWidget {
-  int id;
-  String question;
-  Function changeValue;
-  Function changeFileName;
+  int? id;
+  String? question;
+  Function? changeValue;
+  Function? changeFileName;
   UploadFileQuiz({
     this.id,
     this.question,
@@ -45,7 +45,7 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
   _imgFromCamera() async {
     changeDocument(false);
-    final pickedFile = await picker.getImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
     setState(() async {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
@@ -59,10 +59,10 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
           // rotate: 180,
         );
 
-        final bytes = fileCompressed.readAsBytesSync();
-        String img = base64Encode(bytes);
-        widget.changeFileName(fileName);
-        widget.changeValue(img);
+        final bytes = fileCompressed?.readAsBytesSync();
+        String img = base64Encode(bytes!);
+        widget.changeFileName!(fileName);
+        widget.changeValue!(img);
         changeDoc(image);
 
         // File fileFixed = await Utils.fixExifRotation(image.path);
@@ -82,15 +82,15 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
   _imgFromGallery() async {
     changeDocument(false);
-    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 100, maxWidth: 1024, maxHeight: 768);
     setState(() {
       if (pickedFile != null) {
         var image = File(pickedFile.path);
         final bytes = image.readAsBytesSync();
         String img = base64Encode(bytes);
         String fileName = image.path.split('/').last;
-        widget.changeFileName(fileName);
-        widget.changeValue(img);
+        widget.changeFileName!(fileName);
+        widget.changeValue!(img);
         changeDoc(image);
       } else {
         print('No image selected.');
@@ -100,12 +100,12 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
   _selectFile() async {
     changeDocument(true);
-    FilePickerResult result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf', 'doc'],
     );
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       if(file.existsSync()){
         String fileName = file.path.split('/').last;
         Directory tempDir = await getTemporaryDirectory();
@@ -121,8 +121,8 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
 
         // final bytes = file.readAsBytesSync();
         String img = base64Encode(fileCompressed.readAsBytesSync());
-        widget.changeFileName(fileName);
-        widget.changeValue(img);
+        widget.changeFileName!(fileName);
+        widget.changeValue!(img);
         changeDoc(file);
       }
     }
@@ -132,7 +132,7 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
     if(val.existsSync()){
       _fileDoc.sink.add(val);
     }else{
-      _fileDoc.sink.add(null);
+      _fileDoc.sink.add(File(''));
     }
   }
 
@@ -165,15 +165,15 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
                 child: StreamBuilder(
                   stream: fileDoc,
                   builder: (context, snapshot) {
-                    File data = null;
-                    String fileName =  widget.question;
+                    File data = File('');
+                    String fileName =  widget.question!;
                     if(snapshot.data != null){
-                      data = snapshot.data;
+                      data = snapshot.data as File;
                       if(isDocument){
                         fileName = data.path.split('/').last;
                       }
                     }
-                    return (!isDocument && data != null) ? Container(
+                    return (!isDocument && data.existsSync()) ? Container(
                       child: Image.file(
                         data,
                         width: size.width * 0.88,
@@ -183,7 +183,7 @@ class _UploadFileQuizState extends State<UploadFileQuiz> {
                     ):Row(
                       children: [
                         Container(
-                          child: Image.asset(data != null ? ImageConstant.icPdf : ImageConstant.noImages, height: is5Inc() ? size.height * 0.11:size.height * 0.08),
+                          child: Image.asset(data.existsSync() ? ImageConstant.icPdf : ImageConstant.noImages, height: is5Inc() ? size.height * 0.11:size.height * 0.08),
                           margin: EdgeInsets.all(5),
                         ),
                         SizedBox(width: 10),

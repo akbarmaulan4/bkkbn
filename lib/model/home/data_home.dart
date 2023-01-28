@@ -6,12 +6,12 @@ import 'package:kua/model/home/quiz/item_summary_quiz.dart';
 part 'data_home.g.dart';
 class DataHome{
   DataHome(){}
-  Own own;
-  List<Own> couple;
-  List<ItemResult> result;
-  List<ItemInfo> info;
-  List<ItemEdukasi> edukasi;
-  List<ItemSummaryQuiz> summarykuis;
+  Own? own;
+  List<Own>? couple;
+  List<ItemResult>? result;
+  List<ItemInfo>? info;
+  List<ItemEdukasi>? edukasi;
+  List<ItemSummaryQuiz>? summarykuis;
 
   factory DataHome.fromJson(Map<String, dynamic> json) => _$fromJson(json);
   Map<String, dynamic> toJson() => _$toJson(this);

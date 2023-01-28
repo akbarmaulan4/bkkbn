@@ -26,8 +26,8 @@ class AkunBloc{
   final _addCouple = PublishSubject<bool>();
   final _confirmCouple = PublishSubject<bool>();
   final _canAddCouple = PublishSubject<bool>();
-  final _dataRiwayat = PublishSubject<List<RiwayatItem>>();
-  final _dataPasangan = PublishSubject<List<PasanganItem>>();
+  final _dataRiwayat = PublishSubject<List<RiwayatItem?>>();
+  final _dataPasangan = PublishSubject<List<PasanganItem?>>();
   final _showOldPass = PublishSubject<bool>();
   final _showNewPass = PublishSubject<bool>();
   final _showRePass = PublishSubject<bool>();
@@ -46,8 +46,8 @@ class AkunBloc{
   Stream<bool> get addCouple => _addCouple.stream;
   Stream<bool> get confirmCouple => _confirmCouple.stream;
   Stream<bool> get canAddCouple => _canAddCouple.stream;
-  Stream<List<RiwayatItem>> get dataRiwayat => _dataRiwayat.stream;
-  Stream<List<PasanganItem>> get dataPasangan => _dataPasangan.stream;
+  Stream<List<RiwayatItem?>> get dataRiwayat => _dataRiwayat.stream;
+  Stream<List<PasanganItem?>> get dataPasangan => _dataPasangan.stream;
   Stream<bool> get showOldPass => _showOldPass.stream;
   Stream<bool> get showNewPass => _showNewPass.stream;
   Stream<bool> get showRePass => _showRePass.stream;
@@ -92,7 +92,7 @@ class AkunBloc{
           var json = result as Map<String, dynamic>;
           var data = AllBantuan.fromJson(json);
           if(data != null){
-            _dataBantuan.sink.add(data.data);
+            _dataBantuan.sink.add(data.data!);
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -112,7 +112,7 @@ class AkunBloc{
           var json = result as Map<String, dynamic>;
           var data = AllBantuanDetail.fromJson(json);
           if(data != null){
-            _detailBantuan.sink.add(data.data[0]);
+            _detailBantuan.sink.add(data.data![0]);
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -169,8 +169,8 @@ class AkunBloc{
             var json = result as Map<String, dynamic>;
             var data = AllCouple.fromJson(json);
             if(data != null){
-              _totalPasangan = data.data.length;
-              _dataCouple.sink.add(data.data);
+              _totalPasangan = data.data!.length;
+              _dataCouple.sink.add(data.data!);
               canAddSpouse();
             }else{
               _messageError.sink.add('Terjadi kesalahan dalam menampilkan data');
@@ -196,7 +196,7 @@ class AkunBloc{
             var data = AllWaiting.fromJson(json['data']);
             if(data != null){
               _waitingCouple.sink.add(data);
-              if(data.waiting.isEmpty && totalPasangan < 1){
+              if(data.waiting!.isEmpty && totalPasangan < 1){
                 _showInfoCouple.sink.add(true);
               }
               // if(data.waiting.isEmpty && totalPasangan < 1){
@@ -292,7 +292,7 @@ class AkunBloc{
         if(result != null){
           if(result['code'] == 200 && !result['error']){
             var json = result as Map<String, dynamic>;
-            var data = (json['data'] as List)?.map((e) => e == null ? null : RiwayatItem.fromJson(e as Map<String, dynamic>))?.toList();
+            List<RiwayatItem?> data = (json['data'] as List).map((e) => e == null ? null : RiwayatItem.fromJson(e as Map<String, dynamic>)).toList();
             if(data != null){
               _dataRiwayat.sink.add(data);
             }
@@ -312,7 +312,7 @@ class AkunBloc{
       if(result != null){
         if(result['code'] == 200 && !result['error']){
           var json = result as Map<String, dynamic>;
-          var data = (json['data'] as List)?.map((e) => e == null ? null : PasanganItem.fromJson(e as Map<String, dynamic>))?.toList();
+          var data = (json['data'] as List).map((e) => e == null ? null : PasanganItem.fromJson(e as Map<String, dynamic>)).toList();
           if(data != null){
             _dataPasangan.sink.add(data);
           }

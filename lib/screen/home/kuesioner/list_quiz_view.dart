@@ -65,7 +65,7 @@ class _QuizViewState extends State<ListQuizView> {
               builder: (context, snapshot) {
                 List<DataKuesioner> data = [];
                 if(snapshot.data != null){
-                  data = snapshot.data;
+                  data = snapshot.data as List<DataKuesioner>;
                 }
                 return Column(
                   children: [
@@ -130,14 +130,14 @@ class _QuizViewState extends State<ListQuizView> {
                           builder: (context, snapshot) {
                             bool search = false;
                             if(snapshot.data != null){
-                              search = snapshot.data;
+                              search = snapshot.data as bool;
                             }
                             return StreamBuilder(
                               stream: bloc.isTypingSearch,
                               builder: (context, snapshot) {
                                 bool typing = false;
                                 if(snapshot.data != null){
-                                  typing = snapshot.data;
+                                  typing = snapshot.data as bool;
                                 }
                                 return typing ? Container(
                                   child: CircularProgressIndicator(),
@@ -205,6 +205,7 @@ class _QuizViewState extends State<ListQuizView> {
                     placeholder: (context, url) => Center(
                       child: Image.asset(ImageConstant.placeHolderElsimil, width: size.height * 0.11, height: size.height * 0.11),
                     ),
+                    errorWidget: (context, url, error) => Image.asset(ImageConstant.placeHolderElsimil, width: size.height * 0.11, height: size.height * 0.11),
                     imageBuilder: (context, imageProvider) => Container(
                       width: size.height * 0.11,
                       height: size.height * 0.11,
@@ -215,7 +216,7 @@ class _QuizViewState extends State<ListQuizView> {
                             image: imageProvider, fit: BoxFit.cover),
                       ),
                     ),
-                    imageUrl: data != null ? data.thumbnail:'',
+                    imageUrl: data != null ? data.thumbnail!:'',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -226,13 +227,13 @@ class _QuizViewState extends State<ListQuizView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextAvenir(data.title, size: is5Inc() ? 14:18, color: Utils.colorFromHex(ColorCode.bluePrimary)),
+                          TextAvenir(data.title!, size: is5Inc() ? 14:18, color: Utils.colorFromHex(ColorCode.bluePrimary)),
                           SizedBox(height: is5Inc() ? 10:15),
                           TextAvenir('${data.answered}/${data.total_pertanyaan} Pertanyaan telah dijawab', size: is5Inc() ? 11:12.5, color: Colors.grey),
                           SizedBox(height: 2),
                           SliderQuiz(
-                            max_questions: data.total_pertanyaan.toDouble(),
-                            result: data.answered.toDouble(),
+                            max_questions: data.total_pertanyaan!.toDouble(),
+                            result: data.answered!.toDouble(),
                           ),
                           SizedBox(height: is5Inc() ? 8:10),
                           Container(
@@ -246,7 +247,7 @@ class _QuizViewState extends State<ListQuizView> {
                               children: [
                                 Container(
                                     decoration: BoxDecoration(
-                                      color: data.action == 'start' ? Utils.colorFromHex(ColorCode.lightBlueDark) : (data.background != '' ? Utils.colorFromHex(data.background) : Utils.colorFromHex(ColorCode.greyElsimil)),
+                                      color: data.action == 'start' ? Utils.colorFromHex(ColorCode.lightBlueDark) : (data.background != '' ? Utils.colorFromHex(data.background!) : Utils.colorFromHex(ColorCode.greyElsimil)),
                                       borderRadius: BorderRadius.all(Radius.circular(5)),
                                     ),
                                     height: size.height * 0.025,

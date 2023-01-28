@@ -91,7 +91,7 @@ class _ListNotifState extends State<ListNotif> {
                     builder: (context, snapshot) {
                       List<ItemNotif> data = [];
                       if(snapshot.data != null){
-                        data = snapshot.data;
+                        data = snapshot.data as List<ItemNotif>;
                       }
                       return Container(
                         child: ListView.separated(
@@ -137,7 +137,7 @@ class _ListNotifState extends State<ListNotif> {
                                             textScaleFactor: 1.0,
                                           ),
                                           SizedBox(height: 15),
-                                          TextAvenirBook(notif.waktu, color: Colors.grey, size: 12,),
+                                          TextAvenirBook(notif.waktu!, color: Colors.grey, size: 12,),
                                         ],
                                       ),
                                     ),

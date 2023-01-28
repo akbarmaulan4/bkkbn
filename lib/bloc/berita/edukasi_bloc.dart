@@ -31,7 +31,7 @@ class EdukasiBloc{
           var json = result as Map<String, dynamic>;
           var data = AllCategoryEdukasi.fromJson(json);
           if(data != null){
-            _categoryEdukasi.sink.add(data.data);
+            _categoryEdukasi.sink.add(data.data!);
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -51,7 +51,7 @@ class EdukasiBloc{
           var json = result as Map<String, dynamic>;
           var data = AllArtikel.fromJson(json);
           if(data != null){
-            _allArtikel.sink.add(data.data);
+            _allArtikel.sink.add(data.data!);
           }
         }else{
           _messageError.sink.add(result['message']);
@@ -91,11 +91,11 @@ class EdukasiBloc{
           var json = result as Map<String, dynamic>;
           var data = AllArtikel.fromJson(json);
           if(data != null){
-            for(ArtikelItem item in data.data){
+            for(ArtikelItem item in data.data!){
               item.url = item.image;
             }
-            _allRelatedArticle.addAll(data.data);
-            _allArtikel.sink.add(data.data);
+            _allRelatedArticle.addAll(data.data!);
+            _allArtikel.sink.add(data.data!);
           }
         }else{
           _messageError.sink.add(result['message']);
